@@ -1,0 +1,31 @@
+@mixin inter($ff: 'Inter', $fs: 1.6rem, $fw: 400, $lh: 1, $color: var(--gray)) {
+  font-family: $ff;
+  font-size: $fs;
+  font-weight: $fw;
+  line-height: $lh;
+  color: $color;
+}
+
+@mixin media-laptop {
+  @media (max-width: 1250px) {
+    @content;
+  }
+}
+
+@mixin media-tablet {
+  @media (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin media-mobile {
+  @media (max-width: 600px) {
+    @content;
+  }
+}
+
+@mixin media-mobile-s {
+  @media (max-width: 400px) {
+    @content;
+  }
+}

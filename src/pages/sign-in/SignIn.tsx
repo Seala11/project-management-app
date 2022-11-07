@@ -1,7 +1,12 @@
 import React from 'react';
+import styles from './signin.module.scss';
 
 const SignIn = () => {
-  return <div>Sign-In</div>;
+  return (
+    <div>
+      <h1 className={styles.title}>Sign-In</h1>
+    </div>
+  );
 };
 
 export default SignIn;
