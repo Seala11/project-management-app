@@ -1,0 +1,39 @@
+@use './mixins.scss' as *;
+
+/* inter-regular - latin_cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  src: local(''),
+    url('../../../public/fonts/inter-v12-latin_cyrillic-regular.woff2') format('woff2'),
+    url('../../../public/fonts/inter-v12-latin_cyrillic-regular.woff') format('woff');
+}
+
+/* inter-600 - latin_cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  src: local(''), url('../../../public/fonts/inter-v12-latin_cyrillic-600.woff2') format('woff2'),
+    url('../../../public/fonts/inter-v12-latin_cyrillic-600.woff') format('woff');
+}
+
+/* inter-700 - latin_cyrillic */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  src: local(''), url('../../../public/fonts/inter-v12-latin_cyrillic-700.woff2') format('woff2'),
+    url('../../../public/fonts/inter-v12-latin_cyrillic-700.woff') format('woff');
+}
+
+html {
+  font-size: 10px;
+}
+
+body {
+  @include inter;
+  font-family: 'Inter', sans-serif;
+  background: var(--background);
+}
