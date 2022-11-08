@@ -1,0 +1,17 @@
+{
+  "AUTH": {
+    "LOG_IN": "Sidn in",
+    "SIGN_UP": "Sign up"
+  },
+  "LANGUAGES": {
+    "EN": "En",
+    "RU": "Ru"
+  },
+  "DEVELOPERS": {
+    "VALA": "Valentin",
+    "ANNA": "Anna",
+    "KOSTIA": "Kostia",
+    "TEAM_L": "Team Lead",
+    "DEVELOPER": "Developer"
+  }
+}

@@ -1,0 +1,41 @@
+@import '../../app/styles/index.scss';
+
+.footer {
+  background-color: var(--primary-s);
+}
+
+.footer__wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+  font-size: 2rem;
+}
+
+.footer__info {
+  display: flex;
+  gap: 2rem;
+}
+
+.footer__copyright {
+  display: flex;
+  align-items: center;
+}
+
+.footer__year {
+  padding: 0 7rem 0 2rem;
+}
+
+.footer__github_username,
+.footer__rss {
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+@include media-tablet {
+  .footer__wrapper {
+    flex-wrap: wrap;
+    grid-gap: 2rem;
+  }
+}
