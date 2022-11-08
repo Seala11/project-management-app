@@ -1,6 +1,6 @@
 import React from 'react';
 import IcomoonReact from 'icomoon-react';
-import iconSet from 'data/iconSet.json';
+import iconSet from 'utils/data/iconSet.json';
 
 /*
 import Icon from 'components/Icon/Icon';

@@ -1,6 +1,9 @@
 import React from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
+import ROUTES from 'utils/constants/ROUTES';
 import NotFound from './404/NotFound';
+import Board from './board/Board';
+import Boards from './boards/Boards';
 import Home from './home/Home';
 import SignIn from './sign-in/SignIn';
 import SignUp from './sign-up/SignUp';
@@ -8,11 +11,13 @@ import SignUp from './sign-up/SignUp';
 const Routing = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/sign-in" element={<SignIn />} />
-      <Route path="/sign-up" element={<SignUp />} />
-      <Route path="/404" element={<NotFound />} />
-      <Route path="*" element={<Navigate to="/404" />} />
+      <Route path={ROUTES.home} element={<Home />} />
+      <Route path={ROUTES.signIn} element={<SignIn />} />
+      <Route path={ROUTES.signUp} element={<SignUp />} />
+      <Route path={ROUTES.boards} element={<Boards />} />
+      <Route path={ROUTES.board} element={<Board />} />
+      <Route path={ROUTES.notFound} element={<NotFound />} />
+      <Route path={ROUTES.default} element={<Navigate to={ROUTES.notFound} />} />
     </Routes>
   );
 };

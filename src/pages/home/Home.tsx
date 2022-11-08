@@ -5,6 +5,7 @@ const Home = () => {
   return (
     <div>
       <h1 className={styles.title}>More accomplish together</h1>
+      <h1 className="title">More accomplish together</h1>
     </div>
   );
 };
