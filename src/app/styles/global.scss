@@ -1,0 +1,62 @@
+*,
+*:before,
+*:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+input,
+button,
+textarea {
+  font-family: inherit;
+}
+
+a,
+a:visited,
+a:link {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  color: var(--primary);
+}
+
+body {
+  margin: 0;
+}
+
+.wrapper {
+  max-width: 1200px;
+  padding: 0 1rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.btn {
+  border-radius: 16px;
+  padding: 10px 26px;
+  -webkit-tap-highlight-color: transparent;
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+
+.btn_blue {
+  background: rgba(0, 71, 255, 0.08);
+  border: 2px solid rgba(0, 71, 255, 0.08);
+  color: var(--primary);
+}
+
+a.btn {
+  display: inline;
+}
+
+a.btn:hover {
+  color: inherit;
+}
+
+.btn:hover {
+  opacity: 0.8;
+}
