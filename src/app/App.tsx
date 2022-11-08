@@ -1,18 +1,18 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import Header from 'components/header/Header';
-import Footer from 'components/footer/Footer';
-import Routing from 'pages/Routing';
+import Routing from '../pages/Routing';
 import styles from './app.module.scss';
+import { store } from 'store';
+import { Provider } from 'react-redux';
 
 const App = () => (
-  <BrowserRouter>
-    <div className={styles.app}>
-      <Header />
-      <Routing />
-      <Footer />
-    </div>
-  </BrowserRouter>
+  <Provider store={store}>
+    <BrowserRouter>
+      <div className={styles.app}>
+        <Routing />
+      </div>
+    </BrowserRouter>
+  </Provider>
 );
 
 export default App;
