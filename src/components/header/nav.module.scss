@@ -1,3 +1,5 @@
+@use './app/styles/mixins.scss' as *;
+
 .nav__list {
   display: flex;
   gap: 2rem;
