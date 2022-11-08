@@ -1,6 +1,6 @@
 .nav__list {
   display: flex;
-  gap: 20px;
+  gap: 2rem;
 }
 
 .nav__list .btn {
@@ -28,11 +28,11 @@ a.home:hover {
 }
 
 .hamburger .line {
-  width: 30px;
-  height: 2px;
+  width: 3rem;
+  height: 0.2rem;
   background-color: var(--maintheme);
   display: block;
-  margin: 6px auto;
+  margin: 0.6rem auto;
   -webkit-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
@@ -49,7 +49,7 @@ a.home:hover {
   transform: rotate(90deg);
 }
 
-@media screen and (max-width: 768px) {
+@include media-tablet {
   .hamburger {
     display: block;
   }
@@ -59,41 +59,16 @@ a.home:hover {
   }
 
   .nav__list {
-    gap: 20px;
+    gap: 2rem;
     flex-direction: column;
     align-items: center;
     margin-bottom: 1.5rem;
     flex-wrap: wrap;
   }
-
-  .nav {
-    position: fixed;
-    top: 5rem;
-    right: 1.5rem;
-    width: 160px;
-    z-index: 2;
-    padding-right: 0px;
-    transition: 0.5s;
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 8px;
-    transform: scaleY(0);
-    transform-origin: 0 0;
-  }
-
-  .nav.is-active {
-    top: 53px;
-    transform: scaleY(1);
-  }
 }
 
-@media screen and (max-width: 450px) {
+@include media-mobile {
   .hamburger {
     margin: 0 0rem 0 0;
-  }
-}
-
-@media screen and (max-width: 350px) {
-  .nav {
-    width: 100%;
   }
 }

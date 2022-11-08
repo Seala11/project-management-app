@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 import styles from './header.module.scss';
 import navStyles from './nav.module.scss';
 
-export default function Header() {
+const Header = () => {
   const [isLogged] = useState(true);
 
   // const state = useAppSelector((state) => state.apiPage);
@@ -35,4 +35,6 @@ export default function Header() {
       </div>
     </header>
   );
-}
+};
+
+export default Header;

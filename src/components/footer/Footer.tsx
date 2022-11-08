@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './footer.module.scss';
 import { DEVELOPERS } from 'utils/constants/TEAM';
 
-function Footer() {
+const Footer = () => {
   return (
     <footer className={styles.footer}>
       <div className={`${styles.wrapper} ${styles.footer__wrapper}`}>
@@ -35,6 +35,6 @@ function Footer() {
       </div>
     </footer>
   );
-}
+};
 
 export default Footer;

@@ -36,8 +36,8 @@ body {
 }
 
 .btn {
-  border-radius: 16px;
-  padding: 10px 26px;
+  border-radius: 1.6rem;
+  padding: 1rem 2.6rem;
   -webkit-tap-highlight-color: transparent;
   font-size: 1.6rem;
   cursor: pointer;
@@ -45,7 +45,7 @@ body {
 
 .btn_blue {
   background: rgba(0, 71, 255, 0.08);
-  border: 2px solid rgba(0, 71, 255, 0.08);
+  border: 0.2rem solid rgba(0, 71, 255, 0.08);
   color: var(--primary);
 }
 

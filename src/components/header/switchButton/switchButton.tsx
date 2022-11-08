@@ -6,7 +6,7 @@ type SwitchButtonProps = {
   handleToggle: () => void;
 };
 
-const SwitchButton: React.FC<SwitchButtonProps> = ({ isOn, handleToggle }) => {
+const SwitchButton = ({ isOn, handleToggle }: SwitchButtonProps) => {
   const labelClass = isOn ? 'switch__label en' : 'switch__label ru';
   return (
     <React.Fragment>

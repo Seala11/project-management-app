@@ -14,7 +14,7 @@ enum DropDownEnum {
   signOut = 'Sign Out',
 }
 
-export default function CustomSelect(props: CustomSelectProps) {
+const CustomSelect = (props: CustomSelectProps) => {
   const { options } = props;
   const [isOpen, setIsOpen] = useState(false);
   // const state = useAppSelector((state) => state.apiPage);
@@ -51,4 +51,6 @@ export default function CustomSelect(props: CustomSelectProps) {
       )}
     </div>
   );
-}
+};
+
+export default CustomSelect;

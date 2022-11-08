@@ -28,7 +28,7 @@ export const DEVELOPERS: DevelopersType[] = [
   },
   {
     name: 'Anna',
-    ghNick: 'Seala11',
+    ghNick: 'Hanna',
     role: 'Team Lead',
     ghLink: 'https://github.com/Seala11',
     imgLink: '',
@@ -36,9 +36,9 @@ export const DEVELOPERS: DevelopersType[] = [
   },
   {
     name: 'Kostia',
-    ghNick: 'Kostia',
+    ghNick: 'kosta4310',
     role: 'Developer',
-    ghLink: 'https://github.com/Kostia',
+    ghLink: 'https://github.com/kosta4310',
     imgLink: '',
     features: { first: '', second: '', third: '' },
   },
