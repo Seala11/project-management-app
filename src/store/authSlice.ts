@@ -32,7 +32,7 @@ export const thunkSignUp = createAsyncThunk(
         throw new Error(response.message);
       }
       const response: User = await res.json();
-      dispatch(setUser(response));
+      dispatch(setUser(options));
     } catch (error) {
       return rejectWithValue(error);
     }
