@@ -1,33 +1,3 @@
-*,
-*:before,
-*:after {
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-}
-
-input,
-button,
-textarea {
-  font-family: inherit;
-}
-
-a,
-a:visited,
-a:link {
-  text-decoration: none;
-  color: inherit;
-}
-
-a:hover {
-  color: var(--primary);
-}
-
-body {
-  margin: 0;
-}
-
 .wrapper {
   max-width: 1200px;
   padding: 0 1rem;
@@ -44,19 +14,41 @@ body {
 }
 
 .btn_blue {
-  background: rgba(0, 71, 255, 0.08);
+  background: var(--primary-s);
   border: 0.2rem solid rgba(0, 71, 255, 0.08);
   color: var(--primary);
 }
 
-a.btn {
-  display: inline;
+.btn_blue:hover {
+  background: var(--primary-m);
 }
 
-a.btn:hover {
-  color: inherit;
+.btn_red {
+  background: var(--error-s);
+  border: 0.2rem solid var(--gray-s);
+  color: var(--error);
 }
 
-.btn:hover {
+.btn_red:hover {
+  background: var(--error-m);
+}
+
+.btn_gray {
+  background: transparent;
+  border: 0.2rem solid var(--gray-s);
+  color: var(--gray);
+}
+
+.btn_gray:hover {
+  background: var(--primary-s);
+  border: 0.2rem solid rgba(0, 71, 255, 0.08);
+  color: var(--primary);
+}
+
+.btn:active {
   opacity: 0.8;
+}
+
+.btn:disabled {
+  background: var(--gray-s);
 }

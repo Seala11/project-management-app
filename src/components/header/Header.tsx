@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import ROUTES from 'utils/constants/ROUTES';
 //import { useAppSelector, useAppDispatch } from '../../store/store';
 //import { updateSearch } from '../../store/apiPageReducer';
 import styles from './header.module.scss';
@@ -20,7 +21,11 @@ const Header = () => {
   return (
     <header className={styles.header}>
       <div className={`${styles.wrapper} ${styles.header__wrapper}`}>
-        <NavLink to="/" className={`${navStyles.nav__link} ${navStyles.home}`} title="home">
+        <NavLink
+          to={ROUTES.home}
+          className={`${navStyles.nav__link} ${navStyles.home}`}
+          title="home"
+        >
           <div className={styles.logo}>RS Trello</div>
         </NavLink>
         <div className={styles.menu__wrapper}>
