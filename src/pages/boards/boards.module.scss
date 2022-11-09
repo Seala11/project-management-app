@@ -1,0 +1,49 @@
+.main {
+  max-width: 120rem;
+  padding: 0 1rem;
+  width: 100%;
+  margin: 0 auto;
+  flex: 1 1 auto;
+}
+
+.title {
+  font-size: 2.4rem;
+  font-weight: 600;
+}
+
+.list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 20rem;
+  width: 36rem;
+  border-radius: 0.8rem;
+  padding: 1.6rem;
+  background-color: var(--white);
+  box-shadow: 0px 3px 16px 1px var(--card);
+
+  &:hover {
+    box-shadow: 0px 3px 36px 6px var(--card-hover);
+    cursor: pointer;
+  }
+}
+
+.cardCreate {
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.cardName {
+  font-size: 2.4rem;
+  font-weight: 600;
+}
+
+.image {
+  width: 11.4rem;
+  height: 7.5rem;
+}
