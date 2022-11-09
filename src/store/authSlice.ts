@@ -1,9 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { useSelector, useDispatch } from 'react-redux';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { fetchSignIn, fetchSignUp, SighUp, SignIn, User } from '../api/api';
+import { fetchSignIn, fetchSignUp } from '../api/apiAuth';
+import { SighUp, SignIn, User } from '../api/types';
+
 import { RootState } from 'store';
-import { setLocalStorage } from 'api/localStorage';
+import { setTokenToLS } from 'api/localStorage';
 
 type Auth = {
   auth: boolean;
@@ -51,7 +53,7 @@ export const thunkSignIn = createAsyncThunk(
       const response: { token: string } = await res.json();
       console.log(response.token);
 
-      setLocalStorage(response.token);
+      setTokenToLS(response.token);
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -77,9 +79,6 @@ export const authSlice = createSlice({
     setUser(state, action) {
       state.user = action.payload;
     },
-    // setToken(state, action) {
-    //   state.token = action.payload;
-    // },
   },
 });
 
