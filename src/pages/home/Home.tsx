@@ -1,5 +1,6 @@
 import React from 'react';
 import SectionFeatures from './sectionFeatures/SectionFeatures';
+import SectionTeam from './sectionTeam/SectionTeam';
 import SectionWelcome from './sectionWelcome/SectionWelcome';
 
 const Home = () => {
@@ -7,6 +8,7 @@ const Home = () => {
     <>
       <SectionWelcome />
       <SectionFeatures />
+      <SectionTeam />
     </>
   );
 };

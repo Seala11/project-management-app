@@ -5,6 +5,7 @@ import ROUTES from 'utils/constants/ROUTES';
 //import { updateSearch } from '../../store/apiPageReducer';
 import styles from './header.module.scss';
 import navStyles from './nav.module.scss';
+import SwitchButton from './switchButton/switchButton';
 
 const Header = () => {
   const [isLogged] = useState(true);
@@ -30,7 +31,7 @@ const Header = () => {
         </NavLink>
         <div className={styles.menu__wrapper}>
           {isLogged && <div className={styles.menu__list}>User name</div>}
-          <div className={styles.menu__language}>EN / RU</div>
+          <SwitchButton />
         </div>
         <div className={navStyles.hamburger} id="hamburger-1">
           <span className={navStyles.line}></span>
