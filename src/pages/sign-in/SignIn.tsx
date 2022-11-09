@@ -5,17 +5,19 @@ import * as api from '../../api/api';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch } from 'store';
 import { thunkSignIn } from 'store/authSlice';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 
 const SignIn = () => {
-  const dispatch: AppDispatch = useDispatch();
-  const { login, password } = useSelector((state: RootState) => state.auth.user);
+  const dispatch = useAppDispatch();
+  const { login, password } = useAppSelector((state) => state.auth.user);
+  const state = useAppSelector((state) => state.auth);
   useEffect(() => {
-    // const res = api
-    //   .fetchSignIn({ login: 'petyako', password: '123456' })
-    //   .then((res) => res.json())
-    //   .then((res) => console.log(res))
-    //   .catch((e) => console.log(e));
-    dispatch(thunkSignIn({ login, password }));
+    console.log('signIn mounted');
+    // dispatch(thunkSignIn({ login: 'vaassgsss', password: '123456' }));
+    api
+      .getAllUsers()
+      .then((res) => res && res.json())
+      .then((res) => console.log(res));
   }, []);
 
   return (

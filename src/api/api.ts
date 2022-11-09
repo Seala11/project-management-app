@@ -51,12 +51,13 @@ export async function fetchSignUp(options: SighUp): Promise<Response> {
 
 export async function getAllUsers() {
   const token = getLocalStorage();
+
   if (token) {
     const res = await fetch(`${USERS}`, {
       method: 'GET',
       headers: {
         accept: 'application/json',
-        Authorization: token,
+        Authorization: `Bearer ${token}`,
       },
     });
     return res;

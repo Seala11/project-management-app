@@ -32,7 +32,7 @@ export const thunkSignUp = createAsyncThunk(
         throw new Error(response.message);
       }
       const response: User = await res.json();
-      dispatch(setUser(options));
+      dispatch(setUser(Object.assign(options, { _id: response._id })));
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -49,6 +49,8 @@ export const thunkSignIn = createAsyncThunk(
         throw new Error(response.message);
       }
       const response: { token: string } = await res.json();
+      console.log(response.token);
+
       setLocalStorage(response.token);
     } catch (error) {
       return rejectWithValue(error);
@@ -64,7 +66,7 @@ export const authSlice = createSlice({
       console.log('pending');
     });
     builder.addCase(thunkSignUp.fulfilled, (state, action) => {
-      console.log('fulfilled');
+      console.log('user is created');
     });
     builder.addCase(thunkSignUp.rejected, (state, action) => {
       console.log('rejected');
