@@ -27,7 +27,7 @@ export const useGetTeamData = () => {
       ghNick: 'OutLaw0',
       role: `${t('VALA.ROLE')}`,
       ghLink: 'https://github.com/OutLaw0',
-      imgLink: 'assets/images/avatar_boy.jpg',
+      imgLink: '',
       features: {
         first: `${t('VALA.FEAT1')}`,
         second: `${t('VALA.FEAT2')}`,
@@ -39,7 +39,7 @@ export const useGetTeamData = () => {
       ghNick: 'Seala11',
       role: `${t('ANNA.ROLE')}`,
       ghLink: 'https://github.com/Seala11',
-      imgLink: 'assets/images/avatar_girl.jpg',
+      imgLink: '',
       features: {
         first: `${t('ANNA.FEAT1')}`,
         second: `${t('ANNA.FEAT2')}`,
@@ -51,7 +51,7 @@ export const useGetTeamData = () => {
       ghNick: 'kosta4310',
       role: `${t('KOSTIA.ROLE')}`,
       ghLink: 'https://github.com/kosta4310',
-      imgLink: 'assets/images/avatar_boy2.jpg',
+      imgLink: '',
       features: {
         first: `${t('KOSTIA.FEAT1')}`,
         second: `${t('KOSTIA.FEAT2')}`,
