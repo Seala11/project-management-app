@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { useSelector, useDispatch } from 'react-redux';
 import type { PayloadAction } from '@reduxjs/toolkit';

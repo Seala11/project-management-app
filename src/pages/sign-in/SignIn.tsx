@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect } from 'react';
 import styles from './signin.module.scss';
 import { RootState } from 'store';
@@ -41,7 +42,7 @@ const SignIn = () => {
             <NavLink to="/sign-up">I dont`t have an account</NavLink>
           </div>
           <div className="form-image">
-            <img src={process.env.PUBLIC_URL + '/images/login.png'} alt="sign in" />
+            <img src="../../assets/images/login.png" alt="sign in" />
           </div>
         </div>
       </div>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
@@ -10,9 +11,9 @@ const SignUp = () => {
   const { login, password } = useAppSelector((state) => state.auth.user);
   const state = useAppSelector((state) => state.auth);
 
-  useEffect(() => {
-    dispatch(thunkSignUp({ name: 'petya', login: 'vaassgsss', password: '123456' }));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(thunkSignUp({ name: 'petya', login: 'vaassgsss', password: '123456' }));
+  // }, []);
 
   return (
     <div className="wrapper">
@@ -38,7 +39,7 @@ const SignUp = () => {
             <NavLink to="/sign-in">I already have an account</NavLink>
           </div>
           <div className="form-image">
-            <img src={process.env.PUBLIC_URL + '/images/login.png'} alt="sign up" />
+            <img src="login.png" alt="sign up" />
           </div>
         </div>
       </div>

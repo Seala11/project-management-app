@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { BASE, AUTH, USERS } from 'api/config';
 import { SighUp, SignIn } from './types';
 
