@@ -8,6 +8,7 @@ import { thunkSignIn } from 'store/authSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { getTokenFromLS } from 'api/localStorage';
 import { NavLink } from 'react-router-dom';
+import signImage from '../../assets/images/login.png';
 
 const SignIn = () => {
   const dispatch = useAppDispatch();
@@ -29,20 +30,24 @@ const SignIn = () => {
           <div className="form-block">
             <h1>Sing in</h1>
             <form className="form-sign-in">
-              <label>
-                Login
-                <input type="text" />
-              </label>
-              <label>
-                Password
-                <input type="text" />
-              </label>
+              <div className="form-item">
+                <label>
+                  Name
+                  <input type="text" />
+                </label>
+              </div>
+              <div className="form-item">
+                <label>
+                  Password
+                  <input type="text" />
+                </label>
+              </div>
               <button type="submit">Submit</button>
             </form>
             <NavLink to="/sign-up">I dont`t have an account</NavLink>
           </div>
           <div className="form-image">
-            <img src="../../assets/images/login.png" alt="sign in" />
+            <img src={signImage} alt="sign in" />
           </div>
         </div>
       </div>
