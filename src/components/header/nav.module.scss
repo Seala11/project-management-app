@@ -1,0 +1,76 @@
+@use './app/styles/mixins.scss' as *;
+
+.nav__list {
+  display: flex;
+  gap: 2rem;
+}
+
+.nav__list .btn {
+  background: transparent;
+  border-color: transparent;
+}
+
+.nav__list .btn.btn-login {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.nav__list .btn.btn-logout {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+a.home:hover {
+  color: var(--black);
+}
+
+.hamburger {
+  display: none;
+  z-index: 1;
+  margin: 0 3rem 0 1rem;
+  transition: 0.3s;
+}
+
+.hamburger .line {
+  width: 3rem;
+  height: 0.2rem;
+  background-color: var(--maintheme);
+  display: block;
+  margin: 0.6rem auto;
+  -webkit-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+.hamburger:hover {
+  cursor: pointer;
+}
+
+#hamburger-1.is-active {
+  -webkit-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+@include media-tablet {
+  .hamburger {
+    display: block;
+  }
+
+  .hamburger {
+    margin: 0 1rem 0 0;
+  }
+
+  .nav__list {
+    gap: 2rem;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+}
+
+@include media-mobile {
+  .hamburger {
+    margin: 0 0rem 0 0;
+  }
+}

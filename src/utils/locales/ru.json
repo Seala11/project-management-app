@@ -1,0 +1,17 @@
+{
+  "AUTH": {
+    "LOG_IN": "Войти",
+    "SIGN_UP": "Зарегистрироваться"
+  },
+  "LANGUAGES": {
+    "EN": "En",
+    "RU": "Ru"
+  },
+  "DEVELOPERS": {
+    "VALA": "Валентин",
+    "ANNA": "Анна",
+    "KOSTIA": "Костя",
+    "TEAM_L": "ТимЛид",
+    "DEVELOPER": "Разработчик"
+  }
+}
