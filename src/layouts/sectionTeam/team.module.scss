@@ -4,6 +4,10 @@
   @extend %wrapper;
 }
 
+.sectionThree {
+  background-color: var(--background);
+}
+
 .title {
   font-weight: 700;
   font-size: 4.8rem;
