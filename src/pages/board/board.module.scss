@@ -1,0 +1,6 @@
+@use './app/styles/mixins.scss' as *;
+
+.main {
+  flex: 1 1 auto;
+  @extend %wrapper;
+}
