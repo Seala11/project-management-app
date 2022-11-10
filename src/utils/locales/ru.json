@@ -9,7 +9,14 @@
   },
   "AUTH": {
     "SIGN_IN": "Войти",
-    "SIGN_UP": "Регистрация"
+    "SIGN_UP": "Регистрация",
+    "NAME": "Имя",
+    "LOGIN": "Логин",
+    "PASSWORD": "Пароль",
+    "SUBMIT": "Подтвердить",
+    "HAVE_ACCOUNT": "Я уже имею аккаунт",
+    "HAVENT_ACCOUNT": "У меня нет аккаунта",
+    "REQUIRED": "Это поле нужно заполнить"
   },
   "LANGUAGES": {
     "EN": "En",
