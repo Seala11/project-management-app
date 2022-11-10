@@ -1,0 +1,35 @@
+@use './app/styles/mixins.scss' as *;
+@import 'app/styles/global.scss';
+
+.title {
+  font-weight: 700;
+  font-size: 6.4rem;
+}
+
+.title_wrapper {
+  max-width: 57rem;
+}
+
+.subtitle {
+  font-weight: 400;
+  font-size: 1.8rem;
+  line-height: 3rem;
+  max-width: 42.2rem;
+}
+
+.main_content {
+  display: flex;
+  padding: 16.7rem 0;
+  flex-wrap: wrap;
+}
+
+.buttons_wrapper {
+  display: flex;
+  gap: 1rem;
+  padding-top: 4.5rem;
+  justify-content: flex-end;
+}
+
+.section_one {
+  background-color: var(--white);
+}
