@@ -2,29 +2,41 @@ import React from 'react';
 import styles from './team.module.scss';
 import { useTranslation } from 'react-i18next';
 import { useGetTeamData } from 'utils/TEAM';
+import Icon from 'components/Icon/Icon';
 
 const SectionTeam = () => {
   const { t } = useTranslation();
   const teamData = useGetTeamData();
 
   return (
-    <section className={styles.section_three}>
+    <section className={styles.sectionThree}>
       <div className={styles.wrapper}>
-        <div className={styles.main_content}>
-          <div className={styles.title_wrapper}>
+        <div className={styles.mainContent}>
+          <div className={styles.titleWrapper}>
             <h2 className={styles.title}>{t('TEAM.TITLE')}</h2>
           </div>
-          <div className={styles.team_wrapper}>
+          <div className={styles.teamWrapper}>
             {teamData.map((dev) => (
-              <div className={styles.team_member} key={dev.name}>
+              <div className={styles.teamMember} key={dev.name}>
                 <img src={dev.imgLink[`${dev.ghNick}`]} alt={dev.name} />
-                <div className={styles.member_data}>
-                  <div className={styles.member_name}>{dev.name}</div>
-                  <div className={styles.member_role}>{dev.role}</div>
-                  <div className={styles.feature_list}>
-                    <div className={styles.feature_item}>{dev.features.first}</div>
-                    <div className={styles.feature_item}>{dev.features.second}</div>
-                    <div className={styles.feature_item}>{dev.features.third}</div>
+                <div className={styles.memberData}>
+                  <div className={styles.memberName}>
+                    {dev.name} <Icon color="" size={20} icon="github" className={styles.icon} />
+                  </div>
+                  <div className={styles.memberRole}>{dev.role}</div>
+                  <div className={styles.featureList}>
+                    <div className={styles.featureItem}>
+                      <span className={styles.dot}>&#8226;</span>
+                      <div>{dev.features.first}</div>
+                    </div>
+                    <div className={styles.featureItem}>
+                      <span className={styles.dot}>&#8226;</span>
+                      <div>{dev.features.second}</div>
+                    </div>
+                    <div className={styles.featureItem}>
+                      <span className={styles.dot}>&#8226;</span>
+                      <div>{dev.features.third}</div>
+                    </div>
                   </div>
                 </div>
               </div>
