@@ -1,9 +1,8 @@
+@use './app/styles/mixins.scss' as *;
+
 .main {
-  max-width: 120rem;
-  padding: 0 1rem;
-  width: 100%;
-  margin: 0 auto;
   flex: 1 1 auto;
+  @extend %wrapper;
 }
 
 .title {
