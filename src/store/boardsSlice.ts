@@ -11,6 +11,7 @@ import { RootState } from 'store';
 
 type FakeBoard = {
   title: string;
+  _id: string;
 };
 
 type BoardState = {
@@ -19,12 +20,12 @@ type BoardState = {
 
 export const initialState: BoardState = {
   boards: [
-    { title: 'board 1' },
-    { title: 'board 2' },
-    { title: 'board 3' },
-    { title: 'board 5' },
-    { title: 'board 6' },
-    { title: 'board 7' },
+    { title: 'board 1', _id: '1rgrgr23' },
+    { title: 'board 2', _id: '1234awew' },
+    { title: 'board 3', _id: '123ser5' },
+    { title: 'board 5', _id: '12rgrgr36' },
+    { title: 'board 6', _id: '12rgrg37' },
+    { title: 'board 7', _id: '123gdgdgdg' },
   ],
 };
 
