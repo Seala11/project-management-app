@@ -16,7 +16,7 @@ const Boards = () => {
   };
 
   const navigateToBoardPage = (id: string) => {
-    navigate(`/boards/:${id}`);
+    navigate(`/boards/${id}`);
   };
 
   const deleteBoard = (event: React.MouseEvent) => {
