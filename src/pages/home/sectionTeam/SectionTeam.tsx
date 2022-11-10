@@ -17,13 +17,15 @@ const SectionTeam = () => {
           <div className={styles.team_wrapper}>
             {teamData.map((dev) => (
               <div className={styles.team_member} key={dev.name}>
-                <img src={dev.imgLink} alt={dev.name} />
-                <div className={styles.member_name}>{dev.name}</div>
-                <div className={styles.member_role}>{dev.role}</div>
-                <div className={styles.feature_list}>
-                  <div className={styles.feature_item}>{dev.features.first}</div>
-                  <div className={styles.feature_item}>{dev.features.second}</div>
-                  <div className={styles.feature_item}>{dev.features.third}</div>
+                <img src={dev.imgLink[`${dev.ghNick}`]} alt={dev.name} />
+                <div className={styles.member_data}>
+                  <div className={styles.member_name}>{dev.name}</div>
+                  <div className={styles.member_role}>{dev.role}</div>
+                  <div className={styles.feature_list}>
+                    <div className={styles.feature_item}>{dev.features.first}</div>
+                    <div className={styles.feature_item}>{dev.features.second}</div>
+                    <div className={styles.feature_item}>{dev.features.third}</div>
+                  </div>
                 </div>
               </div>
             ))}
