@@ -1,8 +1,10 @@
 import React from 'react';
 import styles from './footer.module.scss';
-import { DEVELOPERS } from 'utils/constants/TEAM';
+import { useGetTeamData } from 'utils/TEAM';
 
 const Footer = () => {
+  const teamData = useGetTeamData();
+
   return (
     <footer className={styles.footer}>
       <div className={`${styles.wrapper} ${styles.footer__wrapper}`}>
@@ -10,7 +12,7 @@ const Footer = () => {
           <span className={styles.copyright}>©</span>
           <span className={styles.footer__year}>2022</span>
           <div className={styles.footer__info}>
-            {DEVELOPERS.map((dev) => (
+            {teamData.map((dev) => (
               <a
                 key={dev.ghNick}
                 className={styles.footer__github_username}

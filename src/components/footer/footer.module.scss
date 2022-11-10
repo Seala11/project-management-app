@@ -1,4 +1,5 @@
-@import '../../app/styles/index.scss';
+@import 'app/styles/global.scss';
+@import 'app/styles/mixins.scss';
 
 .footer {
   background-color: var(--primary-s);

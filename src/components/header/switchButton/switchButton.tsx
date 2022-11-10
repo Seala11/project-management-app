@@ -1,30 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import './_switchButton.scss';
 
-type SwitchButtonProps = {
-  isOn: boolean;
-  handleToggle: () => void;
-};
+const SwitchButton = () => {
+  const [lang, setLang] = useState(localStorage.getItem('i18nextLng') || 'en');
+  const { i18n } = useTranslation();
+  const isEn = lang === 'en' ? true : false;
+  const handleToggle = () => {
+    const newLangValue = isEn ? 'ru' : 'en';
+    setLang(newLangValue);
+    i18n.changeLanguage(newLangValue);
+  };
 
-const SwitchButton = ({ isOn, handleToggle }: SwitchButtonProps) => {
-  const labelClass = isOn ? 'switch__label en' : 'switch__label ru';
   return (
-    <React.Fragment>
-      <div className="switch__label-info">
-        <span>EN</span>
-        <span>RU</span>
-      </div>
+    <>
       <input
-        checked={isOn}
+        checked={isEn}
         onChange={handleToggle}
         className="switch__checkbox"
         id={`switch-new`}
         type="checkbox"
       />
-      <label className={labelClass} htmlFor={`switch-new`}>
+      <label className={isEn ? 'switch__label en' : 'switch__label ru'} htmlFor={`switch-new`}>
+        <div className="switch__label-info">
+          <span className={isEn ? 'label__info' : 'label__info--invisible'}>{lang}</span>
+          <span className={isEn ? 'label__info--invisible' : 'label__info'}>{lang}</span>
+        </div>
         <span className={`switch__button`} />
       </label>
-    </React.Fragment>
+    </>
   );
 };
 

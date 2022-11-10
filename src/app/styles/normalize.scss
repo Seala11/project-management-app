@@ -36,4 +36,27 @@ body {
   @include inter;
   font-family: 'Inter', sans-serif;
   background: var(--background);
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+input,
+button,
+textarea {
+  font-family: inherit;
+}
+
+a,
+a:visited,
+a:link {
+  -webkit-tap-highlight-color: transparent;
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  color: var(--primary);
 }
