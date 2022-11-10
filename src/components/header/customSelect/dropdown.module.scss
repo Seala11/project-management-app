@@ -26,14 +26,9 @@
   filter: brightness(0.5);
 }
 
-.dropdownHeader:focus {
-  outline: 0.3rem solid #ddd;
-  z-index: 1;
-}
-
 .dropdownList {
   position: absolute;
-  background-color: white;
+  background-color: var(--white);
   width: 100%;
   top: 5rem;
   left: 0;
@@ -42,7 +37,7 @@
   cursor: pointer;
   border-radius: 0.8rem;
   padding: 2rem 0rem 2rem 2rem;
-  border: 0.1rem solid #f2f2f2;
+  border: 0.1rem solid var(--border);
   box-shadow: 0 0.3rem 1.6rem 0.1rem rgb(0 0 0 / 4%);
   display: flex;
   gap: 2rem;
@@ -61,12 +56,12 @@
 }
 
 .dropdownListItem.active {
-  color: #cac8c8;
+  color: var(--gray-l);
   cursor: default;
 }
 
 .dropdownListItem.active:hover {
-  background-color: rgba(101, 104, 109, 1);
+  color: var(--gray);
 }
 
 .dropdownListItem:hover {

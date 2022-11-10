@@ -3,25 +3,7 @@ import React, { useState } from 'react';
 // import { updateSearchBar } from '../../store/apiPageReducer';
 import styles from './dropdown.module.scss';
 import Icon from 'components/Icon/Icon';
-
-const DropDownArr = [
-  {
-    name: 'New Board',
-    icon: 'plus',
-  },
-  {
-    name: 'My Boards',
-    icon: 'boards',
-  },
-  {
-    name: 'Edit Profile',
-    icon: 'pen-menu',
-  },
-  {
-    name: 'Sign Out',
-    icon: 'log-out',
-  },
-];
+import { DROP_DOWN_DATA } from 'utils/constants/constants';
 
 const UserDropDown = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -48,7 +30,7 @@ const UserDropDown = () => {
       </div>
       {isOpen && (
         <ul className={styles.dropdownList}>
-          {DropDownArr.map((option) => (
+          {DROP_DOWN_DATA.map((option) => (
             <li
               className={styles.dropdownListItem}
               onClick={onOptionClicked(option.name)}
