@@ -1,26 +1,42 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppSelector } from 'store/hooks';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { boardsSelector } from 'store/boardsSlice';
-import { toast } from 'react-toastify';
 import Icon from 'components/Icon/Icon';
 import pencil from 'assets/images/pencil.png';
 import styles from './boards.module.scss';
+import { BtnColor, setModalOpen } from 'store/modalSlice';
 
 const Boards = () => {
   const boards = useAppSelector(boardsSelector);
+  // const modalAction = useAppSelector(modalActionSelector);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
-  const createBoard = () => {
-    toast.success(`успешный успех`);
-  };
 
   const navigateToBoardPage = (id: string) => {
     navigate(`/boards/${id}`);
   };
 
-  const deleteBoard = (event: React.MouseEvent) => {
+  const createBoard = () => {
+    dispatch(
+      setModalOpen({
+        title: `Create new board`,
+        input1: 'title',
+        color: BtnColor.BLUE,
+        btnText: 'Create',
+      })
+    );
+  };
+
+  const deleteBoard = (event: React.MouseEvent, board: string) => {
     event.stopPropagation();
+    dispatch(
+      setModalOpen({
+        message: `Are you sure you want to delete ${board}?`,
+        color: BtnColor.RED,
+        btnText: 'Delete',
+      })
+    );
   };
 
   return (
@@ -39,7 +55,7 @@ const Boards = () => {
           >
             <div className={styles.wrapper}>
               <h3 className={styles.cardName}>{board.title}</h3>
-              <button className={styles.button} onClick={(e) => deleteBoard(e)}>
+              <button className={styles.button} onClick={(e) => deleteBoard(e, board.title)}>
                 <Icon color="#CC0707" size={100} icon="trash" className={styles.icon} />
               </button>
             </div>
