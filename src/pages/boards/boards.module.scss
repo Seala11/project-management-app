@@ -9,12 +9,18 @@
 .title {
   font-size: 2.4rem;
   font-weight: 600;
+  padding: 3rem 0 0;
 }
 
 .list {
   list-style-type: none;
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  row-gap: 5rem;
+  padding: 3rem 0;
 }
 
 .card {
@@ -41,9 +47,11 @@
 .cardName {
   font-size: 2.4rem;
   font-weight: 600;
+  margin: 0.6rem 0;
 }
 
 .image {
   width: 11.4rem;
   height: 7.5rem;
+  margin-top: 3rem;
 }

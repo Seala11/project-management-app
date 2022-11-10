@@ -18,7 +18,14 @@ type BoardState = {
 };
 
 export const initialState: BoardState = {
-  boards: [],
+  boards: [
+    { title: 'board 1' },
+    { title: 'board 2' },
+    { title: 'board 3' },
+    { title: 'board 5' },
+    { title: 'board 6' },
+    { title: 'board 7' },
+  ],
 };
 
 export const boardsSlice = createSlice({
@@ -33,6 +40,6 @@ export const boardsSlice = createSlice({
 
 export const { createBoard } = boardsSlice.actions;
 
-export const languageSelector = (state: RootState) => state.boards;
+export const boardsSelector = (state: RootState) => state.boards.boards;
 
 export default boardsSlice.reducer;
