@@ -6,7 +6,7 @@ import { AppDispatch } from 'store';
 import { thunkSignIn } from 'store/authSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { getTokenFromLS } from 'api/localStorage';
-import { NavLink } from 'react-router-dom';
+import { Navigate, NavLink } from 'react-router-dom';
 import { Signin } from 'api/types';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import signImage from '../../assets/images/login.png';
@@ -20,8 +20,8 @@ export interface IFormInputSingIn {
 
 const SignIn = () => {
   const dispatch = useAppDispatch();
-  const { login, password } = useAppSelector((state) => state.auth.user);
-  const state = useAppSelector((state) => state.auth);
+  // const { login, password } = useAppSelector((state) => state.auth.user);
+  const { auth } = useAppSelector((state) => state.auth);
   const {
     register,
     handleSubmit,
@@ -30,6 +30,8 @@ const SignIn = () => {
   const onSubmit: SubmitHandler<Signin> = (data) => {
     dispatch(thunkSignIn(data));
   };
+
+  if (auth) return <Navigate to={'/'} />;
 
   return (
     <div className="wrapper">

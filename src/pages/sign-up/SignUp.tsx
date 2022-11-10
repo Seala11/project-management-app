@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { Navigate, NavLink } from 'react-router-dom';
 import { AppDispatch, RootState } from 'store';
 import { thunkSignIn, thunkSignUp } from 'store/authSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
@@ -16,7 +16,8 @@ interface IFormInputSignUp extends IFormInputSingIn {
 const SignUp = () => {
   const dispatch = useAppDispatch();
   const { login, password } = useAppSelector((state) => state.auth.user);
-  const state = useAppSelector((state) => state.auth);
+  const { registered, auth } = useAppSelector((state) => state.auth);
+
   const {
     register,
     handleSubmit,
@@ -25,9 +26,17 @@ const SignUp = () => {
   const onSubmit: SubmitHandler<Signup> = (data) => {
     dispatch(thunkSignUp(data));
   };
-  // useEffect(() => {
-  //   dispatch(thunkSignUp({ name: 'petya', login: 'vaassgsss', password: '123456' }));
-  // }, []);
+
+  useEffect(() => {
+    if (registered) {
+      console.log(registered);
+
+      console.log({ login, password });
+      dispatch(thunkSignIn({ login, password }));
+    }
+  }, [dispatch, login, password, registered]);
+
+  if (auth) return <Navigate to={'/'} />;
 
   return (
     <div className="wrapper">

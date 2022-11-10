@@ -13,10 +13,12 @@ type Auth = {
   auth: boolean;
   user: User;
   token: string;
+  registered: boolean;
 };
 
 const initialState: Auth = {
   auth: false,
+  registered: false,
   user: {
     _id: '',
     name: '',
@@ -35,8 +37,8 @@ export const thunkSignUp = createAsyncThunk(
         const response: { message: string; statusCode: number } = await res.json();
         throw new Error(response.message);
       }
-      const response: User = await res.json();
-      return response;
+      const response: Omit<User, 'password'> = await res.json();
+      return Object.assign(response, { password: options.password });
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -55,8 +57,6 @@ export const thunkSignIn = createAsyncThunk(
       }
 
       const response: { token: string } = await res.json();
-      dispatch(setAuth(true));
-      // console.log(response.token);
       setTokenToLS(response.token);
 
       const responseGetAllUsers = await getAllUsers(response.token);
@@ -86,7 +86,10 @@ export const authSlice = createSlice({
     // });
     builder.addCase(thunkSignUp.fulfilled, (state, action) => {
       console.log('user is created');
+      state.registered = true;
+      state.user = action.payload;
     });
+
     builder.addCase(thunkSignUp.rejected, (state, action) => {
       console.log('rejected');
       console.log(action.payload);
@@ -97,7 +100,9 @@ export const authSlice = createSlice({
     builder.addCase(thunkSignIn.fulfilled, (state, action) => {
       console.log('user is created');
       state.user = action.payload;
+      state.auth = true;
     });
+
     builder.addCase(thunkSignIn.rejected, (state, action) => {
       console.log('rejected');
       console.log(action.payload);
@@ -107,6 +112,7 @@ export const authSlice = createSlice({
     setUser(state, action) {
       state.user = action.payload;
     },
+
     setAuth(state, action) {
       state.auth = action.payload;
     },
