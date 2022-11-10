@@ -1,11 +1,11 @@
 import React from 'react';
-import styles from './boards.module.scss';
-import pencil from 'assets/images/pencil.png';
+import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from 'store/hooks';
 import { boardsSelector } from 'store/boardsSlice';
 import { toast } from 'react-toastify';
 import Icon from 'components/Icon/Icon';
-import { useNavigate } from 'react-router-dom';
+import pencil from 'assets/images/pencil.png';
+import styles from './boards.module.scss';
 
 const Boards = () => {
   const boards = useAppSelector(boardsSelector);
