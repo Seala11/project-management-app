@@ -3,16 +3,17 @@ import styles from './boards.module.scss';
 import pencil from 'assets/images/pencil.png';
 import { useAppSelector } from 'store/hooks';
 import { boardsSelector } from 'store/boardsSlice';
+import { toast } from 'react-toastify';
 
 const Boards = () => {
   const boards = useAppSelector(boardsSelector);
 
   const createBoard = () => {
-    console.log('show confirmation modal');
+    toast.success(`успешный успех`);
   };
 
   const navigateToBoardPage = () => {
-    console.log('navigate to board page');
+    toast.error(`error message`);
   };
 
   return (
