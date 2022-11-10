@@ -5,10 +5,33 @@
   @extend %wrapper;
 }
 
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.icon {
+  height: 2.4rem;
+  width: 2.2rem;
+}
+
 .title {
   font-size: 2.4rem;
   font-weight: 600;
   padding: 3rem 0 0;
+}
+
+.button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 1rem;
+  border-radius: 100%;
+
+  &:hover {
+    background: var(--error-m);
+  }
 }
 
 .list {
@@ -47,6 +70,10 @@
   font-size: 2.4rem;
   font-weight: 600;
   margin: 0.6rem 0;
+}
+
+.cardCreateName {
+  margin-top: 1rem;
 }
 
 .image {
