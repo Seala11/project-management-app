@@ -3,22 +3,24 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Navigate, NavLink } from 'react-router-dom';
 import { AppDispatch, RootState } from 'store';
-import { thunkSignIn, thunkSignUp } from 'store/authSlice';
+import { authSelector, thunkSignIn, thunkSignUp, userSelector } from 'store/authSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import signImage from '../../assets/images/login.png';
 import { IFormInputSingIn } from 'pages/sign-in/SignIn';
 import { Signup } from 'api/types';
 import { useTranslation } from 'react-i18next';
+import ROUTES from 'utils/constants/ROUTES';
 
-interface IFormInputSignUp extends IFormInputSingIn {
-  firstName: string;
-}
+// interface IFormInputSignUp extends IFormInputSingIn {
+//   firstName: string;
+// }
 const SignUp = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { login, password } = useAppSelector((state) => state.auth.user);
-  const { registered, auth } = useAppSelector((state) => state.auth);
+  const state = useAppSelector((state) => state);
+  const { login, password } = userSelector(state);
+  const { registered, auth } = authSelector(state);
 
   const {
     register,
@@ -38,7 +40,7 @@ const SignUp = () => {
     }
   }, [dispatch, login, password, registered]);
 
-  if (auth) return <Navigate to={'/'} />;
+  if (auth) return <Navigate to={ROUTES.boards} />;
 
   return (
     <div className="wrapper">

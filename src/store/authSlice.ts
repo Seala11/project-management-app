@@ -92,7 +92,7 @@ export const authSlice = createSlice({
 
     builder.addCase(thunkSignUp.rejected, (state, action) => {
       console.log('rejected');
-      console.log(action.payload);
+      // toast.error(action.payload);
     });
 
     // sign in
@@ -101,11 +101,12 @@ export const authSlice = createSlice({
       console.log('user is created');
       state.user = action.payload;
       state.auth = true;
+      // toast.success('User sign in successfully');
     });
 
     builder.addCase(thunkSignIn.rejected, (state, action) => {
       console.log('rejected');
-      console.log(action.payload);
+      // toast.error(action.payload);
     });
   },
   reducers: {
@@ -121,3 +122,5 @@ export const authSlice = createSlice({
 
 export default authSlice.reducer;
 export const { setUser, setAuth } = authSlice.actions;
+export const authSelector = (state: RootState) => state.auth;
+export const userSelector = (state: RootState) => state.auth.user;
