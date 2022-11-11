@@ -1,19 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect } from 'react';
-import { RootState } from 'store';
-import { useSelector, useDispatch } from 'react-redux';
-import { AppDispatch } from 'store';
-import { authSelector, thunkGetUserById, thunkSignIn } from 'store/authSlice';
+import React from 'react';
+import { authSelector, thunkSignIn } from 'store/authSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { getTokenFromLS } from 'api/localStorage';
 import { Navigate, NavLink } from 'react-router-dom';
-import { Signin, User } from 'api/types';
+import { Signin } from 'api/types';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import signImage from 'assets/images/login.png';
 import { useTranslation } from 'react-i18next';
-import { parseJwt } from '../../utils/func/parsejwt';
-
-import styles from './signin.module.scss';
 import ROUTES from 'utils/constants/ROUTES';
 
 export interface IFormInputSingIn {
@@ -33,14 +25,6 @@ const SignIn = () => {
   } = useForm<Signin>();
   const onSubmit: SubmitHandler<Signin> = (data) => {
     dispatch(thunkSignIn(data));
-    // .then((data) => {
-    // const res = data.payload as User;
-    // console.log(res.);
-
-    // const token = getTokenFromLS();
-    // const userId = parseJwt(token).id;
-    // dispatch(thunkGetUserById({ token, userId }));
-    // });
   };
 
   if (auth) return <Navigate to={ROUTES.boards} />;

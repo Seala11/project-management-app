@@ -1,14 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { AsyncThunk, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { useSelector, useDispatch } from 'react-redux';
-import type { PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchSignIn, fetchSignUp } from '../api/apiAuth';
 import { Signup, Signin, User } from '../api/types';
-import { useAppDispatch } from './hooks';
 import { RootState } from 'store';
 import { setTokenToLS } from 'api/localStorage';
-import { getAllUsers, getUserById } from 'api/apiUsers';
+import { getUserById } from 'api/apiUsers';
 import { parseJwt } from 'utils/func/parsejwt';
+import { toast } from 'react-toastify';
+import { getErrorMessage } from 'utils/func/handleError';
 
 type Auth = {
   auth: boolean;
@@ -39,14 +37,14 @@ export const thunkSignUp = createAsyncThunk(
       dispatch(thunkSignIn({ login, password }));
       return response;
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(getErrorMessage(error));
     }
   }
 );
 
 export const thunkSignIn = createAsyncThunk(
   'auth/fetchSignIn',
-  async (options: Signin, { rejectWithValue, dispatch, getState }) => {
+  async (options: Signin, { rejectWithValue, dispatch }) => {
     try {
       const res = await fetchSignIn(options);
 
@@ -62,14 +60,14 @@ export const thunkSignIn = createAsyncThunk(
       dispatch(thunkGetUserById({ token, userId }));
       return token;
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(getErrorMessage(error));
     }
   }
 );
 
 export const thunkGetUserById = createAsyncThunk(
   'auth/thunkGetUserById',
-  async ({ userId, token }: { token: string; userId: string }, { rejectWithValue, dispatch }) => {
+  async ({ userId, token }: { token: string; userId: string }, { rejectWithValue }) => {
     try {
       const res = await getUserById(userId, token);
       if (!res.ok) {
@@ -80,7 +78,7 @@ export const thunkGetUserById = createAsyncThunk(
 
       return response;
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(getErrorMessage(error));
     }
   }
 );
@@ -98,40 +96,44 @@ export const authSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    builder.addCase(thunkSignUp.fulfilled, (state, action) => {
+    builder.addCase(thunkSignUp.fulfilled, () => {
       console.log('user is created');
-      // state.user = action.payload;
+      toast.success('user is created');
     });
 
     builder.addCase(thunkSignUp.rejected, (state, action) => {
       console.log('rejected');
-      // toast.error(action.payload);
+      if (typeof action.payload === 'string') {
+        toast.error(action.payload);
+      }
     });
 
     // sign in
 
-    builder.addCase(thunkSignIn.fulfilled, (state, action) => {
+    builder.addCase(thunkSignIn.fulfilled, (state) => {
       console.log('user is created');
-      // state.user = action.payload;
       state.auth = true;
     });
 
     builder.addCase(thunkSignIn.rejected, (state, action) => {
       console.log('rejected');
-      // toast.error(action.payload);
-    });
-
-    builder.addCase(thunkGetUserById.rejected, (state, action) => {
-      console.log('rejected');
-      state.auth = false;
-
-      // toast.error(action.payload);
+      if (typeof action.payload === 'string') {
+        toast.error(action.payload);
+      }
     });
 
     builder.addCase(thunkGetUserById.fulfilled, (state, action) => {
       state.user = action.payload;
       state.auth = true;
-      // toast.success('User sign in successfully');
+      toast.success('User sign in successfully');
+    });
+
+    builder.addCase(thunkGetUserById.rejected, (state, action) => {
+      console.log('rejected');
+      state.auth = false;
+      if (typeof action.payload === 'string') {
+        toast.error(action.payload);
+      }
     });
   },
 });
