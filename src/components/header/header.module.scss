@@ -1,21 +1,27 @@
 @use './app/styles/mixins.scss' as *;
 
-.wrapper {
-  @extend %wrapper;
-}
-
 .header {
+  position: sticky;
+  top: 0;
   background: var(--white);
   box-shadow: 0 0.4rem 0.4rem rgb(0 0 0 / 4%);
   z-index: 1;
+  padding-top: 1.2rem;
+  padding-bottom: 1.2rem;
+  transition: 0.3s;
 }
 
 .headerWrapper {
+  @extend %wrapper;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
+}
+
+.header.sticky {
+  background: var(--background);
+  padding-top: 0.8rem;
+  padding-bottom: 0.8rem;
 }
 
 .logo {

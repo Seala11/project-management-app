@@ -18,7 +18,7 @@ const SectionTeam = () => {
           <div className={styles.teamWrapper}>
             {teamData.map((dev) => (
               <div className={styles.teamMember} key={dev.name}>
-                <img src={dev.imgLink[`${dev.ghNick}`]} alt={dev.name} />
+                <img className={styles.img} src={dev.imgLink[`${dev.ghNick}`]} alt={dev.name} />
                 <div className={styles.memberData}>
                   <div className={styles.memberName}>
                     {dev.name} <Icon color="" size={20} icon="github" className={styles.icon} />

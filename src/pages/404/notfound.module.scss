@@ -6,6 +6,7 @@
 
 .btn {
   @extend %btn;
+  padding: 1rem 6.6rem;
 }
 
 .btnBlue {
@@ -14,23 +15,19 @@
 
 .title {
   font-weight: 700;
-  font-size: 6.4rem;
+  font-size: 3.2rem;
 }
 
 .titleWrapper {
-  max-width: 57rem;
-}
-
-.subtitle {
-  font-weight: 400;
-  font-size: 1.8rem;
-  line-height: 3rem;
-  max-width: 42.2rem;
+  max-width: 51.7rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .mainContent {
   display: flex;
-  padding: 16.7rem 0;
+  align-items: center;
   justify-content: space-between;
 }
 
@@ -47,8 +44,11 @@
   justify-content: flex-end;
 }
 
-.sectionOne {
-  background-color: var(--white);
+.sectionError {
+  background-color: var(--background);
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
 }
 
 @include media-big-tablet {

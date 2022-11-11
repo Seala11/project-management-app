@@ -12,6 +12,10 @@
     "SIGN_IN": "Sign in",
     "SIGN_UP": "Sign up"
   },
+  "NOTFOUND": {
+    "TITLE": "Oops! The page you are looking for cannot be found.",
+    "HOMELINK": "Back Home"
+  },
   "LANGUAGES": {
     "EN": "En",
     "RU": "Ru"

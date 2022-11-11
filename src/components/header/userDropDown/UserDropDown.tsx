@@ -3,7 +3,31 @@ import React, { useState } from 'react';
 // import { updateSearchBar } from '../../store/apiPageReducer';
 import styles from './dropdown.module.scss';
 import Icon from 'components/Icon/Icon';
-import { DROP_DOWN_DATA } from 'utils/constants/constants';
+import ROUTES from 'utils/constants/ROUTES';
+import { NavLink } from 'react-router-dom';
+
+export const DROP_DOWN_DATA = [
+  {
+    name: 'New Board',
+    icon: 'plus',
+    route: ROUTES.boards,
+  },
+  {
+    name: 'My Boards',
+    icon: 'boards',
+    route: ROUTES.boards,
+  },
+  {
+    name: 'Edit Profile',
+    icon: 'pen-menu',
+    route: ROUTES.boards,
+  },
+  {
+    name: 'Sign Out',
+    icon: 'log-out',
+    route: ROUTES.boards,
+  },
+];
 
 const UserDropDown = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,13 +55,11 @@ const UserDropDown = () => {
       {isOpen && (
         <ul className={styles.dropdownList}>
           {DROP_DOWN_DATA.map((option) => (
-            <li
-              className={styles.dropdownListItem}
-              onClick={onOptionClicked(option.name)}
-              key={option.name}
-            >
-              <Icon color="#4D4D4D" size={20} icon={option.icon} /> {option.name}
-            </li>
+            <NavLink to={option.route} title={option.name} key={option.name}>
+              <li className={styles.dropdownListItem} onClick={onOptionClicked(option.name)}>
+                <Icon color="#4D4D4D" size={20} icon={option.icon} /> {option.name}
+              </li>
+            </NavLink>
           ))}
         </ul>
       )}
