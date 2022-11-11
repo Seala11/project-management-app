@@ -12,6 +12,12 @@
   }
 }
 
+@mixin media-big-tablet {
+  @media (max-width: 990px) {
+    @content;
+  }
+}
+
 @mixin media-tablet {
   @media (max-width: 768px) {
     @content;
@@ -27,5 +33,60 @@
 @mixin media-mobile-s {
   @media (max-width: 400px) {
     @content;
+  }
+}
+
+%wrapper {
+  max-width: 120rem;
+  padding: 0 1rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
+%btn {
+  border-radius: 1.6rem;
+  padding: 1rem 2.6rem;
+  -webkit-tap-highlight-color: transparent;
+  font-size: 1.6rem;
+  cursor: pointer;
+
+  &:active {
+    opacity: 0.8;
+  }
+
+  &:disabled {
+    background: var(--gray-s);
+  }
+}
+
+%btnBlue {
+  background: var(--primary-s);
+  border: 0.2rem solid rgba(0, 71, 255, 0.08);
+  color: var(--primary);
+
+  &:hover {
+    background: var(--primary-m);
+  }
+}
+
+%btnRed {
+  background: var(--error-s);
+  border: 0.2rem solid var(--gray-s);
+  color: var(--error);
+
+  &:hover {
+    background: var(--error-m);
+  }
+}
+
+%btnGray {
+  background: transparent;
+  border: 0.2rem solid var(--gray-s);
+  color: var(--gray);
+
+  &:hover {
+    background: var(--primary-s);
+    border: 0.2rem solid rgba(0, 71, 255, 0.08);
+    color: var(--primary);
   }
 }

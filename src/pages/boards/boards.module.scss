@@ -1,0 +1,83 @@
+@use './app/styles/mixins.scss' as *;
+
+.main {
+  flex: 1 1 auto;
+  @extend %wrapper;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.icon {
+  height: 2.4rem;
+  width: 2.2rem;
+}
+
+.title {
+  font-size: 2.4rem;
+  font-weight: 600;
+  padding: 3rem 0 0;
+}
+
+.button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 1rem;
+  border-radius: 100%;
+
+  &:hover {
+    background: var(--error-m);
+  }
+}
+
+.list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  row-gap: 5rem;
+  padding: 3rem 0;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 20rem;
+  width: 36rem;
+  border-radius: 0.8rem;
+  padding: 1.6rem;
+  background-color: var(--white);
+  box-shadow: 0px 3px 16px 1px var(--card);
+
+  &:hover {
+    box-shadow: 0px 3px 36px 6px var(--card-hover);
+    cursor: pointer;
+  }
+}
+
+.cardCreate {
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.cardName {
+  font-size: 2.4rem;
+  font-weight: 600;
+  margin: 0.6rem 0;
+}
+
+.cardCreateName {
+  margin-top: 1rem;
+}
+
+.image {
+  width: 11.4rem;
+  height: 7.5rem;
+  margin-top: 3rem;
+}

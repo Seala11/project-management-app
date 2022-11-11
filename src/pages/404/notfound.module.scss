@@ -1,0 +1,58 @@
+@use './app/styles/mixins.scss' as *;
+
+.wrapper {
+  @extend %wrapper;
+}
+
+.btn {
+  @extend %btn;
+  padding: 1rem 6.6rem;
+}
+
+.btnBlue {
+  @extend %btnBlue;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 3.2rem;
+}
+
+.titleWrapper {
+  max-width: 51.7rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.mainContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.img {
+  height: auto;
+  width: max-content;
+  min-width: 0;
+}
+
+.buttonsWrapper {
+  display: flex;
+  gap: 1rem;
+  padding-top: 4.5rem;
+  justify-content: flex-end;
+}
+
+.sectionError {
+  background-color: var(--background);
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+}
+
+@include media-big-tablet {
+  .mainContent {
+    flex-wrap: wrap;
+  }
+}

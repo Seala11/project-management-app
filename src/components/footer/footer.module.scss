@@ -1,35 +1,40 @@
-@import 'app/styles/global.scss';
-@import 'app/styles/mixins.scss';
+@use './app/styles/mixins.scss' as *;
+
+.wrapper {
+  @extend %wrapper;
+}
 
 .footer {
   background-color: var(--primary-s);
 }
 
-.footer__wrapper {
+.footerWrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding-top: 6rem;
   padding-bottom: 6rem;
   font-size: 2rem;
+  flex-wrap: wrap;
 }
 
-.footer__info {
+.footerInfo {
   display: flex;
   gap: 2rem;
 }
 
-.footer__copyright {
+.footerCopyright {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 }
 
-.footer__year {
+.footerYear {
   padding: 0 7rem 0 2rem;
 }
 
-.footer__github_username,
-.footer__rss {
+.footerGithubUsername,
+.footerRss {
   text-decoration: none;
   transition: 0.3s;
 }

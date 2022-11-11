@@ -1,12 +1,15 @@
 @use './app/styles/mixins.scss' as *;
-@import 'app/styles/global.scss';
+
+.wrapper {
+  @extend %wrapper;
+}
 
 .title {
   font-weight: 700;
   font-size: 4.8rem;
 }
 
-.title_wrapper {
+.titleWrapper {
   max-width: 49.3rem;
 }
 
@@ -17,19 +20,25 @@
   max-width: 42.2rem;
 }
 
-.main_content {
+.mainContent {
   display: flex;
   padding: 15.85rem 0;
   gap: 10.3rem;
-  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
-.main_content img {
+.img {
   height: auto;
-  width: 100%;
-  max-width: max-content;
+  width: max-content;
+  min-width: 0;
 }
 
-.section_two {
+.sectionTwo {
   background-color: var(--primary-m);
+}
+
+@include media-big-tablet {
+  .mainContent {
+    flex-wrap: wrap;
+  }
 }

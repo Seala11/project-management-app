@@ -1,7 +1,8 @@
 {
   "WELCOME": {
     "TITLE": "More accomplish together",
-    "SUBTITLE": "Collaborate, manage projects and reach new Productivity peak."
+    "SUBTITLE": "Collaborate, manage projects and reach new Productivity peak.",
+    "BOARDLINK": "Go to Boards"
   },
   "FEATURES": {
     "TITLE": "Features to help your team succeed",
@@ -17,6 +18,10 @@
     "HAVE_ACCOUNT": "I already have an account",
     "HAVENT_ACCOUNT": "I dont`t have an account",
     "REQUIRED": "This field is required"
+  },
+  "NOTFOUND": {
+    "TITLE": "Oops! The page you are looking for cannot be found.",
+    "HOMELINK": "Back Home"
   },
   "LANGUAGES": {
     "EN": "En",

@@ -6,11 +6,11 @@ import { useTranslation } from 'react-i18next';
 const SectionFeatures = () => {
   const { t } = useTranslation();
   return (
-    <section className={styles.section_two}>
+    <section className={styles.sectionTwo}>
       <div className={styles.wrapper}>
-        <div className={styles.main_content}>
-          <img src={growth} alt="growth.png" />
-          <div className={styles.title_wrapper}>
+        <div className={styles.mainContent}>
+          <img className={styles.img} src={growth} alt="growth.png" />
+          <div className={styles.titleWrapper}>
             <h2 className={styles.title}>{t('FEATURES.TITLE')}</h2>
             <div className={styles.subtitle}>{t('FEATURES.SUBTITLE')}</div>
           </div>
