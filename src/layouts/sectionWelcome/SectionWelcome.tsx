@@ -35,7 +35,7 @@ const SectionWelcome = () => {
             <h1 className={styles.title}>{t('WELCOME.TITLE')}</h1>
             <div className={styles.subtitle}>{t('WELCOME.SUBTITLE')}</div>
           </div>
-          <img src={teaching} alt="teaching.png" />
+          <img className={styles.img} src={teaching} alt="teaching.png" />
         </div>
       </div>
     </section>
