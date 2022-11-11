@@ -24,9 +24,10 @@
   display: flex;
   padding: 15.85rem 0;
   gap: 10.3rem;
+  justify-content: space-between;
 }
 
-.mainContent img {
+.img {
   height: auto;
   width: max-content;
   min-width: 0;

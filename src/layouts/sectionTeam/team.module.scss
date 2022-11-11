@@ -33,7 +33,7 @@
   padding-bottom: 20.7rem;
 }
 
-.mainContent img {
+.img {
   height: auto;
   width: max-content;
   min-width: 0;
@@ -78,7 +78,7 @@
   align-self: flex-end;
 }
 
-.teamMember:nth-child(2) img {
+.teamMember:nth-child(2) .img {
   order: 2;
 }
 

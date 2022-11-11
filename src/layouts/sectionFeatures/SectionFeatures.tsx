@@ -9,7 +9,7 @@ const SectionFeatures = () => {
     <section className={styles.sectionTwo}>
       <div className={styles.wrapper}>
         <div className={styles.mainContent}>
-          <img src={growth} alt="growth.png" />
+          <img className={styles.img} src={growth} alt="growth.png" />
           <div className={styles.titleWrapper}>
             <h2 className={styles.title}>{t('FEATURES.TITLE')}</h2>
             <div className={styles.subtitle}>{t('FEATURES.SUBTITLE')}</div>

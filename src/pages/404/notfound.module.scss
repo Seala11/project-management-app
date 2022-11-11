@@ -28,9 +28,10 @@
 .mainContent {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
-.mainContent img {
+.img {
   height: auto;
   width: max-content;
   min-width: 0;

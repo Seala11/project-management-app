@@ -31,9 +31,10 @@
 .mainContent {
   display: flex;
   padding: 16.7rem 0;
+  justify-content: space-between;
 }
 
-.mainContent img {
+.img {
   height: auto;
   width: max-content;
   min-width: 0;

@@ -21,7 +21,7 @@ const NotFound = () => {
               </NavLink>
             </div>
           </div>
-          <img src={image404} alt="404.png" />
+          <img className={styles.img} src={image404} alt="404.png" />
         </div>
       </div>
     </section>
