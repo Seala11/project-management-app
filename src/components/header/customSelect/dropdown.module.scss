@@ -1,0 +1,70 @@
+@use './app/styles/mixins.scss' as *;
+
+.dropdownWrapper {
+  display: flex;
+  min-width: 12.2rem;
+  z-index: 1;
+  position: relative;
+  margin: 0.5rem;
+}
+
+.dropdownHeader {
+  font-size: 1.6rem;
+  font-weight: 500;
+  padding: 0 1rem 0 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+}
+
+.name {
+  padding-right: 3rem;
+}
+
+.dropdownHeader.disable {
+  filter: brightness(0.5);
+}
+
+.dropdownList {
+  position: absolute;
+  background-color: var(--white);
+  width: 100%;
+  top: 5rem;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 0.8rem;
+  padding: 2rem 0rem 2rem 2rem;
+  border: 0.1rem solid var(--border);
+  box-shadow: 0 0.3rem 1.6rem 0.1rem rgb(0 0 0 / 4%);
+  display: flex;
+  gap: 2rem;
+  flex-direction: column;
+}
+
+.dropdownListItem {
+  color: var(--gray);
+  text-decoration: none;
+  display: flex;
+  line-height: normal;
+  font-weight: 400;
+  font-size: 1.6rem;
+  line-height: 1.9rem;
+  gap: 1.5rem;
+}
+
+.dropdownListItem.active {
+  color: var(--gray-l);
+  cursor: default;
+}
+
+.dropdownListItem.active:hover {
+  color: var(--gray);
+}
+
+.dropdownListItem:hover {
+  color: var(--black);
+  transition: 0.3s;
+}
