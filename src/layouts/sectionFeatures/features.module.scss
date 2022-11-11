@@ -24,15 +24,20 @@
   display: flex;
   padding: 15.85rem 0;
   gap: 10.3rem;
-  flex-wrap: wrap;
 }
 
 .mainContent img {
   height: auto;
-  width: 100%;
-  max-width: max-content;
+  width: max-content;
+  min-width: 0;
 }
 
 .sectionTwo {
   background-color: var(--primary-m);
+}
+
+@include media-big-tablet {
+  .mainContent {
+    flex-wrap: wrap;
+  }
 }

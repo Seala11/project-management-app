@@ -28,7 +28,6 @@
   display: flex;
   padding: 15.85rem 0;
   gap: 3rem;
-  flex-wrap: wrap;
   flex-direction: column;
   align-items: center;
   padding-bottom: 20.7rem;
@@ -36,8 +35,8 @@
 
 .mainContent img {
   height: auto;
-  width: 100%;
-  max-width: max-content;
+  width: max-content;
+  min-width: 0;
 }
 
 .teamWrapper {
@@ -122,4 +121,10 @@
   display: flex;
   justify-content: center;
   line-height: 1.4rem;
+}
+
+@include media-big-tablet {
+  .mainContent {
+    flex-wrap: wrap;
+  }
 }
