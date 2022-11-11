@@ -1,5 +1,8 @@
-@import 'app/styles/global.scss';
-@import 'app/styles/mixins.scss';
+@use './app/styles/mixins.scss' as *;
+
+.wrapper {
+  @extend %wrapper;
+}
 
 .header {
   background: var(--white);
@@ -7,7 +10,7 @@
   z-index: 1;
 }
 
-.header__wrapper {
+.headerWrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -19,40 +22,87 @@
   font-weight: 700;
   font-size: 2.2rem;
   line-height: 140%;
+  display: flex;
+  gap: 0.8rem;
 }
 
-.menu__wrapper {
+.logo img {
+  max-height: 2.9rem;
+}
+
+.menuWrapper {
   display: flex;
   align-items: center;
   position: relative;
 }
 
-.menu__list {
+.menuList {
   font-size: 1.6rem;
   font-weight: 500;
   padding: 0 5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
-.menu__language {
+.menuLanguage {
   display: flex;
   align-items: center;
   font-size: 2rem;
   font-weight: 700;
 }
 
+a.home:hover {
+  color: var(--black);
+}
+
+.hamburger {
+  display: none;
+  z-index: 1;
+  margin: 0 3rem 0 1rem;
+  transition: 0.3s;
+}
+
+.hamburger .line {
+  width: 3rem;
+  height: 0.2rem;
+  background-color: var(--maintheme);
+  display: block;
+  margin: 0.6rem auto;
+  -webkit-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+.hamburger:hover {
+  cursor: pointer;
+}
+
+.hamburger.is-active {
+  -webkit-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
 @include media-tablet {
-  .header__wrapper {
-    margin: 1.5rem auto 1rem auto;
+  .hamburger {
+    display: block;
+    margin: 0 1rem 0 0;
   }
 
-  .nav__list {
-    flex-wrap: wrap;
+  .header__wrapper {
+    margin: 1.5rem auto 1rem auto;
   }
 }
 
 @include media-mobile {
   .logo {
     margin: 1rem 0;
+  }
+
+  .hamburger {
+    margin: 0 0rem 0 0;
   }
 }
 
