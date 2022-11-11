@@ -7,7 +7,7 @@ import { Signup, Signin, User } from '../api/types';
 import { useAppDispatch } from './hooks';
 import { RootState } from 'store';
 import { setTokenToLS } from 'api/localStorage';
-import { getAllUsers } from 'api/apiUsers';
+import { getAllUsers, getUserById } from 'api/apiUsers';
 
 type Auth = {
   auth: boolean;
@@ -56,21 +56,30 @@ export const thunkSignIn = createAsyncThunk(
         throw new Error(response.message);
       }
 
-      const response: { token: string } = await res.json();
-      setTokenToLS(response.token);
+      const { token }: { token: string } = await res.json();
+      setTokenToLS(token);
+      console.log('login');
+      return token;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
 
-      const responseGetAllUsers = await getAllUsers(response.token);
+export const thunkGetUserById = createAsyncThunk(
+  'auth/thunkGetUserById',
+  async ({ userId, token }: { token: string; userId: string }, { rejectWithValue, dispatch }) => {
+    try {
+      const res = await getUserById(userId, token);
       if (!res.ok) {
-        const response: { message: string; statusCode: number } = await responseGetAllUsers.json();
+        const response: { message: string; statusCode: number } = await res.json();
         throw new Error(response.message);
       }
-
-      const allUsers: Array<Omit<User, 'password'>> = await responseGetAllUsers.json();
-      const user = allUsers.find((user) => user.login === options.login);
-      if (!user) {
-        throw new Error('нет такого юзера');
-      }
-      return Object.assign(user, { ...options });
+      const response = await res.json();
+      console.log('auth');
+      console.log(response);
+      // const response: Omit<User, 'password'> = await res.json();
+      // return Object.assign(response, { password: options.password });
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -99,7 +108,7 @@ export const authSlice = createSlice({
 
     builder.addCase(thunkSignIn.fulfilled, (state, action) => {
       console.log('user is created');
-      state.user = action.payload;
+      // state.user = action.payload;
       state.auth = true;
       // toast.success('User sign in successfully');
     });
@@ -108,7 +117,14 @@ export const authSlice = createSlice({
       console.log('rejected');
       // toast.error(action.payload);
     });
+
+    builder.addCase(thunkGetUserById.rejected, (state, action) => {
+      console.log('rejected');
+      state.auth = false;
+      // toast.error(action.payload);
+    });
   },
+
   reducers: {
     setUser(state, action) {
       state.user = action.payload;

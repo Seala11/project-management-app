@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { RootState } from 'store';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch } from 'store';
-import { authSelector, thunkSignIn } from 'store/authSlice';
+import { authSelector, thunkGetUserById, thunkSignIn } from 'store/authSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { getTokenFromLS } from 'api/localStorage';
 import { Navigate, NavLink } from 'react-router-dom';
@@ -11,6 +11,7 @@ import { Signin } from 'api/types';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import signImage from 'assets/images/login.png';
 import { useTranslation } from 'react-i18next';
+import { parseJwt } from '../../utils/func/parsejwt';
 
 import styles from './signin.module.scss';
 import ROUTES from 'utils/constants/ROUTES';
@@ -24,7 +25,6 @@ const SignIn = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const state = useAppSelector((state) => state);
-  // const { login, password } = useAppSelector((state) => state.auth.user);
   const { auth } = authSelector(state);
   const {
     register,
@@ -32,7 +32,11 @@ const SignIn = () => {
     formState: { errors },
   } = useForm<Signin>();
   const onSubmit: SubmitHandler<Signin> = (data) => {
-    dispatch(thunkSignIn(data));
+    dispatch(thunkSignIn(data)).then(() => {
+      const token = getTokenFromLS();
+      const userId = parseJwt(token).id;
+      dispatch(thunkGetUserById({ token, userId }));
+    });
   };
 
   if (auth) return <Navigate to={ROUTES.boards} />;

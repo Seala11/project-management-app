@@ -8,13 +8,10 @@ import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import signImage from '../../assets/images/login.png';
 import { IFormInputSingIn } from 'pages/sign-in/SignIn';
-import { Signup } from 'api/types';
+import { Signup, User } from 'api/types';
 import { useTranslation } from 'react-i18next';
 import ROUTES from 'utils/constants/ROUTES';
 
-// interface IFormInputSignUp extends IFormInputSingIn {
-//   firstName: string;
-// }
 const SignUp = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
