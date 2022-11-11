@@ -1,13 +1,13 @@
 @use './app/styles/mixins.scss' as *;
 
-.switch__checkbox {
+.switchCheckbox {
   height: 0;
   width: 0;
   visibility: hidden;
   margin: 0;
 }
 
-.switch__label {
+.switchLabel {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -21,7 +21,7 @@
   min-height: auto;
 }
 
-.switch__label .switch__button {
+.switchLabel .switchButton {
   content: '';
   position: absolute;
   top: 0.2rem;
@@ -34,24 +34,24 @@
   box-shadow: 0 0 0.2rem 0 rgba(10, 10, 10, 0.29);
 }
 
-.switch__label.ru {
+.switchLabel.ru {
   background: var(--error-m);
 }
 
-.switch__label.en {
+.switchLabel.en {
   background: var(--primary-m);
 }
 
-.switch__checkbox:checked + .switch__label .switch__button {
+.switchCheckbox:checked + .switchLabel .switchButton {
   left: calc(100% - 0.2rem);
   transform: translateX(-100%);
 }
 
-.switch__label:active .switch__button {
+.switchLabel:active .switch__button {
   width: 4rem;
 }
 
-.switch__label-info {
+.switchLabelInfo {
   display: flex;
   gap: 1.3rem;
   position: absolute;
@@ -63,16 +63,16 @@
   text-transform: uppercase;
 }
 
-.label__info--invisible {
+.invisible {
   opacity: 0;
 }
 
 @include media-mobile {
-  .switch__label {
+  .switchLabel {
     min-width: auto;
   }
 
-  .switch__label-info {
+  .switchLabel-info {
     left: unset;
   }
 }
