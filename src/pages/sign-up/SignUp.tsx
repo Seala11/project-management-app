@@ -11,8 +11,7 @@ import ROUTES from 'utils/constants/ROUTES';
 const SignUp = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const state = useAppSelector((state) => state);
-  const { auth } = authSelector(state);
+  const { auth } = useAppSelector(authSelector);
 
   const {
     register,
