@@ -8,24 +8,20 @@ import { useAppDispatch } from './hooks';
 import { RootState } from 'store';
 import { setTokenToLS } from 'api/localStorage';
 import { getAllUsers, getUserById } from 'api/apiUsers';
+import { parseJwt } from 'utils/func/parsejwt';
 
 type Auth = {
   auth: boolean;
-  user: User;
-  token: string;
-  registered: boolean;
+  user: Omit<User, 'password'>;
 };
 
 const initialState: Auth = {
   auth: false,
-  registered: false,
   user: {
     _id: '',
     name: '',
     login: '',
-    password: '',
   },
-  token: '',
 };
 
 export const thunkSignUp = createAsyncThunk(
@@ -37,8 +33,11 @@ export const thunkSignUp = createAsyncThunk(
         const response: { message: string; statusCode: number } = await res.json();
         throw new Error(response.message);
       }
-      const response: Omit<User, 'password'> = await res.json();
-      return Object.assign(response, { password: options.password });
+      const response: User = await res.json();
+      const login = options.login;
+      const password = options.password;
+      dispatch(thunkSignIn({ login, password }));
+      return response;
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -58,7 +57,9 @@ export const thunkSignIn = createAsyncThunk(
 
       const { token }: { token: string } = await res.json();
       setTokenToLS(token);
-      console.log('login');
+
+      const userId = parseJwt(token).id;
+      dispatch(thunkGetUserById({ token, userId }));
       return token;
     } catch (error) {
       return rejectWithValue(error);
@@ -75,11 +76,9 @@ export const thunkGetUserById = createAsyncThunk(
         const response: { message: string; statusCode: number } = await res.json();
         throw new Error(response.message);
       }
-      const response = await res.json();
-      console.log('auth');
-      console.log(response);
-      // const response: Omit<User, 'password'> = await res.json();
-      // return Object.assign(response, { password: options.password });
+      const response: User = await res.json();
+
+      return response;
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -89,14 +88,19 @@ export const thunkGetUserById = createAsyncThunk(
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
+  reducers: {
+    setUser(state, action) {
+      state.user = action.payload;
+    },
+
+    setAuth(state, action) {
+      state.auth = action.payload;
+    },
+  },
   extraReducers(builder) {
-    // builder.addCase(thunkSignUp.pending, (state, action) => {
-    //   console.log('pending');
-    // });
     builder.addCase(thunkSignUp.fulfilled, (state, action) => {
       console.log('user is created');
-      state.registered = true;
-      state.user = action.payload;
+      // state.user = action.payload;
     });
 
     builder.addCase(thunkSignUp.rejected, (state, action) => {
@@ -110,7 +114,6 @@ export const authSlice = createSlice({
       console.log('user is created');
       // state.user = action.payload;
       state.auth = true;
-      // toast.success('User sign in successfully');
     });
 
     builder.addCase(thunkSignIn.rejected, (state, action) => {
@@ -121,18 +124,15 @@ export const authSlice = createSlice({
     builder.addCase(thunkGetUserById.rejected, (state, action) => {
       console.log('rejected');
       state.auth = false;
+
       // toast.error(action.payload);
     });
-  },
 
-  reducers: {
-    setUser(state, action) {
+    builder.addCase(thunkGetUserById.fulfilled, (state, action) => {
       state.user = action.payload;
-    },
-
-    setAuth(state, action) {
-      state.auth = action.payload;
-    },
+      state.auth = true;
+      // toast.success('User sign in successfully');
+    });
   },
 });
 

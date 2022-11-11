@@ -16,8 +16,7 @@ const SignUp = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const state = useAppSelector((state) => state);
-  const { login, password } = userSelector(state);
-  const { registered, auth } = authSelector(state);
+  const { auth } = authSelector(state);
 
   const {
     register,
@@ -27,15 +26,6 @@ const SignUp = () => {
   const onSubmit: SubmitHandler<Signup> = (data) => {
     dispatch(thunkSignUp(data));
   };
-
-  useEffect(() => {
-    if (registered) {
-      console.log(registered);
-
-      console.log({ login, password });
-      dispatch(thunkSignIn({ login, password }));
-    }
-  }, [dispatch, login, password, registered]);
 
   if (auth) return <Navigate to={ROUTES.boards} />;
 
