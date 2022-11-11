@@ -10,7 +10,14 @@
   },
   "AUTH": {
     "SIGN_IN": "Sign in",
-    "SIGN_UP": "Sign up"
+    "SIGN_UP": "Sign up",
+    "NAME": "Name",
+    "LOGIN": "Login",
+    "PASSWORD": "Password",
+    "SUBMIT": "Submit",
+    "HAVE_ACCOUNT": "I already have an account",
+    "HAVENT_ACCOUNT": "I dont`t have an account",
+    "REQUIRED": "This field is required"
   },
   "NOTFOUND": {
     "TITLE": "Oops! The page you are looking for cannot be found.",
