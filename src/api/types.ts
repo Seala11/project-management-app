@@ -13,5 +13,5 @@ type Auth = {
   token: string;
 };
 
-export type SighUp = Omit<Auth, '_id' | 'token'>;
-export type SignIn = Pick<Auth, 'login' | 'password'>;
+export type Signup = Omit<Auth, '_id' | 'token'>;
+export type Signin = Pick<Auth, 'login' | 'password'>;
