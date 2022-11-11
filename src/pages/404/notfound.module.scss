@@ -47,6 +47,7 @@
   background-color: var(--background);
   display: flex;
   align-items: center;
+  flex: 1 1 auto;
 }
 
 @include media-big-tablet {

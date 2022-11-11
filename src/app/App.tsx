@@ -13,8 +13,8 @@ const App = () => (
   <Provider store={store}>
     <BrowserRouter>
       <div className={styles.app}>
-        <Header />
         <ToastContainer autoClose={8000} />
+        <Header />
         <Routing />
         <Footer />
       </div>
