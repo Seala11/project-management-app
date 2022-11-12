@@ -14,9 +14,7 @@ const NotFound = () => {
           <h2 className={styles.title}>{t('NOTFOUND.TITLE')}</h2>
           <div className={styles.buttonsWrapper}>
             <NavLink to={ROUTES.home} title="go home">
-              <button className={`${styles.btn} ${styles.btnBlue}`}>
-                {t('NOTFOUND.HOMELINK')}
-              </button>
+              <button className={styles.btn}>{t('NOTFOUND.HOMELINK')}</button>
             </NavLink>
           </div>
         </div>

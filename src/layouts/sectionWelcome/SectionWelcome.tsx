@@ -15,18 +15,16 @@ const SectionWelcome = () => {
           {!isLogged && (
             <>
               <NavLink to={ROUTES.signIn} title="signIn">
-                <button className={`${styles.btn} ${styles.btnBlue}`}>{t('AUTH.SIGN_IN')}</button>
+                <button className={styles.btn}>{t('AUTH.SIGN_IN')}</button>
               </NavLink>
               <NavLink to={ROUTES.signUp} title="signUp">
-                <button className={`${styles.btn} ${styles.btnBlue}`}>{t('AUTH.SIGN_UP')}</button>
+                <button className={styles.btn}>{t('AUTH.SIGN_UP')}</button>
               </NavLink>
             </>
           )}
           {isLogged && (
             <NavLink to={ROUTES.boards} title="boards">
-              <button className={`${styles.btn} ${styles.btnBlue}`}>
-                {t('WELCOME.BOARDLINK')}
-              </button>
+              <button className={styles.btn}>{t('WELCOME.BOARDLINK')}</button>
             </NavLink>
           )}
         </div>

@@ -46,19 +46,12 @@
 }
 
 .card {
+  @extend %cardShadow;
   display: flex;
   flex-direction: column;
   height: 20rem;
   width: 36rem;
-  border-radius: 0.8rem;
   padding: 1.6rem;
-  background-color: var(--white);
-  box-shadow: 0px 3px 16px 1px var(--card);
-
-  &:hover {
-    box-shadow: 0px 3px 36px 6px var(--card-hover);
-    cursor: pointer;
-  }
 }
 
 .cardCreate {
