@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { authSelector, thunkSignIn } from 'store/authSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { Navigate, NavLink } from 'react-router-dom';
@@ -7,6 +7,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import signImage from 'assets/images/login.png';
 import { useTranslation } from 'react-i18next';
 import ROUTES from 'utils/constants/ROUTES';
+import styles from './signin.module.scss';
 
 export interface IFormInputSingIn {
   login: string;
@@ -27,28 +28,38 @@ const SignIn = () => {
     dispatch(thunkSignIn(data));
   };
 
+  useEffect(() => {
+    console.log(errors.login);
+  });
+
   if (auth) return <Navigate to={ROUTES.boards} />;
 
   return (
-    <div className="wrapper">
-      <div className="container">
-        <div className="sign-in">
-          <div className="form-block">
+    <main>
+      <div className={styles.wrapper}>
+        <div className={styles.signIn}>
+          <div className={styles.formBlock}>
             <h1>{t('AUTH.SIGN_IN')}</h1>
-            <form className="form-sign-in" onSubmit={handleSubmit(onSubmit)}>
-              <div className="form-item">
-                <label>
-                  {t('AUTH.LOGIN')}
-                  <input {...register('login', { required: true })} />
-                  {errors.login && <span>{t('AUTH.REQUIRED')}</span>}
-                </label>
+            <form className={styles.formSignIn} onSubmit={handleSubmit(onSubmit)}>
+              <div className={styles.formItem}>
+                <label htmlFor="login">{t('AUTH.LOGIN')}</label>
+
+                <input
+                  id="login"
+                  {...register('login', { required: true })}
+                  className={errors.login && styles.inputError}
+                />
+
+                {errors.login && <span className={styles.fieldError}>{t('AUTH.REQUIRED')}</span>}
               </div>
-              <div className="form-item">
-                <label>
-                  {t('AUTH.PASSWORD')}
-                  <input {...register('password', { required: true })} />
-                  {errors.password && <span>{t('AUTH.REQUIRED')}</span>}
-                </label>
+              <div className={styles.formItem}>
+                <label htmlFor="password">{t('AUTH.PASSWORD')}</label>
+                <input
+                  id="password"
+                  {...register('password', { required: true })}
+                  className={errors.password && styles.inputError}
+                />
+                {errors.password && <span className={styles.fieldError}>{t('AUTH.REQUIRED')}</span>}
               </div>
               <button type="submit">{t('AUTH.SUBMIT')}</button>
             </form>
@@ -59,7 +70,7 @@ const SignIn = () => {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

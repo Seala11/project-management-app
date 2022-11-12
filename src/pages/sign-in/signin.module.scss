@@ -1,6 +1,73 @@
 @use './app/styles/mixins.scss' as *;
 
-.title {
-  font-weight: 700;
-  font-size: 2.4rem;
+.wrapper {
+  @extend %wrapper;
+}
+
+.signIn {
+  display: flex;
+  align-items: center;
+  column-gap: 15rem;
+}
+
+.formBlock {
+  background-color: var(--white);
+  border-radius: 0.8rem;
+  box-shadow: 0 0.3rem 1.6rem 0.1rem var(--card);
+  padding: 3.5rem 7rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  & h1 {
+    @include inter($fw: 600, $color: var(--black), $fs: 2.4rem);
+    margin: 0;
+    line-height: 2.4rem;
+    padding-bottom: 3rem;
+  }
+
+  & .formItem {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    align-items: start;
+    padding-bottom: 2rem;
+
+    & input {
+      padding: 0.5rem 1rem;
+      font-size: 2rem;
+      width: 30rem;
+      border: 0.2rem solid rgba(77, 77, 77, 0.51);
+      border-radius: 0.8rem;
+    }
+
+    & input:focus {
+      border: 0.2rem solid var(--error-l) !important;
+    }
+
+    & .fieldError {
+      display: block;
+      position: absolute;
+      bottom: 0;
+      color: var(--error);
+    }
+  }
+  & a:hover {
+    text-decoration: underline;
+  }
+  & button {
+    @extend %btn;
+    @extend %btnBlue;
+    margin-top: 2rem;
+    margin-bottom: 4.3rem;
+  }
+}
+
+.formSignIn {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputError {
+  border: 0.2rem solid var(--error-l) !important;
 }
