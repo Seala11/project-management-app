@@ -24,12 +24,12 @@ const UserDropDown = () => {
     {
       name: `${t('MENU.EDIT')}`,
       icon: 'pen-menu',
-      route: ROUTES.boards,
+      route: ROUTES.settings,
     },
     {
       name: `${t('MENU.SIGN_OUT')}`,
       icon: 'log-out',
-      route: ROUTES.boards,
+      route: ROUTES.home,
     },
   ];
 
