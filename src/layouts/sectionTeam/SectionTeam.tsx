@@ -8,8 +8,9 @@ const SectionTeam = () => {
   const { t } = useTranslation();
   const teamData = useGetTeamData();
 
+  // TODO: change line team data to list instead of divs
   return (
-    <section className={styles.sectionThree}>
+    <section>
       <div className={styles.wrapper}>
         <div className={styles.mainContent}>
           <div className={styles.titleWrapper}>

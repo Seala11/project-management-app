@@ -1,11 +1,11 @@
 @use './app/styles/mixins.scss' as *;
 
-.main {
-  flex: 1 1 auto;
+.wrapper {
   @extend %wrapper;
+  flex-grow: 1;
 }
 
-.wrapper {
+.titleWrapper {
   display: flex;
   align-items: center;
   justify-content: space-between;

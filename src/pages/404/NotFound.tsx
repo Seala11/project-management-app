@@ -8,21 +8,19 @@ import { useTranslation } from 'react-i18next';
 const NotFound = () => {
   const { t } = useTranslation();
   return (
-    <section className={styles.sectionError}>
-      <div className={styles.wrapper}>
-        <div className={styles.mainContent}>
-          <div className={styles.titleWrapper}>
-            <h2 className={styles.title}>{t('NOTFOUND.TITLE')}</h2>
-            <div className={styles.buttonsWrapper}>
-              <NavLink to={ROUTES.home} title="go home">
-                <button className={`${styles.btn} ${styles.btnBlue}`}>
-                  {t('NOTFOUND.HOMELINK')}
-                </button>
-              </NavLink>
-            </div>
+    <section className={styles.wrapper}>
+      <div className={styles.mainContent}>
+        <div className={styles.titleWrapper}>
+          <h2 className={styles.title}>{t('NOTFOUND.TITLE')}</h2>
+          <div className={styles.buttonsWrapper}>
+            <NavLink to={ROUTES.home} title="go home">
+              <button className={`${styles.btn} ${styles.btnBlue}`}>
+                {t('NOTFOUND.HOMELINK')}
+              </button>
+            </NavLink>
           </div>
-          <img className={styles.img} src={image404} alt="404.png" />
         </div>
+        <img className={styles.img} src={image404} alt="404.png" />
       </div>
     </section>
   );

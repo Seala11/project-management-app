@@ -5,11 +5,11 @@ import SectionWelcome from 'layouts/sectionWelcome/SectionWelcome';
 
 const Home = () => {
   return (
-    <main>
+    <>
       <SectionWelcome />
       <SectionFeatures />
       <SectionTeam />
-    </main>
+    </>
   );
 };
 

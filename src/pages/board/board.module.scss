@@ -1,6 +1,11 @@
 @use './app/styles/mixins.scss' as *;
 
-.main {
-  flex: 1 1 auto;
+.wrapper {
   @extend %wrapper;
+  flex-grow: 1;
+}
+
+.title {
+  font-size: 2.4rem;
+  font-weight: 600;
 }
