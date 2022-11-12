@@ -1,5 +1,9 @@
 @use './app/styles/mixins.scss' as *;
 
+.wrapper {
+  @extend %wrapper;
+}
+
 .title {
   font-weight: 700;
   font-size: 2.4rem;
