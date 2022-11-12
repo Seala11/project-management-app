@@ -5,6 +5,7 @@ import NotFound from './404/NotFound';
 import Board from './board/Board';
 import Boards from './boards/Boards';
 import Home from './home/Home';
+import Settings from './settings/Settings';
 import SignIn from './sign-in/SignIn';
 import SignUp from './sign-up/SignUp';
 
@@ -14,6 +15,7 @@ const Routing = () => {
       <Route path={ROUTES.home} element={<Home />} />
       <Route path={ROUTES.signIn} element={<SignIn />} />
       <Route path={ROUTES.signUp} element={<SignUp />} />
+      <Route path={ROUTES.settings} element={<Settings />} />
       <Route path={ROUTES.boards} element={<Boards />} />
       <Route path={ROUTES.board} element={<Board />} />
       <Route path={ROUTES.notFound} element={<NotFound />} />

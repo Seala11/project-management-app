@@ -7,6 +7,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import signImage from 'assets/images/login.png';
 import { useTranslation } from 'react-i18next';
 import ROUTES from 'utils/constants/ROUTES';
+import styles from './signin.module.scss';
 
 export interface IFormInputSingIn {
   login: string;
@@ -30,36 +31,32 @@ const SignIn = () => {
   if (auth) return <Navigate to={ROUTES.boards} />;
 
   return (
-    <div className="wrapper">
-      <div className="container">
-        <div className="sign-in">
-          <div className="form-block">
-            <h1>{t('AUTH.SIGN_IN')}</h1>
-            <form className="form-sign-in" onSubmit={handleSubmit(onSubmit)}>
-              <div className="form-item">
-                <label>
-                  {t('AUTH.LOGIN')}
-                  <input {...register('login', { required: true })} />
-                  {errors.login && <span>{t('AUTH.REQUIRED')}</span>}
-                </label>
-              </div>
-              <div className="form-item">
-                <label>
-                  {t('AUTH.PASSWORD')}
-                  <input {...register('password', { required: true })} />
-                  {errors.password && <span>{t('AUTH.REQUIRED')}</span>}
-                </label>
-              </div>
-              <button type="submit">{t('AUTH.SUBMIT')}</button>
-            </form>
-            <NavLink to="/sign-up">{t('AUTH.HAVENT_ACCOUNT')}</NavLink>
+    <section className={styles.wrapper}>
+      <div className="form-block">
+        <h1>{t('AUTH.SIGN_IN')}</h1>
+        <form className="form-sign-in" onSubmit={handleSubmit(onSubmit)}>
+          <div className="form-item">
+            <label>
+              {t('AUTH.LOGIN')}
+              <input {...register('login', { required: true })} />
+              {errors.login && <span>{t('AUTH.REQUIRED')}</span>}
+            </label>
           </div>
-          <div className="form-image">
-            <img src={signImage} alt="sign in" />
+          <div className="form-item">
+            <label>
+              {t('AUTH.PASSWORD')}
+              <input {...register('password', { required: true })} />
+              {errors.password && <span>{t('AUTH.REQUIRED')}</span>}
+            </label>
           </div>
-        </div>
+          <button type="submit">{t('AUTH.SUBMIT')}</button>
+        </form>
+        <NavLink to="/sign-up">{t('AUTH.HAVENT_ACCOUNT')}</NavLink>
       </div>
-    </div>
+      <div className="form-image">
+        <img src={signImage} alt="sign in" />
+      </div>
+    </section>
   );
 };
 

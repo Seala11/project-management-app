@@ -1,5 +1,9 @@
 @use './app/styles/mixins.scss' as *;
 
+.section {
+  background-color: var(--primary-m);
+}
+
 .wrapper {
   @extend %wrapper;
 }
@@ -31,10 +35,6 @@
   height: auto;
   width: max-content;
   min-width: 0;
-}
-
-.sectionTwo {
-  background-color: var(--primary-m);
 }
 
 @include media-big-tablet {
