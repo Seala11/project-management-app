@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import './_switchButton.scss';
+import styles from './switch.module.scss';
 
 const SwitchButton = () => {
   const [lang, setLang] = useState(localStorage.getItem('i18nextLng') || 'en');
@@ -17,16 +17,19 @@ const SwitchButton = () => {
       <input
         checked={isEn}
         onChange={handleToggle}
-        className="switch__checkbox"
+        className={styles.switchCheckbox}
         id={`switch-new`}
         type="checkbox"
       />
-      <label className={isEn ? 'switch__label en' : 'switch__label ru'} htmlFor={`switch-new`}>
-        <div className="switch__label-info">
-          <span className={isEn ? 'label__info' : 'label__info--invisible'}>{lang}</span>
-          <span className={isEn ? 'label__info--invisible' : 'label__info'}>{lang}</span>
+      <label
+        className={`${styles.switchLabel} ${isEn ? styles.en : styles.ru}`}
+        htmlFor={`switch-new`}
+      >
+        <div className={styles.switchLabelInfo}>
+          <span className={!isEn ? styles.invisible : ''}>{lang}</span>
+          <span className={isEn ? styles.invisible : ''}>{lang}</span>
         </div>
-        <span className={`switch__button`} />
+        <span className={styles.switchButton} />
       </label>
     </>
   );

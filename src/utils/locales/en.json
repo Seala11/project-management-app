@@ -30,6 +30,12 @@
   "TEAM": {
     "TITLE": "About Our Team"
   },
+  "MENU": {
+    "NEW_BOARD": "New Board",
+    "MY_BOARDS": "My Boards",
+    "EDIT": "Edit Profile",
+    "SIGN_OUT": "Sign Out"
+  },
   "VALA": {
     "NAME": "Valentin",
     "ROLE": "Developer",
