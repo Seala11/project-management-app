@@ -65,6 +65,10 @@
 }
 
 .dropdownListItem:hover {
-  color: var(--black);
+  color: var(--primary);
   transition: 0.3s;
+}
+
+.dropdownListItem:hover svg {
+  filter: invert(17%) sepia(60%) saturate(6134%) hue-rotate(225deg) brightness(99%) contrast(112%);
 }
