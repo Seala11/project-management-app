@@ -6,23 +6,21 @@ import Header from 'components/header/Header';
 import Footer from 'components/footer/Footer';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ConfirmationModal from 'components/ConfirmationModal/ConfirmationModal';
-import { useAppSelector } from 'store/hooks';
-import { modalStatusSelector } from 'store/modalSlice';
+import { store } from 'store';
+import { Provider } from 'react-redux';
 
 const App = () => {
-  const modalIsOpen = useAppSelector(modalStatusSelector);
-
   return (
-    <BrowserRouter>
-      <div className={styles.app}>
-        {modalIsOpen && <ConfirmationModal />}
-        <ToastContainer autoClose={8000} />
-        <Header />
-        <Routing />
-        <Footer />
-      </div>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <div className={styles.app}>
+          <ToastContainer autoClose={8000} />
+          <Header />
+          <Routing />
+          <Footer />
+        </div>
+      </BrowserRouter>
+    </Provider>
   );
 };
 

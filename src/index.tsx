@@ -1,16 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './app/App';
-import { store } from 'store';
-import { Provider } from 'react-redux';
 import './setupi18n';
 
 const root = ReactDOM.createRoot(document.getElementById('root') ?? document.body);
 
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <App />
   </React.StrictMode>
 );
