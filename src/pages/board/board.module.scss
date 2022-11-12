@@ -6,7 +6,6 @@
 }
 
 .title {
-  font-size: 2.4rem;
-  font-weight: 600;
+  @extend %title;
   padding: 3rem 0 0;
 }
