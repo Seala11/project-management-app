@@ -8,7 +8,7 @@ const SectionTeam = () => {
   const { t } = useTranslation();
   const teamData = useGetTeamData();
 
-  // TODO: change line team data to list instead of divs
+  // TODO: refactor semantic tags in teamData map -> to ul instead of divs
   return (
     <section>
       <div className={styles.wrapper}>
