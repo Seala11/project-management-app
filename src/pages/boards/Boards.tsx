@@ -24,7 +24,7 @@ const Boards = () => {
   };
 
   return (
-    <main className={styles.main}>
+    <section className={styles.wrapper}>
       <h2 className={styles.title}>My Boards</h2>
       <ul className={styles.list}>
         <li className={`${styles.card} ${styles.cardCreate}`} onClick={createBoard}>
@@ -37,7 +37,7 @@ const Boards = () => {
             className={styles.card}
             onClick={() => navigateToBoardPage(board._id)}
           >
-            <div className={styles.wrapper}>
+            <div className={styles.titleWrapper}>
               <h3 className={styles.cardName}>{board.title}</h3>
               <button className={styles.button} onClick={(e) => deleteBoard(e)}>
                 <Icon color="#CC0707" size={100} icon="trash" className={styles.icon} />
@@ -46,7 +46,7 @@ const Boards = () => {
           </li>
         ))}
       </ul>
-    </main>
+    </section>
   );
 };
 

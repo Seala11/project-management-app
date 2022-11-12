@@ -38,9 +38,8 @@
 
 %wrapper {
   max-width: 120rem;
-  padding: 0 1rem;
-  width: 100%;
   margin: 0 auto;
+  padding: 0 1rem;
 }
 
 %btn {
@@ -60,6 +59,7 @@
 }
 
 %btnBlue {
+  @extend %btn;
   background: var(--primary-s);
   border: 0.2rem solid rgba(0, 71, 255, 0.08);
   color: var(--primary);
@@ -70,6 +70,7 @@
 }
 
 %btnRed {
+  @extend %btn;
   background: var(--error-s);
   border: 0.2rem solid var(--gray-s);
   color: var(--error);
@@ -80,6 +81,7 @@
 }
 
 %btnGray {
+  @extend %btn;
   background: transparent;
   border: 0.2rem solid var(--gray-s);
   color: var(--gray);
@@ -89,4 +91,25 @@
     border: 0.2rem solid rgba(0, 71, 255, 0.08);
     color: var(--primary);
   }
+}
+
+%boxShadow {
+  background-color: var(--white);
+  border: 0.1rem solid var(--border);
+  box-shadow: 0 0.3rem 1.6rem 0.1rem var(--card);
+  border-radius: 0.8rem;
+}
+
+%cardShadow {
+  @extend %boxShadow;
+
+  &:hover {
+    box-shadow: 0 0.3rem 1.6rem 0.1rem var(--card-hover);
+    cursor: pointer;
+  }
+}
+
+%title {
+  font-size: 2.4rem;
+  font-weight: 600;
 }
