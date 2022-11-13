@@ -1,12 +1,12 @@
-@import '../../app/styles/formLayout.scss';
+@import '../registration.scss';
 
-.signUp {
+.signIn {
   display: flex;
   align-items: center;
   column-gap: 15rem;
 }
 
-.formSignUp {
+.formSignIn {
   display: flex;
   flex-direction: column;
 }

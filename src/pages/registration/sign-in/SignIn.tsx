@@ -17,8 +17,7 @@ export interface IFormInputSingIn {
 const SignIn = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const state = useAppSelector((state) => state);
-  const { auth } = authSelector(state);
+  const { auth } = useAppSelector(authSelector);
   const {
     register,
     handleSubmit,

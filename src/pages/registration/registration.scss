@@ -1,4 +1,4 @@
-@use './mixins.scss' as *;
+@use 'app/styles/mixins.scss' as *;
 
 .wrapper {
   @extend %wrapper;
@@ -24,7 +24,7 @@
     display: flex;
     flex-direction: column;
     row-gap: 1rem;
-    align-items: start;
+    align-items: flex-start;
     padding-bottom: 2rem;
 
     & input {

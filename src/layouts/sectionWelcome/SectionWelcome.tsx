@@ -1,18 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 import ROUTES from 'utils/constants/ROUTES';
-import styles from './welcome.module.scss';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 import teaching from 'assets/images/teaching.png';
 import { useTranslation } from 'react-i18next';
+import styles from './welcome.module.scss';
+import { authSelector, setAuth } from 'store/authSlice';
 
 const SectionWelcome = () => {
-  const [isLogged] = useState(false);
+  // const [isLogged] = useState(true);
+  const { auth } = useAppSelector(authSelector);
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const handleLogout = () => {
+    dispatch(setAuth(false));
+  };
+
   return (
     <section className={styles.sectionOne}>
       <div className={styles.wrapper}>
         <div className={styles.buttonsWrapper}>
-          {!isLogged && (
+          {!auth ? (
             <>
               <NavLink to={ROUTES.signIn} title="signIn">
                 <button className={styles.btn}>{t('AUTH.SIGN_IN')}</button>
@@ -21,8 +29,12 @@ const SectionWelcome = () => {
                 <button className={styles.btn}>{t('AUTH.SIGN_UP')}</button>
               </NavLink>
             </>
+          ) : (
+            <button className={styles.btn} onClick={handleLogout}>
+              {t('AUTH.LOGOUT')}
+            </button>
           )}
-          {isLogged && (
+          {auth && (
             <NavLink to={ROUTES.boards} title="boards">
               <button className={styles.btn}>{t('WELCOME.BOARDLINK')}</button>
             </NavLink>
