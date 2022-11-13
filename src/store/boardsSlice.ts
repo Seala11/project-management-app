@@ -9,7 +9,7 @@ import { RootState } from 'store';
 //   users: string[];
 // };
 
-type FakeBoard = {
+export type FakeBoard = {
   title: string;
   _id: string;
 };
@@ -36,10 +36,13 @@ export const boardsSlice = createSlice({
     createBoard: (state, action: PayloadAction<FakeBoard>) => {
       state.boards = [...state.boards, action.payload];
     },
+    deleteBoard: (state, action: PayloadAction<string>) => {
+      state.boards = state.boards.filter((board) => board._id !== action.payload);
+    },
   },
 });
 
-export const { createBoard } = boardsSlice.actions;
+export const { createBoard, deleteBoard } = boardsSlice.actions;
 
 export const boardsSelector = (state: RootState) => state.boards.boards;
 

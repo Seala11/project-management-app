@@ -7,25 +7,35 @@ export enum BtnColor {
   BLUE = 'blue',
 }
 
+export enum ModalAction {
+  BOARD_CREATE = 'create new board',
+  BOARD_DELETE = 'delete board',
+}
+
 type ModalType = {
   message?: string;
   title?: string;
-  input1?: string;
-  input2?: string;
+  inputTitle?: string;
+  inputDescr?: string;
   color: BtnColor;
   btnText: string;
+  action: ModalAction;
 };
 
 type ModalState = {
   modalOpen: boolean;
-  modalAction: boolean;
+  modalAction: ModalAction | null | undefined;
   modal: ModalType | null;
+  userInputTitle: string;
+  userInputDescr: string;
 };
 
 export const initialState: ModalState = {
   modalOpen: false,
-  modalAction: false,
+  modalAction: null,
   modal: null,
+  userInputTitle: '',
+  userInputDescr: '',
 };
 
 export const modalSlice = createSlice({
@@ -40,20 +50,28 @@ export const modalSlice = createSlice({
       state.modalOpen = false;
       state.modal = null;
     },
-    setModalAction: (state) => {
-      state.modalAction = true;
+    setModalAction: (state, action: PayloadAction<ModalAction | undefined>) => {
+      state.modalAction = action.payload;
     },
-    removeModalAction: (state) => {
-      state.modalAction = false;
+    resetModalAction: (state) => {
+      state.modalAction = null;
+    },
+    setInputTitle: (state, action: PayloadAction<string>) => {
+      state.userInputTitle = action.payload;
+    },
+    setInputDescr: (state, action: PayloadAction<string>) => {
+      state.userInputDescr = action.payload;
     },
   },
 });
 
-export const { setModalOpen, setModalClose, setModalAction, removeModalAction } =
+export const { setModalOpen, setModalClose, setModalAction, resetModalAction, setInputTitle } =
   modalSlice.actions;
 
 export const modalStatusSelector = (state: RootState) => state.modal.modalOpen;
 export const modalActionSelector = (state: RootState) => state.modal.modalAction;
 export const modalSelector = (state: RootState) => state.modal.modal;
+export const userTitleSelector = (state: RootState) => state.modal.userInputTitle;
+export const userDescriptionSelector = (state: RootState) => state.modal.userInputDescr;
 
 export default modalSlice.reducer;
