@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { authSelector, thunkSignIn } from 'store/authSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { Navigate, NavLink } from 'react-router-dom';
@@ -28,10 +28,6 @@ const SignIn = () => {
     dispatch(thunkSignIn(data));
   };
 
-  useEffect(() => {
-    console.log(errors.login);
-  });
-
   if (auth) return <Navigate to={ROUTES.boards} />;
 
   return (
@@ -43,13 +39,11 @@ const SignIn = () => {
             <form className={styles.formSignIn} onSubmit={handleSubmit(onSubmit)}>
               <div className={styles.formItem}>
                 <label htmlFor="login">{t('AUTH.LOGIN')}</label>
-
                 <input
                   id="login"
                   {...register('login', { required: true })}
                   className={errors.login && styles.inputError}
                 />
-
                 {errors.login && <span className={styles.fieldError}>{t('AUTH.REQUIRED')}</span>}
               </div>
               <div className={styles.formItem}>

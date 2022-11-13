@@ -41,10 +41,6 @@
       border-radius: 0.8rem;
     }
 
-    & input:focus {
-      border: 0.2rem solid var(--error-l) !important;
-    }
-
     & .fieldError {
       display: block;
       position: absolute;
