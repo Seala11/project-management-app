@@ -61,7 +61,7 @@
 %btnBlue {
   @extend %btn;
   background: var(--primary-s);
-  border: 0.2rem solid rgba(0, 71, 255, 0.08);
+  border: 0.2rem solid var(--primary-s);
   color: var(--primary);
 
   &:hover {
@@ -88,7 +88,7 @@
 
   &:hover {
     background: var(--primary-m);
-    border: 0.2rem solid rgba(0, 71, 255, 0.08);
+    border: 0.2rem solid var(--primary-s);
     color: var(--primary);
   }
 }

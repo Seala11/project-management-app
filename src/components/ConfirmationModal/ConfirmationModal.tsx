@@ -1,11 +1,13 @@
 import React from 'react';
 import { BtnColor, modalSelector, setModalAction, setModalClose } from 'store/modalSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { useTranslation } from 'react-i18next';
 import styles from './confirmationModal.module.scss';
 
 const ConfirmationModal = () => {
   const dispatch = useAppDispatch();
   const modal = useAppSelector(modalSelector);
+  const { t } = useTranslation();
 
   const closeModal = () => {
     dispatch(setModalClose());
@@ -44,7 +46,7 @@ const ConfirmationModal = () => {
             {modal?.btnText}
           </button>
           <button type="button" onClick={closeModal} className={`${styles.button} ${styles.gray}`}>
-            Cancel
+            {t('MODAL.CANCEL')}
           </button>
         </div>
       </form>
