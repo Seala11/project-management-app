@@ -67,3 +67,7 @@
 .inputError {
   border: 0.2rem solid var(--error-l) !important;
 }
+
+.title {
+  @extend %title;
+}

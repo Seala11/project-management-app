@@ -5,12 +5,8 @@
 }
 
 .btn {
-  @extend %btn;
-  padding: 1rem 6.6rem;
-}
-
-.btnBlue {
   @extend %btnBlue;
+  padding: 1rem 6.6rem;
 }
 
 .title {
