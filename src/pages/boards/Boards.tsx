@@ -6,7 +6,7 @@ import {
   BtnColor,
   ModalAction,
   modalActionSelector,
-  resetModalAction,
+  resetModal,
   setModalOpen,
   userTitleSelector,
 } from 'store/modalSlice';
@@ -16,15 +16,15 @@ import pencil from 'assets/images/pencil.png';
 import styles from './boards.module.scss';
 
 const Boards = () => {
-  const navigate = useNavigate();
-  const { t } = useTranslation();
-
   const [selectedBoard, setSelectedBoard] = useState<string>();
 
   const dispatch = useAppDispatch();
   const boards = useAppSelector(boardsSelector);
   const modalAction = useAppSelector(modalActionSelector);
   const userInputTitle = useAppSelector(userTitleSelector);
+
+  const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const navigateToBoardPage = (id: string) => {
     navigate(`/boards/${id}`);
@@ -58,12 +58,12 @@ const Boards = () => {
   useEffect(() => {
     if (modalAction === ModalAction.BOARD_CREATE) {
       dispatch(createBoard({ title: userInputTitle, _id: userInputTitle }));
-      dispatch(resetModalAction());
+      dispatch(resetModal());
     }
 
     if (modalAction === ModalAction.BOARD_DELETE && typeof selectedBoard === 'string') {
       dispatch(deleteBoard(selectedBoard));
-      dispatch(resetModalAction());
+      dispatch(resetModal());
     }
   }, [modalAction, dispatch, selectedBoard, userInputTitle]);
 

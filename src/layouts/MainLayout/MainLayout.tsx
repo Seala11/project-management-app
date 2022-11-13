@@ -1,27 +1,42 @@
 import React from 'react';
-import ConfirmationModal from 'components/ConfirmationModal/ConfirmationModal';
 import Header from 'components/header/Header';
 import Footer from 'components/footer/Footer';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import TOASTER from 'utils/constants/TOASTER';
-import { modalStatusSelector } from 'store/modalSlice';
-import { useAppSelector } from 'store/hooks';
+import { modalStatusSelector, setModalClose } from 'store/modalSlice';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 import styles from './mainLayout.module.scss';
+import Modal from 'layouts/Modal/Modal';
+import ConfirmationModal from 'layouts/Modal/ConfirmationModal/ConfirmationModal';
 
 type Props = React.HTMLAttributes<HTMLDivElement>;
 
 const MainLayout = ({ children }: Props) => {
   const modalIsOpen = useAppSelector(modalStatusSelector);
+  const dispatch = useAppDispatch();
+
+  const closeModal = (event: React.MouseEvent) => {
+    if (event.target === event.currentTarget) {
+      dispatch(setModalClose());
+    }
+  };
 
   return (
-    <div className={styles.app}>
-      {modalIsOpen && <ConfirmationModal />}
+    <>
+      {modalIsOpen && (
+        <Modal onClose={closeModal}>
+          <ConfirmationModal onClose={closeModal} />
+        </Modal>
+      )}
       <ToastContainer autoClose={TOASTER.time} />
-      <Header />
-      <main className={styles.main}>{children}</main>
-      <Footer />
-    </div>
+
+      <div className={styles.container}>
+        <Header />
+        <main className={styles.main}>{children}</main>
+        <Footer />
+      </div>
+    </>
   );
 };
 

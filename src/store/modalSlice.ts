@@ -10,6 +10,11 @@ export enum BtnColor {
 export enum ModalAction {
   BOARD_CREATE = 'create new board',
   BOARD_DELETE = 'delete board',
+  COLUMN_CREATE = 'create new column',
+  COLUMN_DELETE = 'delete column',
+  TASK_CREATE = 'create new task',
+  TASK_DELETE = 'delete task',
+  USER_DELETE = 'delete user account',
 }
 
 type ModalType = {
@@ -53,7 +58,7 @@ export const modalSlice = createSlice({
     setModalAction: (state, action: PayloadAction<ModalAction | undefined>) => {
       state.modalAction = action.payload;
     },
-    resetModalAction: (state) => {
+    resetModal: (state) => {
       state.modalAction = null;
     },
     setInputTitle: (state, action: PayloadAction<string>) => {
@@ -65,8 +70,14 @@ export const modalSlice = createSlice({
   },
 });
 
-export const { setModalOpen, setModalClose, setModalAction, resetModalAction, setInputTitle } =
-  modalSlice.actions;
+export const {
+  setModalOpen,
+  setModalClose,
+  setModalAction,
+  resetModal,
+  setInputTitle,
+  setInputDescr,
+} = modalSlice.actions;
 
 export const modalStatusSelector = (state: RootState) => state.modal.modalOpen;
 export const modalActionSelector = (state: RootState) => state.modal.modalAction;

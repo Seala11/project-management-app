@@ -4,10 +4,9 @@
   background-color: rgba(61, 61, 60, 0.3);
   position: fixed;
   top: 0;
-  right: 0;
-  bottom: 0;
   left: 0;
-  z-index: 999;
+  width: 100vw;
+  height: 100vh;
   -webkit-transition: background-color 500ms linear;
   -ms-transition: background-color 500ms linear;
   transition: background-color 500ms linear;
@@ -31,29 +30,19 @@
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  min-width: 40rem;
+  max-height: 80vh;
+  overflow: auto;
+  transform: translate(-50%, -50%) scale(1);
   background-color: var(--white);
   box-shadow: 0 0.3rem 1, 6rem 0.1rem var(--card);
   padding: 2rem;
   border-radius: 0.8rem;
-
-  width: 39rem;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  z-index: 999;
-  max-height: 90vh;
-  transform: translate(-50%, -50%) scale(1);
   opacity: 1;
-  overflow: auto;
   animation: show 0.5s forwards;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-
-  @include media-tablet {
-    width: 90%;
-    max-height: 80vh;
-  }
 }
 
 @keyframes show {
@@ -68,31 +57,4 @@
     transform: translate(-50%, -50%) scale(1);
     opacity: 1;
   }
-}
-
-.wrapper {
-  display: flex;
-  gap: 2rem;
-  padding: 2rem;
-}
-
-.title {
-  font-size: 2.4rem;
-  font-weight: 600;
-}
-
-.button {
-  @extend %btn;
-}
-
-.blue {
-  @extend %btnBlue;
-}
-
-.red {
-  @extend %btnRed;
-}
-
-.gray {
-  @extend %btnGray;
 }

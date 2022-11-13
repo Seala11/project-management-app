@@ -1,0 +1,24 @@
+@use './app/styles/mixins.scss' as *;
+
+.wrapper {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.title {
+  font-size: 2.4rem;
+  font-weight: 600;
+}
+
+.blue {
+  @extend %btnBlue;
+}
+
+.red {
+  @extend %btnRed;
+}
+
+.gray {
+  @extend %btnGray;
+}
