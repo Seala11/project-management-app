@@ -24,6 +24,7 @@ const SignIn = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<Signin>();
+
   const onSubmit: SubmitHandler<Signin> = (data) => {
     dispatch(thunkSignIn(data));
   };
@@ -49,6 +50,7 @@ const SignIn = () => {
               <label htmlFor="password">{t('AUTH.PASSWORD')}</label>
               <input
                 id="password"
+                type={'password'}
                 {...register('password', { required: true })}
                 className={errors.password && styles.inputError}
               />
@@ -59,8 +61,8 @@ const SignIn = () => {
           <NavLink to="/sign-up">{t('AUTH.HAVENT_ACCOUNT')}</NavLink>
         </div>
 
-        <div className="form-image">
-          <img src={signImage} alt="sign in" />
+        <div className={styles.imageBlock}>
+          <img className={styles.img} src={signImage} alt="sign in" />
         </div>
       </div>
     </section>
