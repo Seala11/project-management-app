@@ -11,7 +11,7 @@ import { authSelector } from 'store/authSlice';
 
 const UserDropDown = () => {
   const { t } = useTranslation();
-  const { user, auth } = useAppSelector(authSelector);
+  const { user, isLogged } = useAppSelector(authSelector);
 
   const menuListData = [
     {
@@ -76,7 +76,7 @@ const UserDropDown = () => {
     <div className={styles.dropdownWrapper}>
       <div className={styles.dropdownHeader} onClick={toggling} ref={menuHeader}>
         <Icon color="#4D4D4D" size={36} icon="user" />
-        <span className={styles.name}>{auth ? user.name : userName}</span>
+        <span className={styles.name}>{isLogged ? user.name : userName}</span>
         <Icon color="" size={14} icon="arrow-down" />
       </div>
       {isOpen && (

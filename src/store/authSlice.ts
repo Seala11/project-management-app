@@ -9,12 +9,12 @@ import { toast } from 'react-toastify';
 import { getErrorMessage } from 'utils/func/handleError';
 
 type Auth = {
-  auth: boolean;
+  isLogged: boolean;
   user: Omit<User, 'password'>;
 };
 
 const initialState: Auth = {
-  auth: false,
+  isLogged: false,
   user: {
     _id: '',
     name: '',
@@ -92,7 +92,7 @@ export const authSlice = createSlice({
     },
 
     setAuth(state, action) {
-      state.auth = action.payload;
+      state.isLogged = action.payload;
     },
   },
   extraReducers(builder) {
@@ -110,9 +110,9 @@ export const authSlice = createSlice({
 
     // sign in
 
-    builder.addCase(thunkSignIn.fulfilled, (state) => {
+    builder.addCase(thunkSignIn.fulfilled, () => {
       console.log('user is created');
-      state.auth = true;
+      // state.isLogged = true;
     });
 
     builder.addCase(thunkSignIn.rejected, (state, action) => {
@@ -124,13 +124,13 @@ export const authSlice = createSlice({
 
     builder.addCase(thunkGetUserById.fulfilled, (state, action) => {
       state.user = action.payload;
-      state.auth = true;
+      state.isLogged = true;
       toast.success('User sign in successfully');
     });
 
     builder.addCase(thunkGetUserById.rejected, (state, action) => {
       console.log('rejected');
-      state.auth = false;
+      state.isLogged = false;
       if (typeof action.payload === 'string') {
         toast.error(action.payload);
       }

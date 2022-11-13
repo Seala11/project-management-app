@@ -7,7 +7,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import signImage from 'assets/images/login.png';
 import { useTranslation } from 'react-i18next';
 import ROUTES from 'utils/constants/ROUTES';
-import styles from './signin.module.scss';
+import styles from '../registration.module.scss';
 
 export interface IFormInputSingIn {
   login: string;
@@ -17,7 +17,7 @@ export interface IFormInputSingIn {
 const SignIn = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { auth } = useAppSelector(authSelector);
+  const { isLogged } = useAppSelector(authSelector);
   const {
     register,
     handleSubmit,
@@ -28,14 +28,14 @@ const SignIn = () => {
     dispatch(thunkSignIn(data));
   };
 
-  if (auth) return <Navigate to={ROUTES.boards} />;
+  if (isLogged) return <Navigate to={ROUTES.boards} />;
 
   return (
     <section className={styles.wrapper}>
-      <div className={styles.signIn}>
+      <div className={styles.sign}>
         <div className={styles.formBlock}>
           <h1>{t('AUTH.SIGN_IN')}</h1>
-          <form className={styles.formSignIn} onSubmit={handleSubmit(onSubmit)}>
+          <form className={styles.formSign} onSubmit={handleSubmit(onSubmit)}>
             <div className={styles.formItem}>
               <label htmlFor="login">{t('AUTH.LOGIN')}</label>
               <input

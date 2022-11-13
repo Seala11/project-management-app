@@ -9,7 +9,7 @@ import { authSelector, setAuth } from 'store/authSlice';
 
 const SectionWelcome = () => {
   // const [isLogged] = useState(true);
-  const { auth } = useAppSelector(authSelector);
+  const { isLogged } = useAppSelector(authSelector);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const handleLogout = () => {
@@ -20,7 +20,7 @@ const SectionWelcome = () => {
     <section className={styles.sectionOne}>
       <div className={styles.wrapper}>
         <div className={styles.buttonsWrapper}>
-          {!auth ? (
+          {!isLogged ? (
             <>
               <NavLink to={ROUTES.signIn} title="signIn">
                 <button className={styles.btn}>{t('AUTH.SIGN_IN')}</button>
@@ -34,7 +34,7 @@ const SectionWelcome = () => {
               {t('AUTH.LOGOUT')}
             </button>
           )}
-          {auth && (
+          {isLogged && (
             <NavLink to={ROUTES.boards} title="boards">
               <button className={styles.btn}>{t('WELCOME.BOARDLINK')}</button>
             </NavLink>

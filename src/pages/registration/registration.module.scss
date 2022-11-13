@@ -4,6 +4,17 @@
   @extend %wrapper;
 }
 
+.sign {
+  display: flex;
+  align-items: center;
+  column-gap: 15rem;
+}
+
+.formSign {
+  display: flex;
+  flex-direction: column;
+}
+
 .formBlock {
   @extend %boxShadow;
   border: none;

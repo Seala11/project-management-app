@@ -6,13 +6,13 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import signImage from 'assets/images/login.png';
 import { Signup } from 'api/types';
 import { useTranslation } from 'react-i18next';
-import styles from './signup.module.scss';
 import ROUTES from 'utils/constants/ROUTES';
+import styles from '../registration.module.scss';
 
 const SignUp = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { auth } = useAppSelector(authSelector);
+  const { isLogged } = useAppSelector(authSelector);
 
   const {
     register,
@@ -24,14 +24,14 @@ const SignUp = () => {
     dispatch(thunkSignUp(data));
   };
 
-  if (auth) return <Navigate to={ROUTES.boards} />;
+  if (isLogged) return <Navigate to={ROUTES.boards} />;
 
   return (
     <section className={styles.wrapper}>
-      <div className={styles.signUp}>
+      <div className={styles.sign}>
         <div className={styles.formBlock}>
           <h1>{t('AUTH.SIGN_UP')}</h1>
-          <form className={styles.formSignUp} onSubmit={handleSubmit(onSubmit)}>
+          <form className={styles.formSign} onSubmit={handleSubmit(onSubmit)}>
             <div className={styles.formItem}>
               <label htmlFor="name">{t('AUTH.NAME')}</label>
               <input
