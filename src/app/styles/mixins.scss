@@ -69,6 +69,23 @@
   }
 }
 
+%addButton {
+  @extend %btn;
+  display: flex;
+  align-items: center;
+  gap: 2.4rem;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  color: var(--primary);
+  padding: 1.6rem 0 2.1rem 0;
+  border-radius: 0.8rem;
+
+  &:hover {
+    background: var(--primary-s);
+  }
+}
+
 %btnRed {
   @extend %btn;
   background: var(--error-s);

@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { BASE } from 'api/config';
 import getUserTokenLS from 'utils/localStorage';
+import { getAllColumns } from './columnsReducer';
+import { getAllColumnTasks } from './tasksReducer';
 
 export type FileType = {
   filename: string;
@@ -8,11 +10,13 @@ export type FileType = {
 };
 
 export type TaskType = {
-  id: string;
+  _id: string;
   title: string;
   order: number;
+  boardId: string;
   description: string;
-  userId?: string;
+  userId: string;
+  users: string[];
   files?: FileType[];
 };
 
@@ -21,9 +25,10 @@ export type TaskObjectType = {
 };
 
 export type ColumnType = {
-  id: string;
+  _id: string;
   title: string;
   order: number;
+  boardId: string;
 };
 
 export type BoardStateType = {
@@ -31,8 +36,8 @@ export type BoardStateType = {
   title: string;
   error: string;
   pending: boolean;
-  columns?: ColumnType[];
-  tasks?: TaskObjectType;
+  columns: ColumnType[];
+  tasks: TaskObjectType;
 };
 
 export type BoardResponseType = {
@@ -55,7 +60,7 @@ export const getSingleBoard = createAsyncThunk<BoardResponseType, string, { reje
   'board/getSingleBoard',
   async (id, { rejectWithValue }) => {
     const token = getUserTokenLS(BASE);
-    const response = await fetch(`${BASE}boards/${id}`, {
+    const response = await fetch(`${BASE}/boards/${id}`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -88,6 +93,12 @@ export const boardSlice = createSlice({
       })
       .addCase(getSingleBoard.pending, (state) => {
         state.pending = true;
+      })
+      .addCase(getAllColumns.fulfilled, (state, action) => {
+        state.columns = action.payload;
+      })
+      .addCase(getAllColumnTasks.fulfilled, (state, action) => {
+        state.tasks[action.payload.column] = action.payload.tasks;
       });
   },
 });
