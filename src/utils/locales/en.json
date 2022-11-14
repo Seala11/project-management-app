@@ -57,5 +57,20 @@
     "FEAT1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
     "FEAT2": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
     "FEAT3": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+  },
+  "BOARDS": {
+    "TITLE": "My Boards",
+    "CREATE": "Create new board"
+  },
+  "MODAL": {
+    "DELETE_MSG": "Are you sure you want to delete",
+    "CHANGE_MSG": "Are you sure you want to change",
+    "DELETE": "Delete",
+    "CANCEL": "Cancel",
+    "CREATE": "Create",
+    "CHANGE": "Change",
+    "TITLE": "Title",
+    "DESCRIPTION": "Description",
+    "REQUIRED": "This field is required"
   }
 }
