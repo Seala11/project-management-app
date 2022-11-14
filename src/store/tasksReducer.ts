@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { BASE } from 'api/config';
-import getUserTokenLS from 'utils/localStorage';
+import { getTokenFromLS } from 'api/localStorage';
 import { TaskType } from './boardSlice';
 
 export type TaskResponseType = {
@@ -18,7 +18,7 @@ export const getAllColumnTasks = createAsyncThunk<
   TaskRequestDataType,
   { rejectValue: string }
 >('task/getAllColumnTasks', async ({ boardId, columnId }, { rejectWithValue }) => {
-  const token = getUserTokenLS(BASE);
+  const token = getTokenFromLS();
   const response = await fetch(`${BASE}/boards/${boardId}/columns/${columnId}/tasks`, {
     method: 'GET',
     headers: {

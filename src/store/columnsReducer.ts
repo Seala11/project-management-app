@@ -1,12 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { BASE } from 'api/config';
-import getUserTokenLS from 'utils/localStorage';
+import { getTokenFromLS } from 'api/localStorage';
 import { ColumnType } from './boardSlice';
 
 export const getAllColumns = createAsyncThunk<ColumnType[], string, { rejectValue: string }>(
   'column/getAllColumns',
   async (boardId, { rejectWithValue }) => {
-    const token = getUserTokenLS(BASE);
+    const token = getTokenFromLS();
     const response = await fetch(`${BASE}/boards/${boardId}/columns`, {
       method: 'GET',
       headers: {

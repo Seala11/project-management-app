@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { BASE } from 'api/config';
-import getUserTokenLS from 'utils/localStorage';
+import { getTokenFromLS } from 'api/localStorage';
 import { getAllColumns } from './columnsReducer';
 import { getAllColumnTasks } from './tasksReducer';
 
@@ -59,7 +59,7 @@ const initialBoardState: BoardStateType = {
 export const getSingleBoard = createAsyncThunk<BoardResponseType, string, { rejectValue: string }>(
   'board/getSingleBoard',
   async (id, { rejectWithValue }) => {
-    const token = getUserTokenLS(BASE);
+    const token = getTokenFromLS();
     const response = await fetch(`${BASE}/boards/${id}`, {
       method: 'GET',
       headers: {
