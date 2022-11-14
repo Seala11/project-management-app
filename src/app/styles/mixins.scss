@@ -113,3 +113,35 @@
   font-size: 2.4rem;
   font-weight: 600;
 }
+
+%formItem {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+  align-items: flex-start;
+  padding-bottom: 2rem;
+}
+
+%input {
+  padding: 0.5rem 1rem;
+  font-size: 2rem;
+  width: 30rem;
+  border: 0.2rem solid rgba(77, 77, 77, 0.51);
+  border-radius: 0.8rem;
+}
+
+%fieldError {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  color: var(--error);
+}
+
+%inputError {
+  border: 0.2rem solid var(--error-l) !important;
+}
+
+%inputErrorFocus {
+  outline: 0.05rem solid var(--error-l);
+}

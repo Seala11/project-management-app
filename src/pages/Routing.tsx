@@ -6,8 +6,8 @@ import Board from './board/Board';
 import Boards from './boards/Boards';
 import Home from './home/Home';
 import Settings from './settings/Settings';
-import SignIn from './sign-in/SignIn';
-import SignUp from './sign-up/SignUp';
+import SignIn from './registration/sign-in/SignIn';
+import SignUp from './registration/sign-up/SignUp';
 
 const Routing = () => {
   return (
