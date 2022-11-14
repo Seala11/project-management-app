@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import {
   boardsSelector,
-  deleteBoard,
   boardsLoadingSelector,
   thunkGetUserBoards,
   thunkCreateBoards,
   BoardType,
+  thunkDeleteBoard,
 } from 'store/boardsSlice';
 import {
   BtnColor,
@@ -28,20 +28,23 @@ import { getTokenFromLS } from 'api/localStorage';
 const Boards = () => {
   const [selectedBoard, setSelectedBoard] = useState<string>();
 
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+
   const dispatch = useAppDispatch();
-  const boards = useAppSelector(boardsSelector);
   const loading = useAppSelector(boardsLoadingSelector);
   const modalAction = useAppSelector(modalActionSelector);
   const userInputTitle = useAppSelector(userTitleSelector);
   const userInputDescr = useAppSelector(userDescriptionSelector);
   const user = useAppSelector(userSelector);
+  const boards = useAppSelector(boardsSelector);
+  const initialRenderBoards = useRef(boards.length);
 
   useEffect(() => {
-    dispatch(thunkGetUserBoards({ userId: user._id, token: getTokenFromLS() }));
+    if (initialRenderBoards.current === 0) {
+      dispatch(thunkGetUserBoards({ userId: user._id, token: getTokenFromLS() }));
+    }
   }, [dispatch, user._id]);
-
-  const navigate = useNavigate();
-  const { t } = useTranslation();
 
   const navigateToBoardPage = (id: string) => {
     navigate(`/boards/${id}`);
@@ -62,14 +65,14 @@ const Boards = () => {
 
   const deleteBoardHandler = (event: React.MouseEvent, board: BoardType) => {
     event.stopPropagation();
-    // dispatch(
-    //   setModalOpen({
-    //     message: `${t('MODAL.DELETE_MSG')} ${board.title}?`,
-    //     color: BtnColor.RED,
-    //     btnText: `${t('MODAL.DELETE')}`,
-    //     action: ModalAction.BOARD_DELETE,
-    //   })
-    // );
+    dispatch(
+      setModalOpen({
+        message: `${t('MODAL.DELETE_MSG')} ${board.title.title}?`,
+        color: BtnColor.RED,
+        btnText: `${t('MODAL.DELETE')}`,
+        action: ModalAction.BOARD_DELETE,
+      })
+    );
     setSelectedBoard(board._id);
   };
 
@@ -88,12 +91,10 @@ const Boards = () => {
     }
 
     if (modalAction === ModalAction.BOARD_DELETE && typeof selectedBoard === 'string') {
-      dispatch(deleteBoard(selectedBoard));
+      dispatch(thunkDeleteBoard({ boardId: selectedBoard, token: getTokenFromLS() }));
       dispatch(resetModal());
     }
   }, [modalAction, dispatch, selectedBoard, userInputTitle, userInputDescr, user._id]);
-
-  console.log(boards);
 
   return (
     <section className={styles.wrapper}>
@@ -113,11 +114,11 @@ const Boards = () => {
             >
               <div className={styles.titleWrapper}>
                 <h3 className={styles.cardName}>{board.title.title}</h3>
-                <p>{board.title.descr}</p>
                 <button className={styles.button} onClick={(e) => deleteBoardHandler(e, board)}>
                   <Icon color="#CC0707" size={100} icon="trash" className={styles.icon} />
                 </button>
               </div>
+              <p className={styles.description}>{board.title.descr}</p>
             </li>
           ))}
       </ul>

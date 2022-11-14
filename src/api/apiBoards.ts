@@ -29,3 +29,16 @@ export async function fetchCreateBoards(options: newBoard, token: string): Promi
   });
   return response;
 }
+
+export async function fetchDeleteBoard(boardId: string, token: string): Promise<Response> {
+  const response = await fetch(`${BOARDS}/${boardId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      accept: 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(boardId),
+  });
+  return response;
+}
