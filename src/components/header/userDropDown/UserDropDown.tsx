@@ -6,9 +6,12 @@ import Icon from 'components/Icon/Icon';
 import ROUTES from 'utils/constants/ROUTES';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useAppSelector } from 'store/hooks';
+import { authSelector } from 'store/authSlice';
 
 const UserDropDown = () => {
   const { t } = useTranslation();
+  const { user, isLogged } = useAppSelector(authSelector);
 
   const menuListData = [
     {
@@ -73,7 +76,7 @@ const UserDropDown = () => {
     <div className={styles.dropdownWrapper}>
       <div className={styles.dropdownHeader} onClick={toggling} ref={menuHeader}>
         <Icon color="#4D4D4D" size={36} icon="user" />
-        <span className={styles.name}>{userName}</span>
+        <span className={styles.name}>{isLogged ? user.name : userName}</span>
         <Icon color="" size={14} icon="arrow-down" />
       </div>
       {isOpen && (

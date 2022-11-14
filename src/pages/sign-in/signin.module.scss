@@ -1,9 +1,0 @@
-@use './app/styles/mixins.scss' as *;
-
-.wrapper {
-  @extend %wrapper;
-}
-
-.title {
-  @extend %title;
-}

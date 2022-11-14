@@ -1,0 +1,60 @@
+@use 'app/styles/mixins.scss' as *;
+
+.wrapper {
+  @extend %wrapper;
+}
+
+.sign {
+  display: flex;
+  align-items: center;
+  column-gap: 15rem;
+}
+
+.formSign {
+  display: flex;
+  flex-direction: column;
+}
+
+.formBlock {
+  @extend %boxShadow;
+  border: none;
+  padding: 3.5rem 7rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  & h1 {
+    @extend %title;
+    margin: 0;
+    line-height: 2.4rem;
+    padding-bottom: 3rem;
+  }
+
+  & .formItem {
+    @extend %formItem;
+
+    & input {
+      @extend %input;
+    }
+
+    & .fieldError {
+      @extend %fieldError;
+    }
+  }
+  & a:hover {
+    text-decoration: underline;
+  }
+  & button {
+    @extend %btnBlue;
+    margin-top: 2rem;
+    margin-bottom: 4.3rem;
+  }
+}
+
+.inputError {
+  @extend %inputError;
+}
+
+.inputError:focus-visible {
+  @extend %inputErrorFocus;
+}
