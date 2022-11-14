@@ -8,10 +8,13 @@ import SwitchButton from './switchButton/switchButton';
 import logoIcon from 'assets/images/trello-mark-blue.svg';
 
 import UserDropDown from './userDropDown/UserDropDown';
+import { useAppSelector } from 'store/hooks';
+import { authSelector } from 'store/authSlice';
 
 const Header = () => {
-  const [isLogged] = useState(true);
+  // const [isLogged] = useState(true);
   const [isSticky, setIsSticky] = useState(false);
+  const { isLogged } = useAppSelector(authSelector);
 
   // const state = useAppSelector((state) => state.apiPage);
   // const dispatch = useAppDispatch();
