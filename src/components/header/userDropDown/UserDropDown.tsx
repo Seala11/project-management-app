@@ -1,19 +1,17 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-// import { useAppSelector, useAppDispatch } from '../../store/store';
-// import { updateSearchBar } from '../../store/apiPageReducer';
 import styles from './dropdown.module.scss';
 import Icon from 'components/Icon/Icon';
 import ROUTES from 'utils/constants/ROUTES';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAppSelector } from 'store/hooks';
-import { authSelector } from 'store/authSlice';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { authSelector, setAuth } from 'store/authSlice';
 
 const UserDropDown = () => {
   const { t } = useTranslation();
   const { user, isLogged } = useAppSelector(authSelector);
-
-  const menuListData = [
+  const dispatch = useAppDispatch();
+  const menuLogged = [
     {
       name: `${t('MENU.NEW_BOARD')}`,
       icon: 'plus',
@@ -36,11 +34,21 @@ const UserDropDown = () => {
     },
   ];
 
-  const [isOpen, setIsOpen] = useState(false);
-  // const state = useAppSelector((state) => state.apiPage);
-  // const dispatch = useAppDispatch();
-  // const { UserName, CurrPage } = state;
+  const menuNotLogged = [
+    {
+      name: `${t('MENU.EDIT')}`,
+      icon: 'pen-menu',
+      route: ROUTES.settings,
+    },
+    {
+      name: `${t('MENU.SIGN_OUT')}`,
+      icon: 'log-out',
+      route: ROUTES.home,
+    },
+  ];
 
+  const menuListData = isLogged ? menuLogged : menuNotLogged;
+  const [isOpen, setIsOpen] = useState(false);
   const menuList = useRef<HTMLUListElement>(null);
   const menuHeader = useRef<HTMLDivElement>(null);
 
@@ -68,7 +76,10 @@ const UserDropDown = () => {
 
   const onOptionClicked = (value: string) => () => {
     if (currPage === value) return;
-    //dispatch(updateSearchBar({ [name]: value }));
+    if (value === `${t('MENU.SIGN_OUT')}`) {
+      dispatch(setAuth(false));
+    }
+
     toggling();
   };
 
