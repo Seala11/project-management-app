@@ -70,6 +70,7 @@
     "CREATE": "Create",
     "CHANGE": "Change",
     "TITLE": "Title",
-    "DESCRIPTION": "Description"
+    "DESCRIPTION": "Description",
+    "REQUIRED": "This field is required"
   }
 }

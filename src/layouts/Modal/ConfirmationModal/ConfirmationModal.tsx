@@ -11,13 +11,20 @@ import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { useTranslation } from 'react-i18next';
 import styles from './confirmationModal.module.scss';
 
+type InputValType = {
+  title: string;
+  descr: string;
+};
+
 type Props = {
   onClose: (event: React.MouseEvent) => void;
 };
 
 const ConfirmationModal = ({ onClose }: Props) => {
-  const [titleValue, setTitleValue] = useState<string>('');
-  const [descrValue, setDescrValue] = useState<string>('');
+  const [inputValues, setInputValues] = useState<InputValType>({
+    title: '',
+    descr: '',
+  });
 
   const dispatch = useAppDispatch();
   const modal = useAppSelector(modalSelector);
@@ -27,13 +34,13 @@ const ConfirmationModal = ({ onClose }: Props) => {
     event.preventDefault();
 
     if (modal?.inputTitle) {
-      dispatch(setInputTitle(titleValue));
-    }
-    if (modal?.inputDescr) {
-      dispatch(setInputDescr(descrValue));
+      dispatch(setInputTitle(inputValues.title));
     }
 
-    console.log(modal?.action);
+    if (modal?.inputDescr) {
+      dispatch(setInputDescr(inputValues.descr));
+    }
+
     dispatch(setModalAction(modal?.action));
     dispatch(setModalClose());
   };
@@ -45,25 +52,27 @@ const ConfirmationModal = ({ onClose }: Props) => {
       {modal?.message && <p>{modal.message}</p>}
 
       {modal?.inputTitle && (
-        <>
+        <div className={styles.inputWrraper}>
           <label htmlFor={modal.inputTitle}>{modal.inputTitle}</label>
           <input
             id={modal.inputTitle}
             type="text"
-            onChange={(e) => setTitleValue(e.target.value)}
+            onChange={(e) => setInputValues({ ...inputValues, title: e.target.value })}
           />
-        </>
+          {/* {error.title && <span className={styles.inputError}>{t('MODAL.REQUIRED')}</span>} */}
+        </div>
       )}
 
       {modal?.inputDescr && (
-        <>
+        <div className={styles.inputWrraper}>
           <label htmlFor={modal.inputDescr}>{modal.inputDescr}</label>
           <input
             id={modal.inputDescr}
             type="text"
-            onChange={(e) => setDescrValue(e.target.value)}
+            onChange={(e) => setInputValues({ ...inputValues, descr: e.target.value })}
           />
-        </>
+          {/* {error.descr && <span className={styles.inputError}>{t('MODAL.REQUIRED')}</span>} */}
+        </div>
       )}
 
       <div className={styles.wrapper}>

@@ -35,6 +35,7 @@ const Boards = () => {
       setModalOpen({
         title: `${t('BOARDS.CREATE')}`,
         inputTitle: `${t('MODAL.TITLE')}`,
+        inputDescr: `${t('MODAL.DESCRIPTION')}`,
         color: BtnColor.BLUE,
         btnText: `${t('MODAL.CREATE')}`,
         action: ModalAction.BOARD_CREATE,

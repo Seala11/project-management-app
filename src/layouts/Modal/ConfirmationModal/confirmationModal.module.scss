@@ -2,13 +2,14 @@
 
 .wrapper {
   display: flex;
-  gap: 2rem;
-  padding: 2rem;
+  gap: 3rem;
+  padding: 2rem 0;
 }
 
 .title {
-  font-size: 2.4rem;
-  font-weight: 600;
+  @extend %title;
+  align-self: flex-start;
+  padding-left: 3rem;
 }
 
 .blue {
@@ -21,4 +22,16 @@
 
 .gray {
   @extend %btnGray;
+}
+
+.inputWrraper {
+  @extend %formItem;
+
+  & input {
+    @extend %input;
+  }
+
+  & .inputError {
+    @extend %fieldError;
+  }
 }
