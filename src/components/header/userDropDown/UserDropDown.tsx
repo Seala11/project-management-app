@@ -11,7 +11,7 @@ const UserDropDown = () => {
   const { t } = useTranslation();
   const { user, isLogged } = useAppSelector(authSelector);
   const dispatch = useAppDispatch();
-  const menuLogged = [
+  const menuListData = [
     {
       name: `${t('MENU.NEW_BOARD')}`,
       icon: 'plus',
@@ -34,20 +34,6 @@ const UserDropDown = () => {
     },
   ];
 
-  const menuNotLogged = [
-    {
-      name: `${t('MENU.EDIT')}`,
-      icon: 'pen-menu',
-      route: ROUTES.settings,
-    },
-    {
-      name: `${t('MENU.SIGN_OUT')}`,
-      icon: 'log-out',
-      route: ROUTES.home,
-    },
-  ];
-
-  const menuListData = isLogged ? menuLogged : menuNotLogged;
   const [isOpen, setIsOpen] = useState(false);
   const menuList = useRef<HTMLUListElement>(null);
   const menuHeader = useRef<HTMLDivElement>(null);
@@ -86,8 +72,10 @@ const UserDropDown = () => {
   return (
     <div className={styles.dropdownWrapper}>
       <div className={styles.dropdownHeader} onClick={toggling} ref={menuHeader}>
-        <Icon color="#4D4D4D" size={36} icon="user" />
-        <span className={styles.name}>{isLogged ? user.name : userName}</span>
+        <div className={styles.wrapperIconWithName}>
+          <Icon color="#4D4D4D" size={36} icon="user" />
+          <span className={styles.name}>{isLogged ? user.name : userName}</span>
+        </div>
         <Icon color="" size={14} icon="arrow-down" />
       </div>
       {isOpen && (
