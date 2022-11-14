@@ -12,6 +12,13 @@ export type BoardResponseType = {
   users: string[];
 };
 
+type CreateBoardProps = {
+  owner: string;
+  title: string;
+  users: string[];
+  token: string;
+};
+
 export const thunkGetUserBoards = createAsyncThunk(
   'boardsSet/fetchGetBoards',
   async ({ userId, token }: { token: string; userId: string }, { rejectWithValue }) => {
@@ -33,15 +40,7 @@ export const thunkGetUserBoards = createAsyncThunk(
 
 export const thunkCreateBoards = createAsyncThunk(
   'boards/fetchCreateBoards',
-  async (
-    {
-      owner,
-      title,
-      users,
-      token,
-    }: { owner: string; title: string; users: string[]; token: string },
-    { rejectWithValue }
-  ) => {
+  async ({ owner, title, users, token }: CreateBoardProps, { rejectWithValue }) => {
     try {
       const response = await fetchCreateBoards({ title, owner, users }, token);
 
