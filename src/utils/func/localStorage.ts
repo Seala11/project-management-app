@@ -1,4 +1,4 @@
-import { BASE } from './config';
+import { BASE } from 'api/config';
 
 export function getTokenFromLS() {
   const store = localStorage.getItem(BASE);
