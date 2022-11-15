@@ -34,6 +34,7 @@ type ModalState = {
   userInputTitle: string;
   userInputDescr: string;
   taskOpen: boolean;
+  taskId: string;
 };
 
 export const initialState: ModalState = {
@@ -43,6 +44,7 @@ export const initialState: ModalState = {
   userInputTitle: '',
   userInputDescr: '',
   taskOpen: false,
+  taskId: '',
 };
 
 export const modalSlice = createSlice({
@@ -57,6 +59,7 @@ export const modalSlice = createSlice({
       state.modalOpen = false;
       state.modal = null;
       state.taskOpen = false;
+      state.taskId = '';
     },
     setModalAction: (state, action: PayloadAction<ModalAction | undefined>) => {
       state.modalAction = action.payload;
@@ -73,8 +76,14 @@ export const modalSlice = createSlice({
 
     //task
     setTaskModalOpen: (state) => {
-      state.modalOpen = true;
       state.taskOpen = true;
+      state.modalOpen = true;
+    },
+    setTaskModalClose: (state) => {
+      state.taskOpen = false;
+    },
+    setTaskId: (state, action: PayloadAction<string>) => {
+      state.taskId = action.payload;
     },
   },
 });
@@ -87,6 +96,8 @@ export const {
   setInputTitle,
   setInputDescr,
   setTaskModalOpen,
+  setTaskModalClose,
+  setTaskId,
 } = modalSlice.actions;
 
 export const modalStatusSelector = (state: RootState) => state.modal.modalOpen;
@@ -95,5 +106,6 @@ export const modalActionSelector = (state: RootState) => state.modal.modalAction
 export const modalSelector = (state: RootState) => state.modal.modal;
 export const userTitleSelector = (state: RootState) => state.modal.userInputTitle;
 export const userDescriptionSelector = (state: RootState) => state.modal.userInputDescr;
+export const taskIdSelector = (state: RootState) => state.modal.taskId;
 
 export default modalSlice.reducer;

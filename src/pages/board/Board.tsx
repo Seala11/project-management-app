@@ -8,7 +8,7 @@ import ROUTES from 'utils/constants/ROUTES';
 import { getAllColumns } from 'store/middleware/columns';
 import { setAuth } from 'store/authSlice';
 import Icon from 'components/Icon/Icon';
-import { setTaskModalOpen } from 'store/modalSlice';
+import { setTaskId, setTaskModalOpen } from 'store/modalSlice';
 
 /* ToDo
 - оттестировать ошибки errors
@@ -55,7 +55,9 @@ const Board = () => {
     event.stopPropagation();
   };
 
-  const openTaskModal = () => {
+  const openTaskModal = (task: string) => {
+    // TODO: set task id instead of name;
+    dispatch(setTaskId(task));
     dispatch(setTaskModalOpen());
   };
 
@@ -79,7 +81,7 @@ const Board = () => {
                   <hr className={styles.columnLine}></hr>
                   <ul className={styles.tasksList}>
                     {tasks.map((task, i) => (
-                      <li className={styles.taskItem} key={i} onClick={openTaskModal}>
+                      <li className={styles.taskItem} key={i} onClick={() => openTaskModal(task)}>
                         <div className={styles.taskTitle}>
                           {task}
                           {i}

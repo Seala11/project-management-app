@@ -1,6 +1,11 @@
 import React from 'react';
+import { useAppDispatch } from 'store/hooks';
+import { BtnColor, ModalAction, setModalOpen, setTaskModalClose } from 'store/modalSlice';
+import { useAppSelector } from 'store/hooks';
+import { taskIdSelector } from 'store/modalSlice';
 import COLORS from 'utils/constants/COLORS';
 import styles from './taskModal.module.scss';
+import { useTranslation } from 'react-i18next';
 
 const FAKE_USERS = ['user1', 'user2', 'user3'];
 
@@ -9,6 +14,22 @@ type Props = {
 };
 
 const TaskModal = ({ onClose }: Props) => {
+  const taskId = useAppSelector(taskIdSelector);
+  const dispatch = useAppDispatch();
+  const { t } = useTranslation();
+
+  const deleteModalOpen = () => {
+    dispatch(setTaskModalClose());
+    dispatch(
+      setModalOpen({
+        message: `${t('MODAL.DELETE_MSG')} ${taskId}?`,
+        color: BtnColor.RED,
+        btnText: `${t('MODAL.DELETE')}`,
+        action: ModalAction.TASK_DELETE,
+      })
+    );
+  };
+
   return (
     <>
       <div className={styles.heading}>
@@ -49,7 +70,7 @@ const TaskModal = ({ onClose }: Props) => {
             ))}
           </ul>
         </div>
-        <button className={styles.button} type="button">
+        <button className={styles.button} type="button" onClick={deleteModalOpen}>
           Delete task
         </button>
       </div>
