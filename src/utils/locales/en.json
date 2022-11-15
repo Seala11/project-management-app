@@ -60,5 +60,20 @@
   "TOAST": {
     "401": "zoro",
     "200": "okokokokokok"
+  },
+  "BOARDS": {
+    "TITLE": "My Boards",
+    "CREATE": "Create new board"
+  },
+  "MODAL": {
+    "DELETE_MSG": "Are you sure you want to delete",
+    "CHANGE_MSG": "Are you sure you want to change",
+    "DELETE": "Delete",
+    "CANCEL": "Cancel",
+    "CREATE": "Create",
+    "CHANGE": "Change",
+    "TITLE": "Title",
+    "DESCRIPTION": "Description",
+    "REQUIRED": "This field is required"
   }
 }

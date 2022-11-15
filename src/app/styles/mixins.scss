@@ -61,8 +61,25 @@
 %btnBlue {
   @extend %btn;
   background: var(--primary-s);
-  border: 0.2rem solid rgba(0, 71, 255, 0.08);
+  border: 0.2rem solid var(--primary-s);
   color: var(--primary);
+
+  &:hover {
+    background: var(--primary-m);
+  }
+}
+
+%addButton {
+  @extend %btn;
+  display: flex;
+  align-items: center;
+  gap: 2.4rem;
+  justify-content: center;
+  background: var(--primary-s);
+  border: 0;
+  color: var(--primary);
+  padding: 1.6rem 0 2.1rem 0;
+  border-radius: 0.8rem;
 
   &:hover {
     background: var(--primary-m);
@@ -87,8 +104,8 @@
   color: var(--gray);
 
   &:hover {
-    background: var(--primary-s);
-    border: 0.2rem solid rgba(0, 71, 255, 0.08);
+    background: var(--primary-m);
+    border: 0.2rem solid var(--primary-s);
     color: var(--primary);
   }
 }

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import ROUTES from 'utils/constants/ROUTES';
-//import { useAppSelector, useAppDispatch } from '../../store/store';
-//import { updateSearch } from '../../store/apiPageReducer';
+//import { useAppSelector } from 'store/hooks';
 import styles from './header.module.scss';
 import SwitchButton from './switchButton/switchButton';
 import logoIcon from 'assets/images/trello-mark-blue.svg';

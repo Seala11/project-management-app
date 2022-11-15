@@ -1,4 +1,4 @@
-import { BASE } from './config';
+import { BASE } from 'api/config';
 import { User } from './types';
 
 export function getTokenFromLS() {

@@ -1,53 +1,126 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppSelector } from 'store/hooks';
-import { boardsSelector } from 'store/boardsSlice';
-import { toast } from 'react-toastify';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import {
+  boardsSelector,
+  boardsLoadingSelector,
+  thunkGetUserBoards,
+  thunkCreateBoards,
+  BoardType,
+  thunkDeleteBoard,
+} from 'store/boardsSlice';
+import {
+  BtnColor,
+  ModalAction,
+  modalActionSelector,
+  resetModal,
+  setModalOpen,
+  userDescriptionSelector,
+  userTitleSelector,
+} from 'store/modalSlice';
+import { useTranslation } from 'react-i18next';
 import Icon from 'components/Icon/Icon';
 import pencil from 'assets/images/pencil.png';
 import styles from './boards.module.scss';
+import { userSelector } from 'store/authSlice';
+import { getTokenFromLS } from 'utils/func/localStorage';
 
 const Boards = () => {
-  // const { isLogged } = useAppSelector(authSelector);
-  const boards = useAppSelector(boardsSelector);
-  const navigate = useNavigate();
+  const [selectedBoard, setSelectedBoard] = useState<string>();
 
-  const createBoard = () => {
-    toast.success(`успешный успех`);
-  };
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+
+  const dispatch = useAppDispatch();
+  const loading = useAppSelector(boardsLoadingSelector);
+  const modalAction = useAppSelector(modalActionSelector);
+  const userInputTitle = useAppSelector(userTitleSelector);
+  const userInputDescr = useAppSelector(userDescriptionSelector);
+  const user = useAppSelector(userSelector);
+  const boards = useAppSelector(boardsSelector);
+  const initialRenderBoards = useRef(boards.length);
+
+  useEffect(() => {
+    if (initialRenderBoards.current === 0) {
+      dispatch(thunkGetUserBoards(getTokenFromLS()));
+    }
+  }, [dispatch]);
 
   const navigateToBoardPage = (id: string) => {
     navigate(`/boards/${id}`);
   };
 
-  const deleteBoard = (event: React.MouseEvent) => {
-    event.stopPropagation();
+  const createBoardHandler = () => {
+    dispatch(
+      setModalOpen({
+        title: `${t('BOARDS.CREATE')}`,
+        inputTitle: `${t('MODAL.TITLE')}`,
+        inputDescr: `${t('MODAL.DESCRIPTION')}`,
+        color: BtnColor.BLUE,
+        btnText: `${t('MODAL.CREATE')}`,
+        action: ModalAction.BOARD_CREATE,
+      })
+    );
   };
 
-  // if (!isLogged) return <Navigate to={ROUTES.signIn} />;
+  const deleteBoardHandler = (event: React.MouseEvent, board: BoardType) => {
+    event.stopPropagation();
+    dispatch(
+      setModalOpen({
+        message: `${t('MODAL.DELETE_MSG')} ${board.title.title}?`,
+        color: BtnColor.RED,
+        btnText: `${t('MODAL.DELETE')}`,
+        action: ModalAction.BOARD_DELETE,
+      })
+    );
+    setSelectedBoard(board._id);
+  };
+
+  useEffect(() => {
+    if (modalAction === ModalAction.BOARD_CREATE) {
+      const info = JSON.stringify({ title: userInputTitle, descr: userInputDescr });
+      dispatch(
+        thunkCreateBoards({
+          owner: user._id,
+          title: info,
+          users: [user._id],
+          token: getTokenFromLS(),
+        })
+      );
+      dispatch(resetModal());
+    }
+
+    if (modalAction === ModalAction.BOARD_DELETE && typeof selectedBoard === 'string') {
+      dispatch(thunkDeleteBoard({ boardId: selectedBoard, token: getTokenFromLS() }));
+      dispatch(resetModal());
+    }
+  }, [modalAction, dispatch, selectedBoard, userInputTitle, userInputDescr, user._id]);
 
   return (
     <section className={styles.wrapper}>
-      <h2 className={styles.title}>My Boards</h2>
+      <h2 className={styles.title}>{t('BOARDS.TITLE')}</h2>
       <ul className={styles.list}>
-        <li className={`${styles.card} ${styles.cardCreate}`} onClick={createBoard}>
-          <h3 className={`${styles.cardName} ${styles.cardCreateName}`}>Create new board</h3>
+        <li className={`${styles.card} ${styles.cardCreate}`} onClick={createBoardHandler}>
+          <h3 className={`${styles.cardName} ${styles.cardCreateName}`}>{t('BOARDS.CREATE')}</h3>
           <img src={pencil} alt="yellow pencil" className={styles.image} />
         </li>
-        {boards.map((board) => (
-          <li
-            key={board.title}
-            className={styles.card}
-            onClick={() => navigateToBoardPage(board._id)}
-          >
-            <div className={styles.titleWrapper}>
-              <h3 className={styles.cardName}>{board.title}</h3>
-              <button className={styles.button} onClick={(e) => deleteBoard(e)}>
-                <Icon color="#CC0707" size={100} icon="trash" className={styles.icon} />
-              </button>
-            </div>
-          </li>
-        ))}
+        {loading && <p>Loading...</p>}
+        {!loading &&
+          boards.map((board) => (
+            <li
+              key={board._id}
+              className={styles.card}
+              onClick={() => navigateToBoardPage(board._id)}
+            >
+              <div className={styles.titleWrapper}>
+                <h3 className={styles.cardName}>{board.title.title}</h3>
+                <button className={styles.button} onClick={(e) => deleteBoardHandler(e, board)}>
+                  <Icon color="#CC0707" size={100} icon="trash" className={styles.icon} />
+                </button>
+              </div>
+              <p className={styles.description}>{board.title.descr}</p>
+            </li>
+          ))}
       </ul>
     </section>
   );

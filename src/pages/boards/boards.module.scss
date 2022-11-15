@@ -3,6 +3,7 @@
 .wrapper {
   @extend %wrapper;
   flex-grow: 1;
+  width: 100%;
 }
 
 .titleWrapper {
@@ -36,12 +37,19 @@
 .list {
   list-style-type: none;
   margin: 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  row-gap: 5rem;
   padding: 3rem 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-items: center;
+  grid-row-gap: 3rem;
+
+  @include media-big-tablet {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include media-mobile {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 
 .card {
@@ -51,6 +59,10 @@
   height: 20rem;
   width: 36rem;
   padding: 1.6rem;
+
+  @include media-laptop {
+    width: 90%;
+  }
 }
 
 .cardCreate {
@@ -72,4 +84,8 @@
   width: 11.4rem;
   height: 7.5rem;
   margin-top: 3rem;
+}
+
+.description {
+  color: var(--gray);
 }

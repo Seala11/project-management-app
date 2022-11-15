@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchSignIn, fetchSignUp } from '../api/apiAuth';
 import { Signup, Signin, User } from '../api/types';
 import { RootState } from 'store';
-import { removeTokenFromLS, setTokenToLS } from 'api/localStorage';
+import { removeTokenFromLS, setTokenToLS } from 'utils/func/localStorage';
 import { getUserById } from 'api/apiUsers';
 import { parseJwt } from 'utils/func/parsejwt';
 import { toast } from 'react-toastify';
@@ -12,7 +12,6 @@ import { setToastMessage } from './appSlice';
 type Auth = {
   isLogged: boolean;
   user: Omit<User, 'password'>;
-  // toastMessage: string | null;
 };
 
 const userInit: Omit<User, 'password'> = {
@@ -101,17 +100,12 @@ export const authSlice = createSlice({
   reducers: {
     setUser(state, action) {
       state.user = action.payload;
-      // setUserToLS(action.payload);
     },
 
     setAuth(state, action) {
       state.isLogged = action.payload;
       if (!action.payload) removeTokenFromLS();
     },
-
-    // setToastMessage: (state, action) => {
-    //   state.toastMessage = action.payload;
-    // },
   },
   extraReducers(builder) {
     builder.addCase(thunkSignUp.fulfilled, () => {
@@ -162,4 +156,3 @@ export default authSlice.reducer;
 export const { setUser, setAuth } = authSlice.actions;
 export const authSelector = (state: RootState) => state.auth;
 export const userSelector = (state: RootState) => state.auth.user;
-// export const toastMessageSelector = (state: RootState) => state.auth.toastMessage;

@@ -4,22 +4,26 @@ import Header from 'components/header/Header';
 import Footer from 'components/footer/Footer';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import styles from './mainLayout.module.scss';
 import TOASTER from 'utils/constants/TOASTER';
-import { getTokenFromLS } from 'api/localStorage';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { getTokenFromLS } from 'utils/func/localStorage';
 import { thunkGetUserById } from 'store/authSlice';
 import { parseJwt } from 'utils/func/parsejwt';
 // import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 // import ROUTES from 'utils/constants/ROUTES';
 import { useTranslation } from 'react-i18next';
 import { toastMessageSelector } from 'store/appSlice';
+import { modalStatusSelector, setModalClose } from 'store/modalSlice';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import styles from './mainLayout.module.scss';
+import Modal from 'layouts/Modal/Modal';
+import ConfirmationModal from 'layouts/Modal/ConfirmationModal/ConfirmationModal';
 
 type Props = React.HTMLAttributes<HTMLDivElement>;
 
 const MainLayout = ({ children }: Props) => {
-  const { t } = useTranslation();
+  const modalIsOpen = useAppSelector(modalStatusSelector);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   // const navigate = useNavigate();
   // const location = useLocation();
   const toastMessage = useAppSelector(toastMessageSelector);
@@ -58,13 +62,27 @@ const MainLayout = ({ children }: Props) => {
   //   }
   // }, [isLogged, location.pathname, navigate]);
 
+  const closeModal = (event: React.MouseEvent) => {
+    if (event.target === event.currentTarget) {
+      dispatch(setModalClose());
+    }
+  };
+
   return (
-    <div className={styles.app}>
+    <>
+      {modalIsOpen && (
+        <Modal onClose={closeModal}>
+          <ConfirmationModal onClose={closeModal} />
+        </Modal>
+      )}
       <ToastContainer autoClose={TOASTER.time} />
-      <Header />
-      <main className={styles.main}>{children}</main>
-      <Footer />
-    </div>
+
+      <div className={styles.container}>
+        <Header />
+        <main className={styles.main}>{children}</main>
+        <Footer />
+      </div>
+    </>
   );
 };
 
