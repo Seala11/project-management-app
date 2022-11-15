@@ -42,9 +42,9 @@ const Boards = () => {
 
   useEffect(() => {
     if (initialRenderBoards.current === 0) {
-      dispatch(thunkGetUserBoards({ userId: user._id, token: getTokenFromLS() }));
+      dispatch(thunkGetUserBoards(getTokenFromLS()));
     }
-  }, [dispatch, user._id]);
+  }, [dispatch]);
 
   const navigateToBoardPage = (id: string) => {
     navigate(`/boards/${id}`);

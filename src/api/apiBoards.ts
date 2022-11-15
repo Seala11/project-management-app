@@ -1,12 +1,18 @@
 import { BOARDS, BOARDS_SET } from 'api/config';
+import { newBoard } from './types';
 
-type newBoard = {
-  title: string;
-  owner: string;
-  users: string[];
-};
+export async function fetchGetBoards(token: string): Promise<Response> {
+  const response = await fetch(`${BOARDS}`, {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+}
 
-export async function fetchGetBoards(userId: string, token: string): Promise<Response> {
+export async function fetchGetBoardsByUserId(userId: string, token: string): Promise<Response> {
   const response = await fetch(`${BOARDS_SET}/${userId}`, {
     method: 'GET',
     headers: {

@@ -21,9 +21,9 @@ type CreateBoardProps = {
 
 export const thunkGetUserBoards = createAsyncThunk(
   'boardsSet/fetchGetBoards',
-  async ({ userId, token }: { token: string; userId: string }, { rejectWithValue }) => {
+  async (token: string, { rejectWithValue }) => {
     try {
-      const response = await fetchGetBoards(userId, token);
+      const response = await fetchGetBoards(token);
 
       if (!response.ok) {
         const err: { message: string; statusCode: number } = await response.json();

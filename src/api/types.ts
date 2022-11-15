@@ -15,3 +15,9 @@ type Auth = {
 
 export type Signup = Omit<Auth, '_id' | 'token'>;
 export type Signin = Pick<Auth, 'login' | 'password'>;
+
+export type newBoard = {
+  title: string;
+  owner: string;
+  users: string[];
+};
