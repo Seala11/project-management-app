@@ -23,7 +23,7 @@ import Icon from 'components/Icon/Icon';
 import pencil from 'assets/images/pencil.png';
 import styles from './boards.module.scss';
 import { userSelector } from 'store/authSlice';
-import { getTokenFromLS } from 'api/localStorage';
+import { getTokenFromLS } from 'utils/func/localStorage';
 
 const Boards = () => {
   const [selectedBoard, setSelectedBoard] = useState<string>();
