@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { BASE } from 'api/config';
-import { getTokenFromLS } from 'api/localStorage';
+import { getTokenFromLS } from 'utils/func/localStorage';
 import { getAllColumns } from './middleware/columns';
 import { getAllColumnTasks } from './middleware/tasks';
 
