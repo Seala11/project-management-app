@@ -1,13 +1,16 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useAppSelector } from 'store/hooks';
 import { boardsSelector } from 'store/boardsSlice';
 import { toast } from 'react-toastify';
 import Icon from 'components/Icon/Icon';
 import pencil from 'assets/images/pencil.png';
 import styles from './boards.module.scss';
+import { authSelector } from 'store/authSlice';
+import ROUTES from 'utils/constants/ROUTES';
 
 const Boards = () => {
+  const { isLogged } = useAppSelector(authSelector);
   const boards = useAppSelector(boardsSelector);
   const navigate = useNavigate();
 
@@ -22,6 +25,8 @@ const Boards = () => {
   const deleteBoard = (event: React.MouseEvent) => {
     event.stopPropagation();
   };
+
+  if (!isLogged) return <Navigate to={ROUTES.signIn} />;
 
   return (
     <section className={styles.wrapper}>
