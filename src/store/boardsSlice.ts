@@ -4,6 +4,8 @@ import { fetchCreateBoards, fetchDeleteBoard, fetchGetBoards } from 'api/apiBoar
 import { getErrorMessage } from 'utils/func/handleError';
 import { toast } from 'react-toastify';
 import { parseBoardObj } from 'utils/func/boardHandler';
+import { setAuth } from './authSlice';
+import { setToastMessage } from './appSlice';
 
 export type BoardResponseType = {
   _id: string;
@@ -40,12 +42,16 @@ export const thunkGetUserBoards = createAsyncThunk(
 
 export const thunkCreateBoards = createAsyncThunk(
   'boards/fetchCreateBoards',
-  async ({ owner, title, users, token }: CreateBoardProps, { rejectWithValue }) => {
+  async ({ owner, title, users, token }: CreateBoardProps, { rejectWithValue, dispatch }) => {
     try {
       const response = await fetchCreateBoards({ title, owner, users }, token);
 
       if (!response.ok) {
         const err: { message: string; statusCode: number } = await response.json();
+        if (err.statusCode === 403) {
+          dispatch(setAuth(false));
+          dispatch(setToastMessage(String(err.statusCode)));
+        }
         throw new Error(err.message);
       }
 
@@ -115,7 +121,7 @@ export const boardsSlice = createSlice({
     builder.addCase(thunkGetUserBoards.rejected, (state, action) => {
       state.loading = false;
       if (typeof action.payload === 'string') {
-        toast.error(action.payload);
+        // toast.error(action.payload);
       }
     });
 

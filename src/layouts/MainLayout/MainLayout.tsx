@@ -11,7 +11,7 @@ import { parseJwt } from 'utils/func/parsejwt';
 // import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 // import ROUTES from 'utils/constants/ROUTES';
 import { useTranslation } from 'react-i18next';
-import { toastMessageSelector } from 'store/appSlice';
+import { setToastMessage, toastMessageSelector } from 'store/appSlice';
 import { modalStatusSelector, setModalClose } from 'store/modalSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import styles from './mainLayout.module.scss';
@@ -30,12 +30,9 @@ const MainLayout = ({ children }: Props) => {
   // const { isLogged } = useAppSelector(authSelector);
 
   useEffect(() => {
-    console.log('toast');
-
     if (toastMessage) {
-      console.log('in toast');
-
       toast(t(`TOAST.${toastMessage}`));
+      setToastMessage(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toastMessage]);

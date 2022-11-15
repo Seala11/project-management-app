@@ -1,5 +1,4 @@
 import { BASE } from 'api/config';
-import { User } from './types';
 
 export function getTokenFromLS() {
   const store = localStorage.getItem(BASE);
@@ -9,16 +8,6 @@ export function getTokenFromLS() {
 
 export function setTokenToLS(token: string) {
   localStorage.setItem(BASE, JSON.stringify({ token }));
-}
-
-export function setUserToLS(user: Omit<User, 'password'>) {
-  localStorage.setItem(`user${BASE}`, JSON.stringify(user));
-}
-
-export function getUserFromLS() {
-  const user = localStorage.getItem(`user${BASE}`);
-  const res: Omit<User, 'password'> = user && JSON.parse(user);
-  return res;
 }
 
 export function removeTokenFromLS() {

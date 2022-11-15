@@ -59,6 +59,7 @@
   },
   "TOAST": {
     "401": "zoro",
+    "403": "token invalid token invalid",
     "200": "okokokokokok"
   },
   "BOARDS": {
