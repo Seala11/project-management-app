@@ -2,13 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchSignIn, fetchSignUp } from '../api/apiAuth';
 import { Signup, Signin, User } from '../api/types';
 import { RootState } from 'store';
-import {
-  getTokenFromLS,
-  getUserFromLS,
-  removeTokenFromLS,
-  setTokenToLS,
-  setUserToLS,
-} from 'api/localStorage';
+import { removeTokenFromLS, setTokenToLS } from 'api/localStorage';
 import { getUserById } from 'api/apiUsers';
 import { parseJwt } from 'utils/func/parsejwt';
 import { toast } from 'react-toastify';
@@ -26,8 +20,8 @@ const userInit: Omit<User, 'password'> = {
 };
 
 const initialState: Auth = {
-  isLogged: getTokenFromLS() ? true : false,
-  user: getUserFromLS() ? getUserFromLS() : userInit,
+  isLogged: false,
+  user: userInit,
 };
 
 export const thunkSignUp = createAsyncThunk(
@@ -57,8 +51,11 @@ export const thunkSignIn = createAsyncThunk(
       const res = await fetchSignIn(options);
 
       if (!res.ok) {
-        const response: { message: string; statusCode: number } = await res.json();
-        throw new Error(response.message);
+        const err: { message: string; statusCode: number } = await res.json();
+        if (err.statusCode === 401) {
+          dispatch(setAuth(false));
+        }
+        throw new Error(err.message);
       }
 
       const { token }: { token: string } = await res.json();
@@ -75,12 +72,15 @@ export const thunkSignIn = createAsyncThunk(
 
 export const thunkGetUserById = createAsyncThunk(
   'auth/thunkGetUserById',
-  async ({ userId, token }: { token: string; userId: string }, { rejectWithValue }) => {
+  async ({ userId, token }: { token: string; userId: string }, { rejectWithValue, dispatch }) => {
     try {
       const res = await getUserById(userId, token);
       if (!res.ok) {
-        const response: { message: string; statusCode: number } = await res.json();
-        throw new Error(response.message);
+        const err: { message: string; statusCode: number } = await res.json();
+        if (err.statusCode === 401) {
+          dispatch(setAuth(false));
+        }
+        throw new Error(err.message);
       }
       const response: User = await res.json();
 
@@ -97,7 +97,7 @@ export const authSlice = createSlice({
   reducers: {
     setUser(state, action) {
       state.user = action.payload;
-      setUserToLS(action.payload);
+      // setUserToLS(action.payload);
     },
 
     setAuth(state, action) {
@@ -133,14 +133,15 @@ export const authSlice = createSlice({
 
     builder.addCase(thunkGetUserById.fulfilled, (state, action) => {
       state.user = action.payload;
-      setUserToLS(action.payload);
+      // setUserToLS(action.payload);
       state.isLogged = true;
       toast.success('User sign in successfully');
     });
 
     builder.addCase(thunkGetUserById.rejected, (state, action) => {
       console.log('rejected');
-      state.isLogged = false;
+      // state.isLogged = false;
+      removeTokenFromLS();
       if (typeof action.payload === 'string') {
         toast.error(action.payload);
       }
