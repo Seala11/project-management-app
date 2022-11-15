@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { BASE } from 'api/config';
 import { getTokenFromLS } from 'api/localStorage';
-import { getAllColumns } from './columnsReducer';
-import { getAllColumnTasks } from './tasksReducer';
+import { getAllColumns } from './middleware/columns';
+import { getAllColumnTasks } from './middleware/tasks';
 
 export type FileType = {
   filename: string;

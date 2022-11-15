@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { BASE } from 'api/config';
 import { getTokenFromLS } from 'api/localStorage';
-import { TaskType } from './boardSlice';
+import { TaskType } from '../boardSlice';
 
 export type TaskResponseType = {
   column: string;

@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { BASE } from 'api/config';
 import { getTokenFromLS } from 'api/localStorage';
-import { ColumnType } from './boardSlice';
+import { ColumnType } from '../boardSlice';
 
 export const getAllColumns = createAsyncThunk<ColumnType[], string, { rejectValue: string }>(
   'column/getAllColumns',

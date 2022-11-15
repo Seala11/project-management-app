@@ -5,7 +5,7 @@ import styles from './board.module.scss';
 import { useAppSelector, useAppDispatch } from 'store/hooks';
 import Loader from 'components/loader/Loader';
 import ROUTES from 'utils/constants/ROUTES';
-import { getAllColumns } from 'store/columnsReducer';
+import { getAllColumns } from 'store/middleware/columns';
 import { setAuth } from 'store/authSlice';
 import Icon from 'components/Icon/Icon';
 
