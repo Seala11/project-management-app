@@ -17,8 +17,8 @@ export function setIsLogged(value: boolean) {
 
 export function getIsLogged() {
   const store = localStorage.getItem(`isLogged${BASE}`);
-  const { value }: { value: boolean } = store && typeof store === 'string' && JSON.parse(store);
-  return value;
+  const res: { value: boolean } = store && typeof store === 'string' && JSON.parse(store);
+  return res?.value || false;
 }
 
 export function setUserToLS(user: Omit<User, 'password'>) {
