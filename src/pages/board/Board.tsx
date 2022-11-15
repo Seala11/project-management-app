@@ -8,6 +8,7 @@ import ROUTES from 'utils/constants/ROUTES';
 import { getAllColumns } from 'store/middleware/columns';
 import { setAuth } from 'store/authSlice';
 import Icon from 'components/Icon/Icon';
+import { setTaskModalOpen } from 'store/modalSlice';
 
 /* ToDo
 - оттестировать ошибки errors
@@ -54,6 +55,10 @@ const Board = () => {
     event.stopPropagation();
   };
 
+  const openTaskModal = () => {
+    dispatch(setTaskModalOpen());
+  };
+
   return (
     <section className={styles.wrapper}>
       {pending && <Loader />}
@@ -74,7 +79,7 @@ const Board = () => {
                   <hr className={styles.columnLine}></hr>
                   <ul className={styles.tasksList}>
                     {tasks.map((task, i) => (
-                      <li className={styles.taskItem} key={i}>
+                      <li className={styles.taskItem} key={i} onClick={openTaskModal}>
                         <div className={styles.taskTitle}>
                           {task}
                           {i}

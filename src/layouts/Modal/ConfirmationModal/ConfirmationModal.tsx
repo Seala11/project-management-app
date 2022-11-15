@@ -46,7 +46,7 @@ const ConfirmationModal = ({ onClose }: Props) => {
   };
 
   return (
-    <>
+    <div className={styles.modal}>
       {modal?.title && <p className={styles.title}>{modal.title}</p>}
 
       {modal?.message && <p>{modal.message}</p>}
@@ -87,7 +87,7 @@ const ConfirmationModal = ({ onClose }: Props) => {
           {t('MODAL.CANCEL')}
         </button>
       </div>
-    </>
+    </div>
   );
 };
 
