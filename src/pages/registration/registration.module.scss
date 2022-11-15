@@ -58,3 +58,8 @@
 .inputError:focus-visible {
   @extend %inputErrorFocus;
 }
+
+.img {
+  height: auto;
+  width: max-content;
+}
