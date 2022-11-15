@@ -7,10 +7,12 @@ import { getUserById } from 'api/apiUsers';
 import { parseJwt } from 'utils/func/parsejwt';
 import { toast } from 'react-toastify';
 import { getErrorMessage } from 'utils/func/handleError';
+import { setToastMessage } from './appSlice';
 
 type Auth = {
   isLogged: boolean;
   user: Omit<User, 'password'>;
+  // toastMessage: string | null;
 };
 
 const userInit: Omit<User, 'password'> = {
@@ -22,6 +24,7 @@ const userInit: Omit<User, 'password'> = {
 const initialState: Auth = {
   isLogged: false,
   user: userInit,
+  // toastMessage: null,
 };
 
 export const thunkSignUp = createAsyncThunk(
@@ -79,11 +82,12 @@ export const thunkGetUserById = createAsyncThunk(
         const err: { message: string; statusCode: number } = await res.json();
         if (err.statusCode === 401) {
           dispatch(setAuth(false));
+          dispatch(setToastMessage(String(err.statusCode)));
         }
-        throw new Error(err.message);
+        throw new Error(String(err.statusCode));
       }
       const response: User = await res.json();
-
+      dispatch(setToastMessage('200'));
       return response;
     } catch (error) {
       return rejectWithValue(getErrorMessage(error));
@@ -104,6 +108,10 @@ export const authSlice = createSlice({
       state.isLogged = action.payload;
       if (!action.payload) removeTokenFromLS();
     },
+
+    // setToastMessage: (state, action) => {
+    //   state.toastMessage = action.payload;
+    // },
   },
   extraReducers(builder) {
     builder.addCase(thunkSignUp.fulfilled, () => {
@@ -135,7 +143,8 @@ export const authSlice = createSlice({
       state.user = action.payload;
       // setUserToLS(action.payload);
       state.isLogged = true;
-      toast.success('User sign in successfully');
+      // toast.success('User sign in successfully');
+      // state.toastMessage = '200';
     });
 
     builder.addCase(thunkGetUserById.rejected, (state, action) => {
@@ -143,7 +152,7 @@ export const authSlice = createSlice({
       // state.isLogged = false;
       removeTokenFromLS();
       if (typeof action.payload === 'string') {
-        toast.error(action.payload);
+        // state.toastMessage = action.payload;
       }
     });
   },
@@ -153,3 +162,4 @@ export default authSlice.reducer;
 export const { setUser, setAuth } = authSlice.actions;
 export const authSelector = (state: RootState) => state.auth;
 export const userSelector = (state: RootState) => state.auth.user;
+// export const toastMessageSelector = (state: RootState) => state.auth.toastMessage;

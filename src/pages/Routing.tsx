@@ -8,6 +8,7 @@ import Home from './home/Home';
 import Settings from './settings/Settings';
 import SignIn from './registration/sign-in/SignIn';
 import SignUp from './registration/sign-up/SignUp';
+import { PrivateRouting } from './privateRouting';
 
 const Routing = () => {
   return (
@@ -15,9 +16,18 @@ const Routing = () => {
       <Route path={ROUTES.home} element={<Home />} />
       <Route path={ROUTES.signIn} element={<SignIn />} />
       <Route path={ROUTES.signUp} element={<SignUp />} />
-      <Route path={ROUTES.settings} element={<Settings />} />
-      <Route path={ROUTES.boards} element={<Boards />} />
-      <Route path={ROUTES.board} element={<Board />} />
+      {/* <Route path={ROUTES.settings} element={<Settings />} /> */}
+      {/* <Route path={ROUTES.boards} element={<Boards />} /> */}
+      <Route path="/" element={<PrivateRouting />}>
+        <Route path={ROUTES.boards} element={<Boards />} />
+      </Route>
+      <Route path="/" element={<PrivateRouting />}>
+        <Route path={ROUTES.boards} element={<Settings />} />
+      </Route>
+      <Route path="/" element={<PrivateRouting />}>
+        <Route path={ROUTES.boards} element={<Board />} />
+      </Route>
+      {/* <Route path={ROUTES.board} element={<Board />} /> */}
       <Route path={ROUTES.notFound} element={<NotFound />} />
       <Route path={ROUTES.default} element={<Navigate to={ROUTES.notFound} />} />
     </Routes>

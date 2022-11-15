@@ -56,5 +56,9 @@
     "FEAT1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
     "FEAT2": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
     "FEAT3": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+  },
+  "TOAST" : {
+    "401" : "zoro",
+    "200": "okokokokokok"
   }
 }
