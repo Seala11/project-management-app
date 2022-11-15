@@ -8,7 +8,16 @@ import ROUTES from 'utils/constants/ROUTES';
 import { getAllColumns } from 'store/middleware/columns';
 import { setAuth } from 'store/authSlice';
 import Icon from 'components/Icon/Icon';
-import { setTaskId, setTaskModalOpen } from 'store/modalSlice';
+import {
+  BtnColor,
+  ModalAction,
+  modalActionSelector,
+  resetModal,
+  setModalOpen,
+  setTaskId,
+  setTaskModalOpen,
+} from 'store/modalSlice';
+import { useTranslation } from 'react-i18next';
 
 /* ToDo
 - оттестировать ошибки errors
@@ -18,12 +27,12 @@ import { setTaskId, setTaskModalOpen } from 'store/modalSlice';
 */
 
 const Board = () => {
-  //  const [isOpenModal, setIsOpenModal] = useState(false);
   const { title, pending, error, columns } = useAppSelector((state) => state.board);
   const tasks = new Array(10).fill('Task');
   const dispatch = useAppDispatch();
   const { id } = useParams<'id'>();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const update = useCallback(() => {
     if (id) {
@@ -51,15 +60,68 @@ const Board = () => {
     }
   }, [error, dispatch, navigate]);
 
-  const deleteColumn = (event: React.MouseEvent) => {
+  // MODAL ACTIONS AND HANDLERS
+  const modalAction = useAppSelector(modalActionSelector);
+
+  const deleteColumn = (event: React.MouseEvent, title: string) => {
     event.stopPropagation();
+    dispatch(
+      setModalOpen({
+        message: `${t('MODAL.DELETE_MSG')} ${title}?`,
+        color: BtnColor.RED,
+        btnText: `${t('MODAL.DELETE')}`,
+        action: ModalAction.COLUMN_DELETE,
+      })
+    );
+  };
+
+  const createTask = () => {
+    dispatch(
+      setModalOpen({
+        title: `${t('BOARD.CREATE_TASK_TITLE')}`,
+        inputTitle: `${t('MODAL.TITLE')}`,
+        inputDescr: `${t('MODAL.DESCRIPTION')}`,
+        color: BtnColor.BLUE,
+        btnText: `${t('MODAL.CREATE')}`,
+        action: ModalAction.TASK_CREATE,
+      })
+    );
+  };
+
+  const createColumn = () => {
+    dispatch(
+      setModalOpen({
+        title: `${t('BOARD.CREATE_COLUMN_TITLE')}`,
+        inputTitle: `${t('MODAL.TITLE')}`,
+        color: BtnColor.BLUE,
+        btnText: `${t('MODAL.CREATE')}`,
+        action: ModalAction.COLUMN_CREATE,
+      })
+    );
   };
 
   const openTaskModal = (task: string) => {
-    // TODO: set task id instead of name;
+    // todo: set task id instead of name;
     dispatch(setTaskId(task));
     dispatch(setTaskModalOpen());
   };
+
+  useEffect(() => {
+    if (modalAction === ModalAction.COLUMN_DELETE) {
+      console.log('delete column dispatch');
+      dispatch(resetModal());
+    }
+
+    if (modalAction === ModalAction.TASK_CREATE) {
+      console.log('create task dispatch');
+      dispatch(resetModal());
+    }
+
+    if (modalAction === ModalAction.COLUMN_CREATE) {
+      console.log('create column dispatch');
+      dispatch(resetModal());
+    }
+  }, [dispatch, modalAction]);
 
   return (
     <section className={styles.wrapper}>
@@ -74,7 +136,10 @@ const Board = () => {
                 <li key={column._id} className={styles.columnItem}>
                   <div className={styles.columnTitle}>
                     {column.title}
-                    <button className={styles.button} onClick={deleteColumn}>
+                    <button
+                      className={styles.button}
+                      onClick={(e) => deleteColumn(e, column.title)}
+                    >
                       <Icon color="#CC0707" size={100} icon="trash" className={styles.icon} />
                     </button>
                   </div>
@@ -89,13 +154,13 @@ const Board = () => {
                       </li>
                     ))}
                   </ul>
-                  <div className={`${styles.taskButton} ${styles.addButton}`}>
-                    {'New Column'}
+                  <div className={`${styles.taskButton} ${styles.addButton}`} onClick={createTask}>
+                    {'New Task'}
                     <Icon color="#0047FF" size={100} icon="add" className={styles.icon} />
                   </div>
                 </li>
               ))}
-            <li className={`${styles.columnButton} ${styles.addButton}`}>
+            <li className={`${styles.columnButton} ${styles.addButton}`} onClick={createColumn}>
               {'New Column'}
               <Icon color="#0047FF" size={100} icon="add" className={styles.icon} />
             </li>

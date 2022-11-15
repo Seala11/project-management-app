@@ -72,5 +72,9 @@
     "TITLE": "Title",
     "DESCRIPTION": "Description",
     "REQUIRED": "This field is required"
+  },
+  "BOARD": {
+    "CREATE_COLUMN_TITLE": "Create new column",
+    "CREATE_TASK_TITLE": "Create new task"
   }
 }

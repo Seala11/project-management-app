@@ -72,5 +72,9 @@
     "TITLE": "Название",
     "DESCRIPTION": "Описание",
     "REQUIRED": "Поле обязательно для заполнения"
+  },
+  "BOARD": {
+    "CREATE_COLUMN_TITLE": "Создать новую колонку",
+    "CREATE_TASK_TITLE": "Создать новый таск"
   }
 }
