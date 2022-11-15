@@ -3,9 +3,9 @@ import { fetchSignIn, fetchSignUp } from '../api/apiAuth';
 import { Signup, Signin, User } from '../api/types';
 import { RootState } from 'store';
 import {
-  getIsLogged,
+  getTokenFromLS,
   getUserFromLS,
-  setIsLogged,
+  removeTokenFromLS,
   setTokenToLS,
   setUserToLS,
 } from 'api/localStorage';
@@ -26,7 +26,7 @@ const userInit: Omit<User, 'password'> = {
 };
 
 const initialState: Auth = {
-  isLogged: getIsLogged() ? true : false,
+  isLogged: getTokenFromLS() ? true : false,
   user: getUserFromLS() ? getUserFromLS() : userInit,
 };
 
@@ -102,7 +102,7 @@ export const authSlice = createSlice({
 
     setAuth(state, action) {
       state.isLogged = action.payload;
-      setIsLogged(action.payload);
+      if (!action.payload) removeTokenFromLS();
     },
   },
   extraReducers(builder) {
@@ -122,7 +122,6 @@ export const authSlice = createSlice({
 
     builder.addCase(thunkSignIn.fulfilled, () => {
       console.log('user is created');
-      // state.isLogged = true;
     });
 
     builder.addCase(thunkSignIn.rejected, (state, action) => {
@@ -136,14 +135,12 @@ export const authSlice = createSlice({
       state.user = action.payload;
       setUserToLS(action.payload);
       state.isLogged = true;
-      setIsLogged(true);
       toast.success('User sign in successfully');
     });
 
     builder.addCase(thunkGetUserById.rejected, (state, action) => {
       console.log('rejected');
       state.isLogged = false;
-      setIsLogged(false);
       if (typeof action.payload === 'string') {
         toast.error(action.payload);
       }
