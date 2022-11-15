@@ -91,6 +91,11 @@
   padding: 1.6rem;
   width: 100%;
   margin-top: 1.6rem;
+  background: transparent;
+
+  &:hover {
+    background: var(--primary-s);
+  }
 }
 
 .taskTitle {
