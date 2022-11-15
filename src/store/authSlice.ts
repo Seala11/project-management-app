@@ -2,7 +2,13 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchSignIn, fetchSignUp } from '../api/apiAuth';
 import { Signup, Signin, User } from '../api/types';
 import { RootState } from 'store';
-import { setTokenToLS } from 'api/localStorage';
+import {
+  getIsLogged,
+  getUserFromLS,
+  setIsLogged,
+  setTokenToLS,
+  setUserToLS,
+} from 'api/localStorage';
 import { getUserById } from 'api/apiUsers';
 import { parseJwt } from 'utils/func/parsejwt';
 import { toast } from 'react-toastify';
@@ -13,13 +19,15 @@ type Auth = {
   user: Omit<User, 'password'>;
 };
 
+const userInit: Omit<User, 'password'> = {
+  _id: '',
+  name: '',
+  login: '',
+};
+
 const initialState: Auth = {
-  isLogged: false,
-  user: {
-    _id: '',
-    name: '',
-    login: '',
-  },
+  isLogged: getIsLogged() ? true : false,
+  user: getUserFromLS() ? getUserFromLS() : userInit,
 };
 
 export const thunkSignUp = createAsyncThunk(
@@ -89,10 +97,12 @@ export const authSlice = createSlice({
   reducers: {
     setUser(state, action) {
       state.user = action.payload;
+      setUserToLS(action.payload);
     },
 
     setAuth(state, action) {
       state.isLogged = action.payload;
+      setIsLogged(action.payload);
     },
   },
   extraReducers(builder) {
@@ -124,13 +134,16 @@ export const authSlice = createSlice({
 
     builder.addCase(thunkGetUserById.fulfilled, (state, action) => {
       state.user = action.payload;
+      setUserToLS(action.payload);
       state.isLogged = true;
+      setIsLogged(true);
       toast.success('User sign in successfully');
     });
 
     builder.addCase(thunkGetUserById.rejected, (state, action) => {
       console.log('rejected');
       state.isLogged = false;
+      setIsLogged(false);
       if (typeof action.payload === 'string') {
         toast.error(action.payload);
       }
