@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import ROUTES from 'utils/constants/ROUTES';
-//import { useAppSelector, useAppDispatch } from '../../store/store';
-//import { updateSearch } from '../../store/apiPageReducer';
+//import { useAppSelector } from 'store/hooks';
 import styles from './header.module.scss';
 import SwitchButton from './switchButton/switchButton';
 import logoIcon from 'assets/images/trello-mark-blue.svg';
@@ -10,17 +9,10 @@ import logoIcon from 'assets/images/trello-mark-blue.svg';
 import UserDropDown from './userDropDown/UserDropDown';
 
 const Header = () => {
-  const [isLogged] = useState(true);
   const [isSticky, setIsSticky] = useState(false);
-
-  // const state = useAppSelector((state) => state.apiPage);
-  // const dispatch = useAppDispatch();
-
-  /*  const handleChange = (e: React.SyntheticEvent) => {
-    const { value } = e.target as HTMLInputElement;
-    dispatch(updateSearch(value));
-  };
-*/
+  // const state = useAppSelector((state) => state.auth);
+  // const { auth } = state;
+  const auth = true;
 
   const setStickyHeader = () => {
     if (window.scrollY > 80) {
@@ -46,7 +38,7 @@ const Header = () => {
           </div>
         </NavLink>
         <div className={styles.menuWrapper}>
-          {isLogged && (
+          {auth && (
             <div className={styles.menuList}>
               <UserDropDown />
             </div>
