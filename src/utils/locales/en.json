@@ -71,7 +71,11 @@
     "CHANGE": "Change",
     "TITLE": "Title",
     "DESCRIPTION": "Description",
-    "REQUIRED": "This field is required"
+    "REQUIRED": "This field is required",
+    "IN_COLUMN": "In column",
+    "MEMBERS": "Members",
+    "LABEL": "Cover",
+    "DELETE_TASK": "Delete task"
   },
   "BOARD": {
     "CREATE_COLUMN_TITLE": "Create new column",

@@ -38,16 +38,16 @@ const TaskModal = ({ onClose }: Props) => {
       <div className={styles.taskWrapper}>
         <div className={styles.taskInfo}>
           <h3 className={styles.title}>Task Title</h3>
-          <p className={styles.subtitle}>In column ColumnName</p>
+          <p className={styles.subtitle}>{t('MODAL.IN_COLUMN')} ColumnName</p>
         </div>
 
         <div className={styles.taskInfo}>
-          <h3 className={styles.title}>Description</h3>
+          <h3 className={styles.title}>{t('MODAL.DESCRIPTION')}</h3>
           <p className={styles.subtitle}>task description</p>
         </div>
 
         <div className={styles.taskInfo}>
-          <h3 className={styles.title}>Members</h3>
+          <h3 className={styles.title}>{t('MODAL.MEMBERS')}</h3>
           <p className={styles.member}>User1</p>
           <select className={styles.select}>
             {FAKE_USERS.map((user) => (
@@ -59,7 +59,7 @@ const TaskModal = ({ onClose }: Props) => {
         </div>
 
         <div className={styles.taskInfo}>
-          <h3 className={styles.title}>Choose a cover for this task:</h3>
+          <h3 className={styles.title}>{t('MODAL.LABEL')}</h3>
           <ul className={styles.list}>
             {COLORS.map((color) => (
               <li
@@ -71,7 +71,7 @@ const TaskModal = ({ onClose }: Props) => {
           </ul>
         </div>
         <button className={styles.button} type="button" onClick={deleteModalOpen}>
-          Delete task
+          {t('MODAL.DELETE_TASK')}
         </button>
       </div>
     </>

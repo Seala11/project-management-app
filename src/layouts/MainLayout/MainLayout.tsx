@@ -16,7 +16,6 @@ type Props = React.HTMLAttributes<HTMLDivElement>;
 const MainLayout = ({ children }: Props) => {
   const modalIsOpen = useAppSelector(modalStatusSelector);
   const taskIsOpen = useAppSelector(taskStatusSelector);
-  // const taskId = useAppSelector(taskIdSelector);
   const dispatch = useAppDispatch();
 
   const closeModal = (event: React.MouseEvent) => {
@@ -27,17 +26,6 @@ const MainLayout = ({ children }: Props) => {
 
   return (
     <>
-      {/* {modalIsOpen && (
-        <Modal onClose={closeModal}>
-          <ConfirmationModal onClose={closeModal} />
-        </Modal>
-      )}
-      {taskIsOpen && (
-        <Modal onClose={closeModal}>
-          <TaskModal onClose={closeModal} />
-        </Modal>
-      )} */}
-
       {modalIsOpen && (
         <Modal onClose={closeModal}>
           {taskIsOpen ? (

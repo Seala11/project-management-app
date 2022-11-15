@@ -71,10 +71,14 @@
     "CHANGE": "Поменять",
     "TITLE": "Название",
     "DESCRIPTION": "Описание",
-    "REQUIRED": "Поле обязательно для заполнения"
+    "REQUIRED": "Поле обязательно для заполнения",
+    "IN_COLUMN": "В колонке",
+    "MEMBERS": "Участники",
+    "LABEL": "Обложка",
+    "DELETE_TASK": "Удалить задачу"
   },
   "BOARD": {
     "CREATE_COLUMN_TITLE": "Создать новую колонку",
-    "CREATE_TASK_TITLE": "Создать новый таск"
+    "CREATE_TASK_TITLE": "Создать новую задачу"
   }
 }
