@@ -14,9 +14,7 @@ const Routing = () => {
   return (
     <Routes>
       <Route path={ROUTES.home} element={<Home />} />
-      {/* <Route path={ROUTES.signIn} element={<LoginRouting />}>
-        <Route path={ROUTES.signIn} element={<SignIn />} />
-      </Route> */}
+
       <Route element={<LoginRouting />}>
         <Route path={ROUTES.signUp} element={<SignUp />} />
         <Route path={ROUTES.signIn} element={<SignIn />} />
@@ -27,12 +25,7 @@ const Routing = () => {
         <Route path={ROUTES.settings} element={<Settings />} />
         <Route path={ROUTES.board} element={<Board />} />
       </Route>
-      {/* <Route path={ROUTES.home} element={<PrivateRouting />}>
-        <Route path={ROUTES.settings} element={<Settings />} />
-      </Route>
-      <Route path={ROUTES.home} element={<PrivateRouting />}>
-        <Route path={ROUTES.board} element={<Board />} />
-      </Route> */}
+
       <Route path={ROUTES.notFound} element={<NotFound />} />
       <Route path={ROUTES.default} element={<Navigate to={ROUTES.notFound} />} />
     </Routes>

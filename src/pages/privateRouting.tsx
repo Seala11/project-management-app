@@ -11,10 +11,10 @@ const PrivateRouting = () => {
 
 const LoginRouting = () => {
   const { isLogged } = useAppSelector(authSelector);
-  if (isLogged) {
-    return <Navigate to={ROUTES.boards} />;
-  } else return <Outlet />;
-  // return isLogged ? <Navigate to={ROUTES.boards} /> : <Outlet />;
+  // if (isLogged) {
+  //   return <Navigate to={ROUTES.boards} />;
+  // } else return <Outlet />;
+  return isLogged ? <Navigate to={ROUTES.boards} /> : <Outlet />;
 };
 
 export { PrivateRouting, LoginRouting };
