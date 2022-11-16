@@ -32,8 +32,11 @@ export const thunkSignUp = createAsyncThunk(
     try {
       const res = await fetchSignUp(options);
       if (!res.ok) {
-        const response: { message: string; statusCode: number } = await res.json();
-        throw new Error(response.message);
+        const err: { message: string; statusCode: number } = await res.json();
+        if (err.statusCode === 409) {
+          dispatch(setToastMessage(String(`AUTH${err.statusCode}`)));
+        }
+        throw new Error(String(err.statusCode));
       }
       const response: User = await res.json();
       const login = options.login;
