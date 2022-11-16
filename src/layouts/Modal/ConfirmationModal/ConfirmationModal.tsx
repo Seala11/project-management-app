@@ -85,7 +85,7 @@ const ConfirmationModal = ({ onClose }: Props) => {
       <div className={styles.wrapper}>
         <button
           type="button"
-          onClick={(e) => actionHandler(e)}
+          onClick={actionHandler}
           className={`${modal?.color === BtnColor.BLUE ? styles.blue : styles.red}`}
         >
           {modal?.btnText}
@@ -96,7 +96,7 @@ const ConfirmationModal = ({ onClose }: Props) => {
             {t('MODAL.CANCEL')}
           </button>
         ) : (
-          <button type="button" onClick={(e) => onClose(e)} className={styles.gray}>
+          <button type="button" onClick={onClose} className={styles.gray}>
             {t('MODAL.CANCEL')}
           </button>
         )}

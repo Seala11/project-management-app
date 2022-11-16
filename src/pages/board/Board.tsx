@@ -1,11 +1,11 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getSingleBoard } from 'store/boardSlice';
+import { thunkGetSingleBoard } from 'store/boardSlice';
 import styles from './board.module.scss';
 import { useAppSelector, useAppDispatch } from 'store/hooks';
 import Loader from 'components/loader/Loader';
 import ROUTES from 'utils/constants/ROUTES';
-import { getAllColumns } from 'store/middleware/columns';
+import { thunkGetAllColumns, thunkCreateColumn, thunkDeleteColumn } from 'store/middleware/columns';
 import { setAuth, userSelector } from 'store/authSlice';
 import Icon from 'components/Icon/Icon';
 import {
@@ -39,8 +39,8 @@ const Board = () => {
 
   const update = useCallback(() => {
     if (id) {
-      dispatch(getSingleBoard(id));
-      dispatch(getAllColumns(id));
+      dispatch(thunkGetSingleBoard(id));
+      dispatch(thunkGetAllColumns(id));
       console.log('useEffect');
     }
   }, [id, dispatch]);
@@ -70,14 +70,26 @@ const Board = () => {
   const userInputDescr = useAppSelector(userDescriptionSelector);
   const user = useAppSelector(userSelector);
 
-  const deleteColumn = (event: React.MouseEvent, title: string) => {
-    event.stopPropagation();
+  const deleteColumn = (title: string, columnId: string) => {
+    setColumnId(columnId);
     dispatch(
       setModalOpen({
         message: `${t('MODAL.DELETE_MSG')} ${title}?`,
         color: BtnColor.RED,
         btnText: `${t('MODAL.DELETE')}`,
         action: ModalAction.COLUMN_DELETE,
+      })
+    );
+  };
+
+  const createColumn = () => {
+    dispatch(
+      setModalOpen({
+        title: `${t('BOARD.CREATE_COLUMN_TITLE')}`,
+        inputTitle: `${t('MODAL.TITLE')}`,
+        color: BtnColor.BLUE,
+        btnText: `${t('MODAL.CREATE')}`,
+        action: ModalAction.COLUMN_CREATE,
       })
     );
   };
@@ -96,18 +108,6 @@ const Board = () => {
     );
   };
 
-  const createColumn = () => {
-    dispatch(
-      setModalOpen({
-        title: `${t('BOARD.CREATE_COLUMN_TITLE')}`,
-        inputTitle: `${t('MODAL.TITLE')}`,
-        color: BtnColor.BLUE,
-        btnText: `${t('MODAL.CREATE')}`,
-        action: ModalAction.COLUMN_CREATE,
-      })
-    );
-  };
-
   const openTaskModal = (task: string) => {
     // todo: set task id instead of name;
     dispatch(setTaskId(task));
@@ -116,7 +116,21 @@ const Board = () => {
 
   useEffect(() => {
     if (modalAction === ModalAction.COLUMN_DELETE) {
-      console.log('delete column dispatch');
+      console.log(columnId);
+      dispatch(thunkDeleteColumn({ boardId: `${id}`, columnId: columnId }));
+      //  dispatch(thunkGetAllColumns(`${id}`));
+      dispatch(resetModal());
+    }
+
+    if (modalAction === ModalAction.COLUMN_CREATE) {
+      dispatch(
+        thunkCreateColumn({
+          boardId: `${id}`,
+          title: userInputTitle,
+          order: columns[columns.length - 1].order + 1,
+        })
+      );
+
       dispatch(resetModal());
     }
 
@@ -136,19 +150,27 @@ const Board = () => {
       dispatch(resetModal());
     }
 
-    if (modalAction === ModalAction.COLUMN_CREATE) {
-      console.log('create column dispatch');
-      dispatch(resetModal());
-    }
     // после того как ты разнесешь на компоненты - зависисмоти почищу, можно рефами вынести
-  }, [columnId, dispatch, id, modalAction, user, user._id, userInputDescr, userInputTitle]);
+  }, [
+    columns,
+    columnId,
+    dispatch,
+    id,
+    modalAction,
+    user,
+    user._id,
+    userInputDescr,
+    userInputTitle,
+  ]);
 
   return (
     <section className={styles.wrapper}>
       {pending && <Loader />}
       {!pending && (
         <div className={styles.mainContent}>
-          <h2 className={styles.title}>{title}</h2>
+          <h2 className={styles.title}>
+            {title.title} <span className={styles.description}>({title.descr})</span>
+          </h2>
           <ul className={styles.columnsList}>
             {[...columns]
               .sort((a, b) => a.order - b.order)
@@ -158,7 +180,7 @@ const Board = () => {
                     {column.title}
                     <button
                       className={styles.button}
-                      onClick={(e) => deleteColumn(e, column.title)}
+                      onClick={() => deleteColumn(column.title, column._id)}
                     >
                       <Icon color="#CC0707" size={100} icon="trash" className={styles.icon} />
                     </button>

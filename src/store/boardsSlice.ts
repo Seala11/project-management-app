@@ -76,7 +76,7 @@ export const thunkDeleteBoard = createAsyncThunk(
   }
 );
 
-type BoardInfo = {
+export type BoardInfo = {
   title: string;
   descr: string;
 };
