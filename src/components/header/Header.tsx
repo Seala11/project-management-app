@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import ROUTES from 'utils/constants/ROUTES';
-//import { useAppSelector } from 'store/hooks';
 import styles from './header.module.scss';
 import SwitchButton from './switchButton/switchButton';
 import logoIcon from 'assets/images/trello-mark-blue.svg';
@@ -11,18 +10,8 @@ import { useAppSelector } from 'store/hooks';
 import { authSelector } from 'store/authSlice';
 
 const Header = () => {
-  // const [isLogged] = useState(true);
   const [isSticky, setIsSticky] = useState(false);
   const { isLogged } = useAppSelector(authSelector);
-
-  // const state = useAppSelector((state) => state.apiPage);
-  // const dispatch = useAppDispatch();
-
-  /*  const handleChange = (e: React.SyntheticEvent) => {
-    const { value } = e.target as HTMLInputElement;
-    dispatch(updateSearch(value));
-  };
-*/
 
   const setStickyHeader = () => {
     if (window.scrollY > 80) {
