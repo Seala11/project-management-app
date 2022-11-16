@@ -94,7 +94,7 @@ export const thunkGetUserById = createAsyncThunk(
         throw new Error(String(err.message));
       }
       const response: User = await res.json();
-      dispatch(setToastMessage('200'));
+      dispatch(setToastMessage('Successeful login'));
       return response;
     } catch (error) {
       return rejectWithValue(getErrorMessage(error));

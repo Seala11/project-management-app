@@ -74,7 +74,7 @@
   },
   "TOAST": {
     "Authorization error": "Ошибка авторизации",
-    "Invalid token": "Не правильный токен. Попробуйте войти еще раз.",
+    "Invalid token": "Попробуйте войти еще раз.",
     "Successeful login": "Успешный вход в приложение",
     "Bad Request": "Неправильный запрос",
     "User was not founded!": "Такой пользователь не найден",
