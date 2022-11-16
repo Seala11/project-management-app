@@ -48,8 +48,6 @@ const ConfirmationModal = ({ onClose }: Props) => {
   const onSubmit: SubmitHandler<ModalForm> = (data) => {
     const dataIsValid: boolean = validateData(data);
 
-    console.log(data);
-
     if (dataIsValid) {
       if (modal?.inputTitle && data.title) {
         dispatch(setInputTitle(data.title.trim()));
@@ -119,7 +117,7 @@ const ConfirmationModal = ({ onClose }: Props) => {
           <input
             id={modal.inputTitle}
             type="text"
-            {...register('title', { onChange: () => changeHandler(UserInput.TITLE) })}
+            {...register(UserInput.TITLE, { onChange: () => changeHandler(UserInput.TITLE) })}
             className={`${errors.title ? styles.inputError : ''}`}
           />
           {errors.title && <span className={styles.fieldError}>{errors.title.message}</span>}
@@ -132,7 +130,9 @@ const ConfirmationModal = ({ onClose }: Props) => {
           <input
             id={modal.inputDescr}
             type="text"
-            {...register('description', { onChange: () => changeHandler(UserInput.DESCRIPTION) })}
+            {...register(UserInput.DESCRIPTION, {
+              onChange: () => changeHandler(UserInput.DESCRIPTION),
+            })}
             className={`${errors.description ? styles.inputError : ''}`}
           />
           {errors.description && (
