@@ -1,8 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { BASE } from 'api/config';
+import { toast } from 'react-toastify';
+import { parseTaskObj } from 'utils/func/boardHandler';
 import { getTokenFromLS } from 'utils/func/localStorage';
 import { getAllColumns } from './middleware/columns';
-import { getAllColumnTasks } from './middleware/tasks';
+import { getAllColumnTasks, thunkCreateTasks } from './middleware/tasks';
 
 export type FileType = {
   filename: string;
@@ -20,8 +22,23 @@ export type TaskType = {
   files?: FileType[];
 };
 
+// NEW TASK TYPE
+type TaskParsedType = {
+  _id: string;
+  title: string;
+  order: number;
+  boardId: string;
+  description: {
+    description: string;
+    color: string;
+  };
+  userId: string;
+  users: string[];
+  files?: FileType[];
+};
+
 export type TaskObjectType = {
-  [key: string]: TaskType[];
+  [key: string]: TaskParsedType[];
 };
 
 export type ColumnType = {
@@ -98,7 +115,29 @@ export const boardSlice = createSlice({
         state.columns = action.payload;
       })
       .addCase(getAllColumnTasks.fulfilled, (state, action) => {
-        state.tasks[action.payload.column] = action.payload.tasks;
+        const taskObj = action.payload.tasks.map((task) => parseTaskObj(task));
+        state.tasks[action.payload.column] = taskObj;
+      })
+
+      // create task
+      .addCase(thunkCreateTasks.pending, (state) => {
+        state.pending = true;
+      })
+      .addCase(thunkCreateTasks.fulfilled, (state, action) => {
+        state.pending = false;
+        // была ошибка тк не находил объект state.tasks[action.payload.column], после добавления колонок в стор по ключам надо переписать
+        // это демо, работают запросы, можно глянуть в девтулзах
+        const newObj = Object.assign(state.tasks, {
+          [action.payload.column]: parseTaskObj(action.payload.task),
+        });
+        state.tasks = newObj;
+      })
+      .addCase(thunkCreateTasks.rejected, (state, action) => {
+        state.pending = false;
+        console.log(action.payload);
+        if (typeof action.payload === 'string') {
+          toast.error(action.payload);
+        }
       });
   },
 });

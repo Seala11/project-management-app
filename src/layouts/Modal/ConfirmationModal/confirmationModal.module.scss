@@ -4,12 +4,16 @@
   display: flex;
   gap: 3rem;
   padding: 2rem 0;
+  justify-content: center;
+}
+
+.modal {
+  padding: 2rem;
 }
 
 .title {
   @extend %title;
   align-self: flex-start;
-  padding-left: 3rem;
 }
 
 .blue {

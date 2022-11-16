@@ -4,16 +4,18 @@ import Footer from 'components/footer/Footer';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import TOASTER from 'utils/constants/TOASTER';
-import { modalStatusSelector, setModalClose } from 'store/modalSlice';
+import { modalStatusSelector, setModalClose, taskStatusSelector } from 'store/modalSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import styles from './mainLayout.module.scss';
 import Modal from 'layouts/Modal/Modal';
 import ConfirmationModal from 'layouts/Modal/ConfirmationModal/ConfirmationModal';
+import TaskModal from 'layouts/Modal/TaskModal/TaskModal';
 
 type Props = React.HTMLAttributes<HTMLDivElement>;
 
 const MainLayout = ({ children }: Props) => {
   const modalIsOpen = useAppSelector(modalStatusSelector);
+  const taskIsOpen = useAppSelector(taskStatusSelector);
   const dispatch = useAppDispatch();
 
   const closeModal = (event: React.MouseEvent) => {
@@ -26,7 +28,11 @@ const MainLayout = ({ children }: Props) => {
     <>
       {modalIsOpen && (
         <Modal onClose={closeModal}>
-          <ConfirmationModal onClose={closeModal} />
+          {taskIsOpen ? (
+            <TaskModal onClose={closeModal} />
+          ) : (
+            <ConfirmationModal onClose={closeModal} />
+          )}
         </Modal>
       )}
       <ToastContainer autoClose={TOASTER.time} />
