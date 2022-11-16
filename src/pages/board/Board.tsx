@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getSingleBoard } from 'store/boardSlice';
 import styles from './board.module.scss';
@@ -6,7 +6,7 @@ import { useAppSelector, useAppDispatch } from 'store/hooks';
 import Loader from 'components/loader/Loader';
 import ROUTES from 'utils/constants/ROUTES';
 import { getAllColumns } from 'store/middleware/columns';
-import { setAuth } from 'store/authSlice';
+import { setAuth, userSelector } from 'store/authSlice';
 import Icon from 'components/Icon/Icon';
 import {
   BtnColor,
@@ -16,8 +16,11 @@ import {
   setModalOpen,
   setTaskId,
   setTaskModalOpen,
+  userDescriptionSelector,
+  userTitleSelector,
 } from 'store/modalSlice';
 import { useTranslation } from 'react-i18next';
+import { thunkCreateTasks } from 'store/middleware/tasks';
 
 /* ToDo
 - оттестировать ошибки errors
@@ -62,6 +65,10 @@ const Board = () => {
 
   // MODAL ACTIONS AND HANDLERS
   const modalAction = useAppSelector(modalActionSelector);
+  const [columnId, setColumnId] = useState('');
+  const userInputTitle = useAppSelector(userTitleSelector);
+  const userInputDescr = useAppSelector(userDescriptionSelector);
+  const user = useAppSelector(userSelector);
 
   const deleteColumn = (event: React.MouseEvent, title: string) => {
     event.stopPropagation();
@@ -75,7 +82,8 @@ const Board = () => {
     );
   };
 
-  const createTask = () => {
+  const createTask = (columnId: string) => {
+    setColumnId(columnId);
     dispatch(
       setModalOpen({
         title: `${t('BOARD.CREATE_TASK_TITLE')}`,
@@ -113,7 +121,17 @@ const Board = () => {
     }
 
     if (modalAction === ModalAction.TASK_CREATE) {
-      console.log('create task dispatch');
+      console.log('dispatch', user, Number(user._id));
+      dispatch(
+        thunkCreateTasks({
+          boardId: `${id}`,
+          columnId: columnId,
+          title: userInputTitle,
+          description: userInputDescr,
+          order: 0,
+          userId: user._id,
+        })
+      );
       dispatch(resetModal());
     }
 
@@ -121,7 +139,8 @@ const Board = () => {
       console.log('create column dispatch');
       dispatch(resetModal());
     }
-  }, [dispatch, modalAction]);
+    // после того как ты разнесешь на компоненты - зависисмоти почищу, можно рефами вынести
+  }, [columnId, dispatch, id, modalAction, user, user._id, userInputDescr, userInputTitle]);
 
   return (
     <section className={styles.wrapper}>
@@ -154,7 +173,10 @@ const Board = () => {
                       </li>
                     ))}
                   </ul>
-                  <div className={`${styles.taskButton} ${styles.addButton}`} onClick={createTask}>
+                  <div
+                    className={`${styles.taskButton} ${styles.addButton}`}
+                    onClick={() => createTask(column._id)}
+                  >
                     {'New Task'}
                     <Icon color="#0047FF" size={100} icon="add" className={styles.icon} />
                   </div>
