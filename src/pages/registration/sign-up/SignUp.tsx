@@ -1,18 +1,17 @@
 import React from 'react';
-import { Navigate, NavLink } from 'react-router-dom';
-import { authSelector, thunkSignUp } from 'store/authSlice';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { NavLink } from 'react-router-dom';
+import { thunkSignUp } from 'store/authSlice';
+import { useAppDispatch } from 'store/hooks';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import signImage from 'assets/images/login.png';
 import { Signup } from 'api/types';
 import { useTranslation } from 'react-i18next';
-import ROUTES from 'utils/constants/ROUTES';
 import styles from '../registration.module.scss';
 
 const SignUp = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { isLogged } = useAppSelector(authSelector);
+  // const { isLogged } = useAppSelector(authSelector);
 
   const {
     register,
@@ -24,7 +23,7 @@ const SignUp = () => {
     dispatch(thunkSignUp(data));
   };
 
-  if (isLogged) return <Navigate to={ROUTES.boards} />;
+  // if (isLogged) return <Navigate to={ROUTES.boards} />;
 
   return (
     <section className={styles.wrapper}>
