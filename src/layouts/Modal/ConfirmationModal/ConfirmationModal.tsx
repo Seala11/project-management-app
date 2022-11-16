@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   BtnColor,
   modalSelector,
@@ -12,40 +12,95 @@ import {
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { useTranslation } from 'react-i18next';
 import styles from './confirmationModal.module.scss';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { useGetModalErrors } from 'utils/hooks/useGetModalErrors';
 
-type InputValType = {
-  title: string;
-  descr: string;
+type ModalForm = {
+  title?: string;
+  description?: string;
 };
+
+enum UserInput {
+  TITLE = 'title',
+  DESCRIPTION = 'description',
+}
 
 type Props = {
   onClose: (event: React.MouseEvent) => void;
 };
 
 const ConfirmationModal = ({ onClose }: Props) => {
-  const [inputValues, setInputValues] = useState<InputValType>({
-    title: '',
-    descr: '',
-  });
-
   const dispatch = useAppDispatch();
   const taskId = useAppSelector(taskIdSelector);
   const modal = useAppSelector(modalSelector);
   const { t } = useTranslation();
+  const errMessage = useGetModalErrors();
 
-  const actionHandler = (event: React.MouseEvent) => {
-    event.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    getFieldState,
+    setError,
+    clearErrors,
+    formState: { errors },
+  } = useForm<ModalForm>();
 
-    if (modal?.inputTitle) {
-      dispatch(setInputTitle(inputValues.title));
+  const onSubmit: SubmitHandler<ModalForm> = (data) => {
+    const dataIsValid: boolean = validateData(data);
+
+    console.log(data);
+
+    if (dataIsValid) {
+      if (modal?.inputTitle && data.title) {
+        dispatch(setInputTitle(data.title.trim()));
+      }
+
+      if (modal?.inputDescr && data.description) {
+        dispatch(setInputDescr(data.description.trim()));
+      }
+
+      dispatch(setModalAction(modal?.action));
+      dispatch(setModalClose());
+    }
+  };
+
+  const validateData = (data: ModalForm) => {
+    for (const [key, value] of Object.entries(data)) {
+      switch (key) {
+        case UserInput.TITLE: {
+          if (!value)
+            setError(UserInput.TITLE, {
+              message: errMessage.required,
+            });
+          if (value && typeof value === 'string' && value.trim().length > 20)
+            setError(UserInput.TITLE, {
+              message: errMessage.titleLim,
+            });
+          break;
+        }
+        case UserInput.DESCRIPTION: {
+          if (!value)
+            setError(UserInput.DESCRIPTION, {
+              message: errMessage.required,
+            });
+          if (value && typeof value === 'string' && value.trim().length > 150)
+            setError(UserInput.DESCRIPTION, {
+              message: errMessage.descrLim,
+            });
+          break;
+        }
+      }
     }
 
-    if (modal?.inputDescr) {
-      dispatch(setInputDescr(inputValues.descr));
-    }
+    const formIsInvalid = Object.keys(data).some(
+      (input) => getFieldState(input as keyof ModalForm).error
+    );
 
-    dispatch(setModalAction(modal?.action));
-    dispatch(setModalClose());
+    return !formIsInvalid;
+  };
+
+  const changeHandler = (key: UserInput) => {
+    clearErrors(key);
   };
 
   const backToTaskModal = () => {
@@ -53,7 +108,7 @@ const ConfirmationModal = ({ onClose }: Props) => {
   };
 
   return (
-    <div className={styles.modal}>
+    <form className={styles.modal} onSubmit={handleSubmit(onSubmit)}>
       {modal?.title && <p className={styles.title}>{modal.title}</p>}
 
       {modal?.message && <p>{modal.message}</p>}
@@ -64,9 +119,10 @@ const ConfirmationModal = ({ onClose }: Props) => {
           <input
             id={modal.inputTitle}
             type="text"
-            onChange={(e) => setInputValues({ ...inputValues, title: e.target.value })}
+            {...register('title', { onChange: () => changeHandler(UserInput.TITLE) })}
+            className={`${errors.title ? styles.inputError : ''}`}
           />
-          {/* {error.title && <span className={styles.inputError}>{t('MODAL.REQUIRED')}</span>} */}
+          {errors.title && <span className={styles.fieldError}>{errors.title.message}</span>}
         </div>
       )}
 
@@ -76,16 +132,18 @@ const ConfirmationModal = ({ onClose }: Props) => {
           <input
             id={modal.inputDescr}
             type="text"
-            onChange={(e) => setInputValues({ ...inputValues, descr: e.target.value })}
+            {...register('description', { onChange: () => changeHandler(UserInput.DESCRIPTION) })}
+            className={`${errors.description ? styles.inputError : ''}`}
           />
-          {/* {error.descr && <span className={styles.inputError}>{t('MODAL.REQUIRED')}</span>} */}
+          {errors.description && (
+            <span className={styles.fieldError}>{errors.description.message}</span>
+          )}
         </div>
       )}
 
       <div className={styles.wrapper}>
         <button
-          type="button"
-          onClick={(e) => actionHandler(e)}
+          type="submit"
           className={`${modal?.color === BtnColor.BLUE ? styles.blue : styles.red}`}
         >
           {modal?.btnText}
@@ -101,7 +159,7 @@ const ConfirmationModal = ({ onClose }: Props) => {
           </button>
         )}
       </div>
-    </div>
+    </form>
   );
 };
 
