@@ -138,7 +138,7 @@ export const boardsSlice = createSlice({
     builder.addCase(thunkCreateBoards.rejected, (state, action) => {
       state.loading = false;
       if (typeof action.payload === 'string') {
-        toast.error(action.payload);
+        // toast.error(action.payload);
       }
     });
 

@@ -44,21 +44,6 @@ const MainLayout = ({ children }: Props) => {
     }
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   if (
-  //     (!isLogged && location.pathname === ROUTES.boards) ||
-  //     (!isLogged && location.pathname === ROUTES.settings)
-  //   ) {
-  //     navigate(ROUTES.home);
-  //   }
-  //   if (
-  //     (isLogged && location.pathname === ROUTES.signIn) ||
-  //     (isLogged && location.pathname === ROUTES.signUp)
-  //   ) {
-  //     navigate(ROUTES.boards);
-  //   }
-  // }, [isLogged, location.pathname, navigate]);
-
   const closeModal = (event: React.MouseEvent) => {
     if (event.target === event.currentTarget) {
       dispatch(setModalClose());
