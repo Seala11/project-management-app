@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from 'components/header/Header';
 import Footer from 'components/footer/Footer';
 import { toast, ToastContainer } from 'react-toastify';
@@ -27,6 +27,7 @@ const MainLayout = ({ children }: Props) => {
   const navigate = useNavigate();
   const location = useLocation();
   const toastMessage = useAppSelector(toastMessageSelector);
+  const [loading, setLoading] = useState(true);
   // const { isLogged } = useAppSelector(authSelector);
 
   useEffect(() => {
@@ -50,6 +51,7 @@ const MainLayout = ({ children }: Props) => {
     if (getTokenFromLS()) {
       const token = getTokenFromLS();
       dispatch(thunkGetUserById({ userId: parseJwt(token).id, token: token })).then(() => {
+        setLoading(false);
         const latestPath = localStorage.getItem(`lastPath-${BASE}`);
         latestPath && navigate(latestPath);
       });
@@ -74,7 +76,8 @@ const MainLayout = ({ children }: Props) => {
 
       <div className={styles.container}>
         <Header />
-        <main className={styles.main}>{children}</main>
+        {/* <main className={styles.main}>{children}</main> */}
+        {!loading ? <main className={styles.main}>{children}</main> : <h1>Loading</h1>}
         <Footer />
       </div>
     </>
