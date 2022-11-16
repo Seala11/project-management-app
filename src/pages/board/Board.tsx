@@ -122,12 +122,13 @@ const Board = () => {
 
     if (modalAction === ModalAction.TASK_CREATE) {
       console.log('dispatch', user, Number(user._id));
+      const newDescr = JSON.stringify({ description: userInputDescr, color: '' });
       dispatch(
         thunkCreateTasks({
           boardId: `${id}`,
           columnId: columnId,
           title: userInputTitle,
-          description: userInputDescr,
+          description: newDescr,
           order: 0,
           userId: user._id,
         })
