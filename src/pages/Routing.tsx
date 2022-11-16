@@ -13,21 +13,23 @@ import { LoginRouting, PrivateRouting } from './privateRouting';
 const Routing = () => {
   return (
     <Routes>
-      <Route path={ROUTES.home} element={<Home />} />
+      <Route errorElement={<h1>ERROR BOUNDARY</h1>}>
+        <Route path={ROUTES.home} element={<Home />} />
 
-      <Route element={<LoginRouting />}>
-        <Route path={ROUTES.signUp} element={<SignUp />} />
-        <Route path={ROUTES.signIn} element={<SignIn />} />
+        <Route element={<LoginRouting />}>
+          <Route path={ROUTES.signUp} element={<SignUp />} />
+          <Route path={ROUTES.signIn} element={<SignIn />} />
+        </Route>
+
+        <Route element={<PrivateRouting />}>
+          <Route path={ROUTES.boards} element={<Boards />} />
+          <Route path={ROUTES.settings} element={<Settings />} />
+          <Route path={ROUTES.board} element={<Board />} />
+        </Route>
+
+        <Route path={ROUTES.notFound} element={<NotFound />} />
+        <Route path={ROUTES.default} element={<Navigate to={ROUTES.notFound} />} />
       </Route>
-
-      <Route element={<PrivateRouting />}>
-        <Route path={ROUTES.boards} element={<Boards />} />
-        <Route path={ROUTES.settings} element={<Settings />} />
-        <Route path={ROUTES.board} element={<Board />} />
-      </Route>
-
-      <Route path={ROUTES.notFound} element={<NotFound />} />
-      <Route path={ROUTES.default} element={<Navigate to={ROUTES.notFound} />} />
     </Routes>
   );
 };
