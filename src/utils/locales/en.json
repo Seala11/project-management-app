@@ -57,11 +57,6 @@
     "FEAT2": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
     "FEAT3": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
   },
-  "TOAST": {
-    "401": "zoro",
-    "403": "token invalid token invalid",
-    "200": "okokokokokok"
-  },
   "BOARDS": {
     "TITLE": "My Boards",
     "CREATE": "Create new board"
@@ -76,5 +71,13 @@
     "TITLE": "Title",
     "DESCRIPTION": "Description",
     "REQUIRED": "This field is required"
+  },
+  "TOAST": {
+    "Authorization error": "Authorization error",
+    "Invalid token": "Invalid token",
+    "Successeful login": "Successeful login",
+    "Bad Request": "Bad Request",
+    "User was not founded!": "User was not founded!",
+    "Login already exist": "Login already exist"
   }
 }

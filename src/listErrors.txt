@@ -1,0 +1,19 @@
+200 Successeful login
+400 Bad Request
+403 Invalid token
+401 Authorization error
+200 New user is created
+409 Login already exist
+200 All users on server
+200 Founded user
+200 Updated user
+409 Login already exist
+200 Deleted user
+200 All boards on server
+200 Created board
+404 Board was not founded!
+404 User was not founded!
+200 Updated board
+
+
+

@@ -31,11 +31,16 @@ const MainLayout = ({ children }: Props) => {
 
   useEffect(() => {
     if (toastMessage) {
+      console.log(toastMessage);
+
       toast(t(`TOAST.${toastMessage}`));
-      setToastMessage(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toastMessage]);
+
+  useEffect(() => {
+    dispatch(setToastMessage(null));
+  }, [dispatch]);
 
   useEffect(() => {
     if (getTokenFromLS()) {

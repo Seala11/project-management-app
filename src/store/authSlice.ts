@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchSignIn, fetchSignUp } from '../api/apiAuth';
 import { Signup, Signin, User } from '../api/types';
@@ -13,6 +14,8 @@ type Auth = {
   isLogged: boolean;
   user: Omit<User, 'password'>;
 };
+
+const errorArray = [400, 401, 403, 404, 409];
 
 const userInit: Omit<User, 'password'> = {
   _id: '',
@@ -32,8 +35,11 @@ export const thunkSignUp = createAsyncThunk(
     try {
       const res = await fetchSignUp(options);
       if (!res.ok) {
-        const response: { message: string; statusCode: number } = await res.json();
-        throw new Error(response.message);
+        const err: { message: string; statusCode: number } = await res.json();
+        if (errorArray.includes(err.statusCode)) {
+          dispatch(setToastMessage(err.message));
+        }
+        throw new Error(err.message);
       }
       const response: User = await res.json();
       const login = options.login;
@@ -54,8 +60,8 @@ export const thunkSignIn = createAsyncThunk(
 
       if (!res.ok) {
         const err: { message: string; statusCode: number } = await res.json();
-        if (err.statusCode === 401) {
-          dispatch(setAuth(false));
+        if (errorArray.includes(err.statusCode)) {
+          dispatch(setToastMessage(err.message));
         }
         throw new Error(err.message);
       }
@@ -79,11 +85,13 @@ export const thunkGetUserById = createAsyncThunk(
       const res = await getUserById(userId, token);
       if (!res.ok) {
         const err: { message: string; statusCode: number } = await res.json();
-        if (err.statusCode === 401) {
+
+        if (errorArray.includes(err.statusCode)) {
           dispatch(setAuth(false));
-          dispatch(setToastMessage(String(err.statusCode)));
+          dispatch(setToastMessage(err.message));
         }
-        throw new Error(String(err.statusCode));
+
+        throw new Error(String(err.message));
       }
       const response: User = await res.json();
       dispatch(setToastMessage('200'));
@@ -108,30 +116,30 @@ export const authSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    builder.addCase(thunkSignUp.fulfilled, () => {
-      console.log('user is created');
-      toast.success('user is created');
-    });
+    // builder.addCase(thunkSignUp.fulfilled, () => {
 
-    builder.addCase(thunkSignUp.rejected, (state, action) => {
-      console.log('rejected');
-      if (typeof action.payload === 'string') {
-        toast.error(action.payload);
-      }
-    });
+    // toast.success('user is created');
+    // });
+
+    // builder.addCase(thunkSignUp.rejected, (state, action) => {
+
+    // if (typeof action.payload === 'string') {
+    //   toast.error(action.payload);
+    // }
+    // });
 
     // sign in
 
-    builder.addCase(thunkSignIn.fulfilled, () => {
-      console.log('user is created');
-    });
+    // builder.addCase(thunkSignIn.fulfilled, () => {
+    //   console.log('user is created');
+    // });
 
-    builder.addCase(thunkSignIn.rejected, (state, action) => {
-      console.log('rejected');
-      if (typeof action.payload === 'string') {
-        toast.error(action.payload);
-      }
-    });
+    // builder.addCase(thunkSignIn.rejected, (state, action) => {
+    // console.log('rejected');
+    // if (typeof action.payload === 'string') {
+    //   toast.error(action.payload);
+    // }
+    // });
 
     builder.addCase(thunkGetUserById.fulfilled, (state, action) => {
       state.user = action.payload;
@@ -142,12 +150,12 @@ export const authSlice = createSlice({
     });
 
     builder.addCase(thunkGetUserById.rejected, (state, action) => {
-      console.log('rejected');
+      // console.log('rejected');
       // state.isLogged = false;
       removeTokenFromLS();
-      if (typeof action.payload === 'string') {
-        // state.toastMessage = action.payload;
-      }
+      // if (typeof action.payload === 'string') {
+      // state.toastMessage = action.payload;
+      // }
     });
   },
 });
