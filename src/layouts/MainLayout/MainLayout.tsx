@@ -15,8 +15,6 @@ import { useAppDispatch, useAppSelector } from 'store/hooks';
 import styles from './mainLayout.module.scss';
 import Modal from 'layouts/Modal/Modal';
 import ConfirmationModal from 'layouts/Modal/ConfirmationModal/ConfirmationModal';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { BASE } from 'api/config';
 
 type Props = React.HTMLAttributes<HTMLDivElement>;
 
@@ -24,20 +22,8 @@ const MainLayout = ({ children }: Props) => {
   const modalIsOpen = useAppSelector(modalStatusSelector);
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const location = useLocation();
   const toastMessage = useAppSelector(toastMessageSelector);
   const [loading, setLoading] = useState(true);
-  // const { isLogged } = useAppSelector(authSelector);
-
-  useEffect(() => {
-    return () => {
-      const path = location.pathname;
-      localStorage.setItem(`lastPath-${BASE}`, path);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   useEffect(() => {
     if (toastMessage) {
       console.log(toastMessage);
@@ -52,10 +38,9 @@ const MainLayout = ({ children }: Props) => {
       const token = getTokenFromLS();
       dispatch(thunkGetUserById({ userId: parseJwt(token).id, token: token })).then(() => {
         setLoading(false);
-        const latestPath = localStorage.getItem(`lastPath-${BASE}`);
-        latestPath && navigate(latestPath);
       });
-    }
+    } else setLoading(false);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
