@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useEffect } from 'react';
 import { thunkSignIn } from 'store/authSlice';
 import { useAppDispatch } from 'store/hooks';
 import { NavLink } from 'react-router-dom';
@@ -20,12 +21,40 @@ const SignIn = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty, isValid },
+    setError,
+    clearErrors,
   } = useForm<Signin>();
 
   const onSubmit: SubmitHandler<Signin> = (data) => {
-    dispatch(thunkSignIn(data));
+    // dispatch(thunkSignIn(data));
+    if (isValid && checkFields(data)) {
+      console.log('success');
+      console.log(data);
+    }
+    console.log('мимо');
   };
+
+  function checkFields(data: IFormInputSingIn & { [key: string]: string }) {
+    let isValid = true;
+    for (const key in data) {
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
+        const value = data[key];
+
+        if (value.length < 6) {
+          setError(key as 'login' | 'password', { type: 'minLength', message: 'LENGTH' });
+          isValid = false;
+        }
+
+        if (!value.match(/^\S[a-zA-Z0-9_]+$/i)) {
+          setError(key as 'login' | 'password', { type: 'value', message: 'PATTERN' });
+          isValid = false;
+        }
+      }
+    }
+
+    return isValid;
+  }
 
   return (
     <section className={styles.wrapper}>
@@ -37,20 +66,28 @@ const SignIn = () => {
               <label htmlFor="login">{t('AUTH.LOGIN')}</label>
               <input
                 id="login"
-                {...register('login', { required: true })}
-                className={errors.login && styles.inputError}
+                {...register('login', {
+                  required: { value: true, message: 'REQUIRED' },
+                })}
+                className={errors.login?.message && styles.inputError}
               />
-              {errors.login && <span className={styles.fieldError}>{t('AUTH.REQUIRED')}</span>}
+              {errors.login && (
+                <span className={styles.fieldError}>{t(`AUTH.${errors.login.message}`)}</span>
+              )}
             </div>
             <div className={styles.formItem}>
               <label htmlFor="password">{t('AUTH.PASSWORD')}</label>
               <input
                 id="password"
                 type={'password'}
-                {...register('password', { required: true })}
+                {...register('password', {
+                  required: { value: true, message: 'REQUIRED' },
+                })}
                 className={errors.password && styles.inputError}
               />
-              {errors.password && <span className={styles.fieldError}>{t('AUTH.REQUIRED')}</span>}
+              {errors.password && (
+                <span className={styles.fieldError}>{t(`AUTH.${errors.password.message}`)}</span>
+              )}
             </div>
             <button type="submit">{t('AUTH.SUBMIT')}</button>
           </form>
