@@ -135,9 +135,9 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  row-gap: 1rem;
+  row-gap: 0.8rem;
   align-items: flex-start;
-  padding-bottom: 2rem;
+  padding-bottom: 2.8rem;
 }
 
 %input {
@@ -151,8 +151,9 @@
 %fieldError {
   display: block;
   position: absolute;
-  bottom: 0;
+  bottom: 1rem;
   color: var(--error);
+  font-size: 1.4rem;
 }
 
 %inputError {

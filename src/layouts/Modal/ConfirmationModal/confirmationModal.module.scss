@@ -35,7 +35,15 @@
     @extend %input;
   }
 
-  & .inputError {
+  & .fieldError {
     @extend %fieldError;
   }
+}
+
+.inputError {
+  @extend %inputError;
+}
+
+.inputError:focus-visible {
+  @extend %inputErrorFocus;
 }
