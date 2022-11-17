@@ -16,6 +16,7 @@ import styles from './mainLayout.module.scss';
 import Modal from 'layouts/Modal/Modal';
 import ConfirmationModal from 'layouts/Modal/ConfirmationModal/ConfirmationModal';
 import TaskModal from 'layouts/Modal/TaskModal/TaskModal';
+import Loader from 'components/loader/Loader';
 
 type Props = React.HTMLAttributes<HTMLDivElement>;
 
@@ -67,11 +68,7 @@ const MainLayout = ({ children }: Props) => {
 
       <div className={styles.container}>
         <Header />
-        {!loading ? (
-          <main className={styles.main}>{children}</main>
-        ) : (
-          <main className={styles.main}></main>
-        )}
+        {!loading ? <main className={styles.main}>{children}</main> : <Loader />}
         <Footer />
       </div>
     </>
