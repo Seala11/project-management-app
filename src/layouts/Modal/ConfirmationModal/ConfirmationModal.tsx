@@ -16,8 +16,8 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useGetModalErrors } from 'utils/hooks/useGetModalErrors';
 
 type ModalForm = {
-  title?: string;
-  description?: string;
+  title: string;
+  description: string;
 };
 
 enum UserInput {
@@ -62,7 +62,7 @@ const ConfirmationModal = ({ onClose }: Props) => {
     }
   };
 
-  const validateData = (data: ModalForm) => {
+  const validateData = (data: Partial<ModalForm>) => {
     for (const [key, value] of Object.entries(data)) {
       switch (key) {
         case UserInput.TITLE: {
