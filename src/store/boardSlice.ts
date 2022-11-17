@@ -135,13 +135,14 @@ export const boardSlice = createSlice({
       })
       .addCase(thunkCreateColumn.rejected, (state, action) => {
         state.pending = false;
-        console.log(action.payload);
         if (typeof action.payload === 'string') {
           toast.error(action.payload);
         }
       })
       .addCase(thunkDeleteColumn.fulfilled, (state, action) => {
         state.pending = false;
+        console.log(action.payload);
+        console.log(state.columns.findIndex((elem) => elem._id === action.payload));
         state.columns.splice(
           state.columns.findIndex((elem) => elem._id === action.payload),
           1
@@ -150,7 +151,6 @@ export const boardSlice = createSlice({
       .addCase(thunkDeleteColumn.pending, (state) => {
         state.pending = true;
       })
-
       // Tasks
       .addCase(thunkGetAllTasks.fulfilled, (state, action) => {
         const taskObj = action.payload.tasks.map((task) => parseTaskObj(task));
@@ -163,10 +163,8 @@ export const boardSlice = createSlice({
         state.pending = false;
         // была ошибка тк не находил объект state.tasks[action.payload.column], после добавления колонок в стор по ключам надо переписать
         // это демо, работают запросы, можно глянуть в девтулзах
-        const newObj = Object.assign(state.tasks, {
-          [action.payload.column]: parseTaskObj(action.payload.task),
-        });
-        state.tasks = newObj;
+
+        state.tasks[action.payload.column].push(parseTaskObj(action.payload.task));
       })
       .addCase(thunkCreateTasks.rejected, (state, action) => {
         state.pending = false;
