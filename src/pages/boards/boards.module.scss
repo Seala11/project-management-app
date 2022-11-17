@@ -61,7 +61,16 @@
   padding: 1.6rem;
 
   @include media-laptop {
+    width: 93%;
+  }
+
+  @include media-mobile {
     width: 90%;
+    height: 16rem;
+  }
+
+  @include media-mobile-s {
+    height: 20rem;
   }
 }
 
@@ -74,6 +83,11 @@
   font-size: 2.4rem;
   font-weight: 600;
   margin: 0.6rem 0;
+  word-break: break-word;
+
+  @include media-mobile {
+    font-size: 2rem;
+  }
 }
 
 .cardCreateName {
@@ -88,4 +102,5 @@
 
 .description {
   color: var(--gray);
+  word-break: break-all;
 }
