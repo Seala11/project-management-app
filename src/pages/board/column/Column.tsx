@@ -7,9 +7,11 @@ import { userSelector } from 'store/authSlice';
 import Icon from 'components/Icon/Icon';
 import {
   BtnColor,
+  modalColumnIdSelector,
   ModalAction,
   modalActionSelector,
   resetModal,
+  setModalColumnId,
   setModalOpen,
   setTaskId,
   setTaskModalOpen,
@@ -31,6 +33,7 @@ const Column = (props: Props) => {
 
   // MODAL ACTIONS AND HANDLERS
   const modalAction = useAppSelector(modalActionSelector);
+  const modalColumnId = useAppSelector(modalColumnIdSelector);
   const userInputTitle = useAppSelector(userTitleSelector);
   const userInputDescr = useAppSelector(userDescriptionSelector);
   const user = useAppSelector(userSelector);
@@ -39,7 +42,40 @@ const Column = (props: Props) => {
     dispatch(thunkGetAllTasks({ boardId: column.boardId, columnId: column._id }));
   }, [column.boardId, column._id, dispatch]);
 
+  useEffect(() => {
+    if (modalAction === ModalAction.COLUMN_DELETE && modalColumnId === column._id) {
+      dispatch(thunkDeleteColumn({ boardId: column.boardId, columnId: column._id }));
+      dispatch(resetModal());
+    }
+
+    if (modalAction === ModalAction.TASK_CREATE) {
+      console.log('dispatch', user, Number(user._id));
+      const newDescr = JSON.stringify({ description: userInputDescr, color: '' });
+      dispatch(
+        thunkCreateTasks({
+          boardId: column.boardId,
+          columnId: column._id,
+          title: userInputTitle,
+          description: newDescr,
+          order: 0,
+          userId: user._id,
+        })
+      );
+      dispatch(resetModal());
+    }
+  }, [
+    modalAction,
+    column._id,
+    column.boardId,
+    dispatch,
+    modalColumnId,
+    user,
+    userInputDescr,
+    userInputTitle,
+  ]);
+
   const deleteColumn = (title: string) => {
+    dispatch(setModalColumnId(column._id));
     dispatch(
       setModalOpen({
         message: `${t('MODAL.DELETE_MSG')} ${title}?`,
@@ -67,39 +103,6 @@ const Column = (props: Props) => {
     dispatch(setTaskId(task));
     dispatch(setTaskModalOpen());
   };
-
-  useEffect(() => {
-    if (modalAction === ModalAction.COLUMN_DELETE) {
-      console.log(column._id);
-      dispatch(thunkDeleteColumn({ boardId: column.boardId, columnId: column._id }));
-      dispatch(resetModal());
-    }
-
-    if (modalAction === ModalAction.TASK_CREATE) {
-      console.log('dispatch', user, Number(user._id));
-      const newDescr = JSON.stringify({ description: userInputDescr, color: '' });
-      dispatch(
-        thunkCreateTasks({
-          boardId: column.boardId,
-          columnId: column._id,
-          title: userInputTitle,
-          description: newDescr,
-          order: 0,
-          userId: user._id,
-        })
-      );
-      dispatch(resetModal());
-    }
-  }, [
-    modalAction,
-    dispatch,
-    column._id,
-    column.boardId,
-    user,
-    user._id,
-    userInputDescr,
-    userInputTitle,
-  ]);
 
   return (
     <>

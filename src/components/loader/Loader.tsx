@@ -6,7 +6,6 @@ type Props = {
 };
 
 function Loader({ status }: Props) {
-  console.log(status);
   if (!status) return null;
   return (
     <div className={`${style.loader} ${status === 'full' ? style.full : ''}`}>
