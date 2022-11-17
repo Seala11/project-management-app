@@ -6,6 +6,7 @@ import { getTokenFromLS } from 'utils/func/localStorage';
 import { BoardInfo } from './boardsSlice';
 import { thunkCreateColumn, thunkDeleteColumn, thunkGetAllColumns } from './middleware/columns';
 import { thunkGetAllTasks, thunkCreateTasks } from './middleware/tasks';
+import { RootState } from 'store';
 
 export type FileType = {
   filename: string;
@@ -53,7 +54,7 @@ export type BoardStateType = {
   id: string;
   title: BoardInfo;
   error: string;
-  pending: boolean;
+  pending: boolean | string;
   columns: ColumnType[];
   tasks: TaskObjectType;
 };
@@ -115,7 +116,7 @@ export const boardSlice = createSlice({
         state.pending = false;
       })
       .addCase(thunkGetSingleBoard.pending, (state) => {
-        state.pending = true;
+        state.pending = 'full';
       })
       // Columns
       .addCase(thunkGetAllColumns.fulfilled, (state, action) => {
@@ -123,15 +124,15 @@ export const boardSlice = createSlice({
         state.pending = false;
       })
       .addCase(thunkGetAllColumns.pending, (state) => {
-        state.pending = true;
+        state.pending = 'full';
       })
       .addCase(thunkCreateColumn.fulfilled, (state, action) => {
         state.columns.push(action.payload);
         state.pending = false;
       })
-      /*   .addCase(thunkCreateColumn.pending, (state) => {
+      .addCase(thunkCreateColumn.pending, (state) => {
         state.pending = true;
-      }) */
+      })
       .addCase(thunkCreateColumn.rejected, (state, action) => {
         state.pending = false;
         console.log(action.payload);
@@ -146,9 +147,9 @@ export const boardSlice = createSlice({
           1
         );
       })
-      /*  .addCase(thunkDeleteColumn.pending, (state) => {
+      .addCase(thunkDeleteColumn.pending, (state) => {
         state.pending = true;
-      })*/
+      })
 
       // Tasks
       .addCase(thunkGetAllTasks.fulfilled, (state, action) => {
@@ -178,5 +179,7 @@ export const boardSlice = createSlice({
 });
 
 export const { clearErrors } = boardSlice.actions;
+
+export const singleBoardRequestStatus = (state: RootState) => state.board.pending;
 
 export default boardSlice.reducer;

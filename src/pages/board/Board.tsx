@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { thunkGetSingleBoard } from 'store/boardSlice';
 import styles from './board.module.scss';
 import { useAppSelector, useAppDispatch } from 'store/hooks';
-import Loader from 'components/loader/Loader';
 import ROUTES from 'utils/constants/ROUTES';
 import { thunkGetAllColumns, thunkCreateColumn, thunkDeleteColumn } from 'store/middleware/columns';
 import { setAuth, userSelector } from 'store/authSlice';
@@ -30,7 +29,7 @@ import { thunkCreateTasks } from 'store/middleware/tasks';
 */
 
 const Board = () => {
-  const { title, pending, error, columns } = useAppSelector((state) => state.board);
+  const { title, error, columns } = useAppSelector((state) => state.board);
   const tasks = new Array(10).fill('Task');
   const dispatch = useAppDispatch();
   const { id } = useParams<'id'>();
@@ -164,9 +163,9 @@ const Board = () => {
   ]);
 
   return (
-    <section className={styles.wrapper}>
-      {pending && <Loader />}
-      {!pending && (
+    <>
+      {/*!pending && <Loader />*/}
+      <section className={styles.wrapper}>
         <div className={styles.mainContent}>
           <h2 className={styles.title}>
             {title.title} <span className={styles.description}>({title.descr})</span>
@@ -211,8 +210,8 @@ const Board = () => {
             </li>
           </ul>
         </div>
-      )}
-    </section>
+      </section>
+    </>
   );
 };
 

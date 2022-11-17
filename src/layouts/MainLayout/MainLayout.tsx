@@ -10,12 +10,18 @@ import styles from './mainLayout.module.scss';
 import Modal from 'layouts/Modal/Modal';
 import ConfirmationModal from 'layouts/Modal/ConfirmationModal/ConfirmationModal';
 import TaskModal from 'layouts/Modal/TaskModal/TaskModal';
+import { singleBoardRequestStatus } from 'store/boardSlice';
+import Loader from 'components/loader/Loader';
+import { boardsLoadingSelector } from 'store/boardsSlice';
 
 type Props = React.HTMLAttributes<HTMLDivElement>;
 
 const MainLayout = ({ children }: Props) => {
   const modalIsOpen = useAppSelector(modalStatusSelector);
   const taskIsOpen = useAppSelector(taskStatusSelector);
+  const boardState = useAppSelector(singleBoardRequestStatus);
+  const boardsState = useAppSelector(boardsLoadingSelector);
+  const pending = boardState || boardsState;
   const dispatch = useAppDispatch();
 
   const closeModal = (event: React.MouseEvent) => {
@@ -39,7 +45,10 @@ const MainLayout = ({ children }: Props) => {
 
       <div className={styles.container}>
         <Header />
-        <main className={styles.main}>{children}</main>
+        <main className={styles.main}>
+          <Loader status={pending} />
+          {children}
+        </main>
         <Footer />
       </div>
     </>
