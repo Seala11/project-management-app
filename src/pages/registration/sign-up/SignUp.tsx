@@ -11,7 +11,6 @@ import styles from '../registration.module.scss';
 const SignUp = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  // const { isLogged } = useAppSelector(authSelector);
 
   const {
     register,
@@ -22,8 +21,6 @@ const SignUp = () => {
   const onSubmit: SubmitHandler<Signup> = (data) => {
     dispatch(thunkSignUp(data));
   };
-
-  // if (isLogged) return <Navigate to={ROUTES.boards} />;
 
   return (
     <section className={styles.wrapper}>

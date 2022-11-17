@@ -74,8 +74,8 @@
   },
   "TOAST": {
     "Authorization error": "Authorization error",
-    "Invalid token": "Invalid token",
-    "Successeful login": "Successeful login",
+    "Invalid token": "Authorization is required",
+    "Successeful login": "Welcome to app",
     "Bad Request": "Bad Request",
     "User was not founded!": "User was not founded!",
     "Login already exist": "Login already exist"

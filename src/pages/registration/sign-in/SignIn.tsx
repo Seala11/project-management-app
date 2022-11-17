@@ -16,7 +16,7 @@ export interface IFormInputSingIn {
 const SignIn = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  // const { isLogged } = useAppSelector(authSelector);
+
   const {
     register,
     handleSubmit,
@@ -26,8 +26,6 @@ const SignIn = () => {
   const onSubmit: SubmitHandler<Signin> = (data) => {
     dispatch(thunkSignIn(data));
   };
-
-  // if (isLogged) return <Navigate to={ROUTES.boards} />;
 
   return (
     <section className={styles.wrapper}>
