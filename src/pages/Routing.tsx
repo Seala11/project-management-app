@@ -11,9 +11,11 @@ import SignUp from './registration/sign-up/SignUp';
 import { LoginRouting, PrivateRouting } from './privateRouting';
 import { useAppSelector } from 'store/hooks';
 import { authSelector } from 'store/authSlice';
+import { getTokenFromLS } from 'utils/func/localStorage';
 
 const Routing = () => {
   const { isLogged } = useAppSelector(authSelector);
+  const isLoggedd = !!getTokenFromLS();
   return (
     <Routes>
       <Route path={ROUTES.home} element={<Home />} />
@@ -23,7 +25,7 @@ const Routing = () => {
         <Route path={ROUTES.signIn} element={<SignIn />} />
       </Route>
 
-      <Route element={<PrivateRouting isLogged={isLogged} />}>
+      <Route element={<PrivateRouting isLogged={isLoggedd} />}>
         <Route path={ROUTES.boards} element={<Boards />} />
         <Route path={ROUTES.settings} element={<Settings />} />
         <Route path={ROUTES.board} element={<Board />} />

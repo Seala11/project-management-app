@@ -141,10 +141,11 @@ export const boardSlice = createSlice({
       })
       .addCase(thunkDeleteColumn.fulfilled, (state, action) => {
         state.pending = false;
-        console.log(action.payload);
-        console.log(state.columns.findIndex((elem) => elem._id === action.payload));
         state.columns.splice(
-          state.columns.findIndex((elem) => elem._id === action.payload),
+          state.columns.findIndex((elem) => {
+            console.log(elem._id);
+            return elem._id === action.payload;
+          }),
           1
         );
       })
