@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import ROUTES from 'utils/constants/ROUTES';
-//import { useAppSelector } from 'store/hooks';
 import styles from './header.module.scss';
 import SwitchButton from './switchButton/switchButton';
 import logoIcon from 'assets/images/trello-mark-blue.svg';
 
 import UserDropDown from './userDropDown/UserDropDown';
+import { useAppSelector } from 'store/hooks';
+import { authSelector } from 'store/authSlice';
 
 const Header = () => {
   const [isSticky, setIsSticky] = useState(false);
-  // const state = useAppSelector((state) => state.auth);
-  // const { auth } = state;
-  const auth = true;
+  const { isLogged } = useAppSelector(authSelector);
 
   const setStickyHeader = () => {
     if (window.scrollY > 80) {
@@ -38,7 +37,7 @@ const Header = () => {
           </div>
         </NavLink>
         <div className={styles.menuWrapper}>
-          {auth && (
+          {isLogged && (
             <div className={styles.menuList}>
               <UserDropDown />
             </div>

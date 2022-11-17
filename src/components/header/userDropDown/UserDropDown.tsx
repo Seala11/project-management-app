@@ -1,18 +1,16 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-// import { useAppSelector, useAppDispatch } from '../../store/store';
-// import { updateSearchBar } from '../../store/apiPageReducer';
 import styles from './dropdown.module.scss';
 import Icon from 'components/Icon/Icon';
 import ROUTES from 'utils/constants/ROUTES';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAppSelector } from 'store/hooks';
-import { authSelector } from 'store/authSlice';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { authSelector, setAuth } from 'store/authSlice';
 
 const UserDropDown = () => {
   const { t } = useTranslation();
   const { user, isLogged } = useAppSelector(authSelector);
-
+  const dispatch = useAppDispatch();
   const menuListData = [
     {
       name: `${t('MENU.NEW_BOARD')}`,
@@ -37,10 +35,6 @@ const UserDropDown = () => {
   ];
 
   const [isOpen, setIsOpen] = useState(false);
-  // const state = useAppSelector((state) => state.apiPage);
-  // const dispatch = useAppDispatch();
-  // const { UserName, CurrPage } = state;
-
   const menuList = useRef<HTMLUListElement>(null);
   const menuHeader = useRef<HTMLDivElement>(null);
 
@@ -68,15 +62,20 @@ const UserDropDown = () => {
 
   const onOptionClicked = (value: string) => () => {
     if (currPage === value) return;
-    //dispatch(updateSearchBar({ [name]: value }));
+    if (value === `${t('MENU.SIGN_OUT')}`) {
+      dispatch(setAuth(false));
+    }
+
     toggling();
   };
 
   return (
     <div className={styles.dropdownWrapper}>
       <div className={styles.dropdownHeader} onClick={toggling} ref={menuHeader}>
-        <Icon color="#4D4D4D" size={36} icon="user" />
-        <span className={styles.name}>{isLogged ? user.name : userName}</span>
+        <div className={styles.wrapperIconWithName}>
+          <Icon color="#4D4D4D" size={36} icon="user" />
+          <span className={styles.name}>{isLogged ? user.name : userName}</span>
+        </div>
         <Icon color="" size={14} icon="arrow-down" />
       </div>
       {isOpen && (

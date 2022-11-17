@@ -11,7 +11,6 @@
   "AUTH": {
     "SIGN_IN": "Sign in",
     "SIGN_UP": "Sign up",
-    "LOGOUT": "Logout",
     "NAME": "Name",
     "LOGIN": "Login",
     "PASSWORD": "Password",
@@ -80,5 +79,13 @@
   "BOARD": {
     "CREATE_COLUMN_TITLE": "Create new column",
     "CREATE_TASK_TITLE": "Create new task"
+  },
+  "TOAST": {
+    "Authorization error": "Authorization error",
+    "Invalid token": "Authorization is required",
+    "Successeful login": "Welcome to app",
+    "Bad Request": "Bad Request",
+    "User was not founded!": "User was not founded!",
+    "Login already exist": "Login already exist"
   }
 }
