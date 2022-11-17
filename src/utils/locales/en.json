@@ -19,7 +19,7 @@
     "HAVENT_ACCOUNT": "I dont`t have an account",
     "REQUIRED": "This field is required",
     "LENGTH": "Minimal length 6 characters",
-    "PATTERN": "only letters, numbers or underscore"
+    "PATTERN": "Only letters, numbers or underscore"
   },
   "NOTFOUND": {
     "TITLE": "Oops! The page you are looking for cannot be found.",
