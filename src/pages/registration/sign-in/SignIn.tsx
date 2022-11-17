@@ -27,12 +27,9 @@ const SignIn = () => {
   } = useForm<Signin>();
 
   const onSubmit: SubmitHandler<Signin> = (data) => {
-    dispatch(thunkSignIn(data));
     if (isValid && checkFields(data)) {
-      console.log('success');
-      console.log(data);
+      dispatch(thunkSignIn(data));
     }
-    console.log('мимо');
   };
 
   function checkFields(data: IFormInputSingIn & { [key: string]: string }) {
