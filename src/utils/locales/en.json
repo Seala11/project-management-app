@@ -18,8 +18,8 @@
     "HAVE_ACCOUNT": "I already have an account",
     "HAVENT_ACCOUNT": "I dont`t have an account",
     "REQUIRED": "This field is required",
-    "LENGTH": "Min length is 5",
-    "PATTERN": "Only A-Za-zА-Яа-я"
+    "LENGTH": "Min length is 6",
+    "PATTERN": "Only char,number and _"
   },
   "NOTFOUND": {
     "TITLE": "Oops! The page you are looking for cannot be found.",

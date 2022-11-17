@@ -65,9 +65,7 @@ const SignIn = () => {
               <label htmlFor="login">{t('AUTH.LOGIN')}</label>
               <input
                 id="login"
-                {...register('login', {
-                  // required: { value: true, message: 'REQUIRED' },
-                })}
+                {...register('login')}
                 className={errors.login?.message && styles.inputError}
                 autoComplete="off"
               />
@@ -80,9 +78,7 @@ const SignIn = () => {
               <input
                 id="password"
                 type={'password'}
-                {...register('password', {
-                  // required: { value: true, message: 'REQUIRED' },
-                })}
+                {...register('password')}
                 className={errors.password && styles.inputError}
                 autoComplete="off"
               />
