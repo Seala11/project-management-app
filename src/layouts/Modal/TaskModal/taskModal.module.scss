@@ -1,0 +1,90 @@
+@use './app/styles/mixins.scss' as *;
+
+.title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--black);
+}
+
+.subtitle {
+  color: var(--gray);
+}
+
+.heading {
+  display: flex;
+  background-color: var(--primary-s);
+  width: 100%;
+  width: -moz-available;
+  width: -webkit-fill-available;
+  width: stretch;
+  padding: 2rem;
+  justify-content: flex-end;
+}
+
+.taskWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  padding: 0 2rem 2rem;
+}
+
+.taskInfo {
+  width: 100%;
+  width: -moz-available;
+  width: -webkit-fill-available;
+  width: stretch;
+  padding-bottom: 1rem;
+}
+
+.closeBtn {
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  width: 1.6rem;
+  height: 1.6rem;
+  background-image: url('../../../assets/images/close.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.button {
+  @extend %btnRed;
+  align-self: flex-end;
+}
+
+.list {
+  display: flex;
+  gap: 1rem;
+  list-style-type: none;
+  padding: 0;
+}
+
+.label {
+  width: 7rem;
+  height: 3rem;
+  border-radius: 0.8rem;
+  cursor: pointer;
+
+  &:hover {
+    border: 0.2rem solid var(--gray);
+  }
+}
+
+.select {
+  @extend %input;
+  width: 100%;
+  width: -moz-available;
+  width: -webkit-fill-available;
+  width: stretch;
+}
+
+.member {
+  background-color: var(--gray-s);
+  width: fit-content;
+  padding: 0.5rem 0.8rem;
+  border-radius: 0.8rem;
+  color: var(--black);
+}

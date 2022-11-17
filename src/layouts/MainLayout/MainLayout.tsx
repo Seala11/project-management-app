@@ -10,16 +10,18 @@ import { thunkGetUserById } from 'store/authSlice';
 import { parseJwt } from 'utils/func/parsejwt';
 import { useTranslation } from 'react-i18next';
 import { toastMessageSelector } from 'store/appSlice';
-import { modalStatusSelector, setModalClose } from 'store/modalSlice';
+import { modalStatusSelector, setModalClose, taskStatusSelector } from 'store/modalSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import styles from './mainLayout.module.scss';
 import Modal from 'layouts/Modal/Modal';
 import ConfirmationModal from 'layouts/Modal/ConfirmationModal/ConfirmationModal';
+import TaskModal from 'layouts/Modal/TaskModal/TaskModal';
 
 type Props = React.HTMLAttributes<HTMLDivElement>;
 
 const MainLayout = ({ children }: Props) => {
   const modalIsOpen = useAppSelector(modalStatusSelector);
+  const taskIsOpen = useAppSelector(taskStatusSelector);
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const toastMessage = useAppSelector(toastMessageSelector);
@@ -54,7 +56,11 @@ const MainLayout = ({ children }: Props) => {
     <>
       {modalIsOpen && (
         <Modal onClose={closeModal}>
-          <ConfirmationModal onClose={closeModal} />
+          {taskIsOpen ? (
+            <TaskModal onClose={closeModal} />
+          ) : (
+            <ConfirmationModal onClose={closeModal} />
+          )}
         </Modal>
       )}
       <ToastContainer autoClose={TOASTER.time} />

@@ -6,6 +6,8 @@ import {
   setInputTitle,
   setModalAction,
   setModalClose,
+  setTaskModalOpen,
+  taskIdSelector,
 } from 'store/modalSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { useTranslation } from 'react-i18next';
@@ -27,6 +29,7 @@ const ConfirmationModal = ({ onClose }: Props) => {
   });
 
   const dispatch = useAppDispatch();
+  const taskId = useAppSelector(taskIdSelector);
   const modal = useAppSelector(modalSelector);
   const { t } = useTranslation();
 
@@ -45,8 +48,12 @@ const ConfirmationModal = ({ onClose }: Props) => {
     dispatch(setModalClose());
   };
 
+  const backToTaskModal = () => {
+    dispatch(setTaskModalOpen());
+  };
+
   return (
-    <>
+    <div className={styles.modal}>
       {modal?.title && <p className={styles.title}>{modal.title}</p>}
 
       {modal?.message && <p>{modal.message}</p>}
@@ -83,11 +90,18 @@ const ConfirmationModal = ({ onClose }: Props) => {
         >
           {modal?.btnText}
         </button>
-        <button type="button" onClick={(e) => onClose(e)} className={styles.gray}>
-          {t('MODAL.CANCEL')}
-        </button>
+
+        {taskId ? (
+          <button type="button" onClick={backToTaskModal} className={styles.gray}>
+            {t('MODAL.CANCEL')}
+          </button>
+        ) : (
+          <button type="button" onClick={(e) => onClose(e)} className={styles.gray}>
+            {t('MODAL.CANCEL')}
+          </button>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 
