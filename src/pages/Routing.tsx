@@ -8,16 +8,27 @@ import Home from './home/Home';
 import Settings from './settings/Settings';
 import SignIn from './registration/sign-in/SignIn';
 import SignUp from './registration/sign-up/SignUp';
+import { LoginRouting, PrivateRouting } from './privateRouting';
+import { useAppSelector } from 'store/hooks';
+import { authSelector } from 'store/authSlice';
 
 const Routing = () => {
+  const { isLogged } = useAppSelector(authSelector);
   return (
     <Routes>
       <Route path={ROUTES.home} element={<Home />} />
-      <Route path={ROUTES.signIn} element={<SignIn />} />
-      <Route path={ROUTES.signUp} element={<SignUp />} />
-      <Route path={ROUTES.settings} element={<Settings />} />
-      <Route path={ROUTES.boards} element={<Boards />} />
-      <Route path={ROUTES.board} element={<Board />} />
+
+      <Route element={<LoginRouting isLogged={isLogged} />}>
+        <Route path={ROUTES.signUp} element={<SignUp />} />
+        <Route path={ROUTES.signIn} element={<SignIn />} />
+      </Route>
+
+      <Route element={<PrivateRouting isLogged={isLogged} />}>
+        <Route path={ROUTES.boards} element={<Boards />} />
+        <Route path={ROUTES.settings} element={<Settings />} />
+        <Route path={ROUTES.board} element={<Board />} />
+      </Route>
+
       <Route path={ROUTES.notFound} element={<NotFound />} />
       <Route path={ROUTES.default} element={<Navigate to={ROUTES.notFound} />} />
     </Routes>

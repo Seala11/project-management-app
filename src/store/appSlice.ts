@@ -9,10 +9,12 @@ export enum Lang {
 
 type AppState = {
   lang: Lang;
+  toastMessage: string | null;
 };
 
 export const initialState: AppState = {
   lang: Lang.EN,
+  toastMessage: null,
 };
 
 export const appSlice = createSlice({
@@ -22,11 +24,16 @@ export const appSlice = createSlice({
     setLang: (state, action: PayloadAction<Lang>) => {
       state.lang = action.payload;
     },
+
+    setToastMessage: (state, action) => {
+      state.toastMessage = action.payload;
+    },
   },
 });
 
-export const { setLang } = appSlice.actions;
+export const { setLang, setToastMessage } = appSlice.actions;
 
 export const languageSelector = (state: RootState) => state.app.lang;
+export const toastMessageSelector = (state: RootState) => state.app.toastMessage;
 
 export default appSlice.reducer;

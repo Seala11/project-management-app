@@ -1,9 +1,15 @@
-import React from 'react';
+/* eslint-disable no-unused-vars */
+import React, { useEffect, useState } from 'react';
 import Header from 'components/header/Header';
 import Footer from 'components/footer/Footer';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import TOASTER from 'utils/constants/TOASTER';
+import { getTokenFromLS } from 'utils/func/localStorage';
+import { thunkGetUserById } from 'store/authSlice';
+import { parseJwt } from 'utils/func/parsejwt';
+import { useTranslation } from 'react-i18next';
+import { toastMessageSelector } from 'store/appSlice';
 import { modalStatusSelector, setModalClose, taskStatusSelector } from 'store/modalSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import styles from './mainLayout.module.scss';
@@ -17,6 +23,28 @@ const MainLayout = ({ children }: Props) => {
   const modalIsOpen = useAppSelector(modalStatusSelector);
   const taskIsOpen = useAppSelector(taskStatusSelector);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
+  const toastMessage = useAppSelector(toastMessageSelector);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    if (toastMessage) {
+      console.log(toastMessage);
+
+      toast(t(`TOAST.${toastMessage}`));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [toastMessage]);
+
+  useEffect(() => {
+    if (getTokenFromLS()) {
+      const token = getTokenFromLS();
+      dispatch(thunkGetUserById({ userId: parseJwt(token).id, token: token })).then(() => {
+        setLoading(false);
+      });
+    } else setLoading(false);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const closeModal = (event: React.MouseEvent) => {
     if (event.target === event.currentTarget) {
@@ -39,7 +67,7 @@ const MainLayout = ({ children }: Props) => {
 
       <div className={styles.container}>
         <Header />
-        <main className={styles.main}>{children}</main>
+        {!loading ? <main className={styles.main}>{children}</main> : <h1>Loading</h1>}
         <Footer />
       </div>
     </>

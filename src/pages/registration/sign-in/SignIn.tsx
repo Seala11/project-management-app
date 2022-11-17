@@ -1,12 +1,11 @@
 import React from 'react';
-import { authSelector, thunkSignIn } from 'store/authSlice';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { Navigate, NavLink } from 'react-router-dom';
+import { thunkSignIn } from 'store/authSlice';
+import { useAppDispatch } from 'store/hooks';
+import { NavLink } from 'react-router-dom';
 import { Signin } from 'api/types';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import signImage from 'assets/images/login.png';
 import { useTranslation } from 'react-i18next';
-import ROUTES from 'utils/constants/ROUTES';
 import styles from '../registration.module.scss';
 
 export interface IFormInputSingIn {
@@ -17,7 +16,7 @@ export interface IFormInputSingIn {
 const SignIn = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { isLogged } = useAppSelector(authSelector);
+
   const {
     register,
     handleSubmit,
@@ -27,8 +26,6 @@ const SignIn = () => {
   const onSubmit: SubmitHandler<Signin> = (data) => {
     dispatch(thunkSignIn(data));
   };
-
-  if (isLogged) return <Navigate to={ROUTES.boards} />;
 
   return (
     <section className={styles.wrapper}>

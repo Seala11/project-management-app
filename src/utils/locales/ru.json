@@ -11,7 +11,6 @@
   "AUTH": {
     "SIGN_IN": "Войти",
     "SIGN_UP": "Регистрация",
-    "LOGOUT": "Выйти из аккаунта",
     "NAME": "Имя",
     "LOGIN": "Логин",
     "PASSWORD": "Пароль",
@@ -80,5 +79,13 @@
   "BOARD": {
     "CREATE_COLUMN_TITLE": "Создать новую колонку",
     "CREATE_TASK_TITLE": "Создать новую задачу"
+  },
+  "TOAST": {
+    "Authorization error": "Ошибка авторизации",
+    "Invalid token": "Попробуйте войти еще раз.",
+    "Successeful login": "Добро пожаловать в приложение",
+    "Bad Request": "Неправильный запрос",
+    "User was not founded!": "Такой пользователь не найден",
+    "Login already exist": "Логин уже существует"
   }
 }
