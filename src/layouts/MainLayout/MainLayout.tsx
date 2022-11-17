@@ -16,6 +16,9 @@ import styles from './mainLayout.module.scss';
 import Modal from 'layouts/Modal/Modal';
 import ConfirmationModal from 'layouts/Modal/ConfirmationModal/ConfirmationModal';
 import TaskModal from 'layouts/Modal/TaskModal/TaskModal';
+import { singleBoardRequestStatus } from 'store/boardSlice';
+import Loader from 'components/loader/Loader';
+import { boardsLoadingSelector } from 'store/boardsSlice';
 
 type Props = React.HTMLAttributes<HTMLDivElement>;
 
@@ -26,6 +29,11 @@ const MainLayout = ({ children }: Props) => {
   const { t } = useTranslation();
   const toastMessage = useAppSelector(toastMessageSelector);
   const [loading, setLoading] = useState(true);
+
+  const boardState = useAppSelector(singleBoardRequestStatus);
+  const boardsState = useAppSelector(boardsLoadingSelector);
+  const pending = boardState || boardsState || loading;
+
   useEffect(() => {
     if (toastMessage) {
       console.log(toastMessage);
@@ -67,7 +75,10 @@ const MainLayout = ({ children }: Props) => {
 
       <div className={styles.container}>
         <Header />
-        {!loading ? <main className={styles.main}>{children}</main> : <h1>Loading</h1>}
+        <main className={styles.main}>
+          <Loader status={pending} />
+          {children}
+        </main>
         <Footer />
       </div>
     </>
