@@ -40,14 +40,13 @@ const SignIn = () => {
     for (const key in data) {
       if (Object.prototype.hasOwnProperty.call(data, key)) {
         const value = data[key];
-
-        if (value.length < 6) {
-          setError(key as 'login' | 'password', { type: 'minLength', message: 'LENGTH' });
+        if (!value.match(/^\S[a-zA-Z0-9_]+$/i)) {
+          setError(key as 'login' | 'password', { type: 'value', message: 'PATTERN' });
           isValid = false;
         }
 
-        if (!value.match(/^\S[a-zA-Z0-9_]+$/i)) {
-          setError(key as 'login' | 'password', { type: 'value', message: 'PATTERN' });
+        if (value.length < 6) {
+          setError(key as 'login' | 'password', { type: 'minLength', message: 'LENGTH' });
           isValid = false;
         }
       }
@@ -67,9 +66,10 @@ const SignIn = () => {
               <input
                 id="login"
                 {...register('login', {
-                  required: { value: true, message: 'REQUIRED' },
+                  // required: { value: true, message: 'REQUIRED' },
                 })}
                 className={errors.login?.message && styles.inputError}
+                autoComplete="off"
               />
               {errors.login && (
                 <span className={styles.fieldError}>{t(`AUTH.${errors.login.message}`)}</span>
@@ -81,9 +81,10 @@ const SignIn = () => {
                 id="password"
                 type={'password'}
                 {...register('password', {
-                  required: { value: true, message: 'REQUIRED' },
+                  // required: { value: true, message: 'REQUIRED' },
                 })}
                 className={errors.password && styles.inputError}
+                autoComplete="off"
               />
               {errors.password && (
                 <span className={styles.fieldError}>{t(`AUTH.${errors.password.message}`)}</span>

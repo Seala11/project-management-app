@@ -67,7 +67,11 @@ const MainLayout = ({ children }: Props) => {
 
       <div className={styles.container}>
         <Header />
-        {!loading ? <main className={styles.main}>{children}</main> : <h1>Loading</h1>}
+        {!loading ? (
+          <main className={styles.main}>{children}</main>
+        ) : (
+          <main className={styles.main}></main>
+        )}
         <Footer />
       </div>
     </>
