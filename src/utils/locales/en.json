@@ -73,6 +73,8 @@
     "TITLE": "Title",
     "DESCRIPTION": "Description",
     "REQUIRED": "This field is required",
+    "TITLE_LIM": "No more than 20 characters",
+    "DESCRIPTION_LIM": "No more than 150 characters",
     "IN_COLUMN": "In column",
     "MEMBERS": "Members",
     "LABEL": "Cover",
