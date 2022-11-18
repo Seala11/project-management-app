@@ -6,8 +6,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import signImage from 'assets/images/login.png';
 import { Signup } from 'api/types';
 import { useTranslation } from 'react-i18next';
-import { ReactComponent as OpenedEye } from 'assets/images/show.svg';
-import { ReactComponent as ClosedEye } from 'assets/images/hide.svg';
+import Icon from 'components/Icon/Icon';
 import styles from '../registration.module.scss';
 
 const SignUp = () => {
@@ -23,9 +22,9 @@ const SignUp = () => {
   } = useForm<Signup>({ reValidateMode: 'onSubmit' });
 
   const { ref, ...rest } = register('password', {
-    required: { value: true, message: 'LENGTH' },
+    required: { value: true, message: 'PASSWORD_LENGTH' },
     pattern: { value: /^\S[a-zA-Z0-9_]+$/i, message: 'PATTERN' },
-    minLength: { value: 4, message: 'LENGTH' },
+    minLength: { value: 6, message: 'PASSWORD_LENGTH' },
     onChange: (e) => clearErrors(e.target.name),
   });
 
@@ -101,12 +100,24 @@ const SignUp = () => {
                   }}
                   className={errors.password && styles.inputError}
                   autoComplete="off"
-                  placeholder="More then 4 characters"
+                  placeholder="Must be at least 6 chars"
                 />
                 {isShowText ? (
-                  <OpenedEye className={styles.eye} onClick={showPassword} />
+                  <Icon
+                    icon="eye-slashed"
+                    size="24"
+                    color="#9a9a9a"
+                    className={styles.eye}
+                    onClick={showPassword}
+                  />
                 ) : (
-                  <ClosedEye className={styles.eye} onClick={showPassword} />
+                  <Icon
+                    icon="eye-open"
+                    size="24"
+                    color="#9a9a9a"
+                    className={styles.eye}
+                    onClick={showPassword}
+                  />
                 )}
               </div>
               {errors.password && (
