@@ -34,6 +34,7 @@ type ModalState = {
   userInputTitle: string;
   userInputDescr: string;
   taskOpen: boolean;
+  columnId: string;
   taskId: string;
 };
 
@@ -44,6 +45,7 @@ export const initialState: ModalState = {
   userInputTitle: '',
   userInputDescr: '',
   taskOpen: false,
+  columnId: '',
   taskId: '',
 };
 
@@ -85,6 +87,9 @@ export const modalSlice = createSlice({
     setTaskId: (state, action: PayloadAction<string>) => {
       state.taskId = action.payload;
     },
+    setModalColumnId: (state, action: PayloadAction<string>) => {
+      state.columnId = action.payload;
+    },
   },
 });
 
@@ -98,6 +103,7 @@ export const {
   setTaskModalOpen,
   setTaskModalClose,
   setTaskId,
+  setModalColumnId,
 } = modalSlice.actions;
 
 export const modalStatusSelector = (state: RootState) => state.modal.modalOpen;
@@ -107,5 +113,6 @@ export const modalSelector = (state: RootState) => state.modal.modal;
 export const userTitleSelector = (state: RootState) => state.modal.userInputTitle;
 export const userDescriptionSelector = (state: RootState) => state.modal.userInputDescr;
 export const taskIdSelector = (state: RootState) => state.modal.taskId;
+export const modalColumnIdSelector = (state: RootState) => state.modal.columnId;
 
 export default modalSlice.reducer;
