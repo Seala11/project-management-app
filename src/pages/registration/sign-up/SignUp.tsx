@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { MouseEventHandler, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { thunkSignUp } from 'store/authSlice';
 import { useAppDispatch } from 'store/hooks';
@@ -32,7 +32,8 @@ const SignUp = () => {
     dispatch(thunkSignUp(data));
   };
 
-  const showPassword: React.MouseEventHandler<SVGSVGElement> = () => {
+  const showPassword: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
     if (passwordField?.current) {
       if (passwordField?.current.getAttribute('type') === 'text') {
         setIsShowText(false);
@@ -103,21 +104,13 @@ const SignUp = () => {
                   placeholder="Must be at least 6 chars"
                 />
                 {isShowText ? (
-                  <Icon
-                    icon="eye-slashed"
-                    size="24"
-                    color="#9a9a9a"
-                    className={styles.eye}
-                    onClick={showPassword}
-                  />
+                  <button className={styles.button} onClick={(e) => showPassword(e)}>
+                    <Icon icon="eye-slashed" size="24" color="#9a9a9a" />
+                  </button>
                 ) : (
-                  <Icon
-                    icon="eye-open"
-                    size="24"
-                    color="#9a9a9a"
-                    className={styles.eye}
-                    onClick={showPassword}
-                  />
+                  <button className={styles.button} onClick={(e) => showPassword(e)}>
+                    <Icon icon="eye-open" size="24" color="#9a9a9a" />
+                  </button>
                 )}
               </div>
               {errors.password && (

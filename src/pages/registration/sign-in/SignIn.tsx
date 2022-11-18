@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { MouseEventHandler, useRef, useState } from 'react';
 import { thunkSignIn } from 'store/authSlice';
 import { useAppDispatch } from 'store/hooks';
 import { NavLink } from 'react-router-dom';
@@ -32,7 +32,8 @@ const SignIn = () => {
     dispatch(thunkSignIn(data));
   };
 
-  const showPassword: React.MouseEventHandler<SVGSVGElement> = () => {
+  const showPassword: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
     if (passwordField?.current) {
       if (passwordField?.current.getAttribute('type') === 'text') {
         setIsShowText(false);
@@ -43,27 +44,6 @@ const SignIn = () => {
       }
     }
   };
-  // function checkFields(data: Signin & { [key: string]: string }) {
-  //   let isValid = true;
-
-  //   for (const key in data) {
-  //     if (Object.prototype.hasOwnProperty.call(data, key)) {
-  //       const value = data[key];
-
-  //       if (!value.match(/^\S[a-zA-Z0-9_]+$/i)) {
-  //         setError(key as keyof Signin, { type: 'value', message: 'PATTERN' });
-  //         isValid = false;
-  //       }
-
-  //       if (value.length < 4) {
-  //         setError(key as keyof Signin, { type: 'minLength', message: 'LENGTH' });
-  //         isValid = false;
-  //       }
-  //     }
-  //   }
-
-  //   return isValid;
-  // }
 
   return (
     <section className={styles.wrapper}>
@@ -106,21 +86,13 @@ const SignIn = () => {
                   placeholder="****"
                 />
                 {isShowText ? (
-                  <Icon
-                    icon="eye-slashed"
-                    size="24"
-                    color="#9a9a9a"
-                    className={styles.eye}
-                    onClick={showPassword}
-                  />
+                  <button className={styles.button} onClick={(e) => showPassword(e)}>
+                    <Icon icon="eye-slashed" size="24" color="#9a9a9a" />
+                  </button>
                 ) : (
-                  <Icon
-                    icon="eye-open"
-                    size="24"
-                    color="#9a9a9a"
-                    className={styles.eye}
-                    onClick={showPassword}
-                  />
+                  <button className={styles.button} onClick={(e) => showPassword(e)}>
+                    <Icon icon="eye-open" size="24" color="#9a9a9a" />
+                  </button>
                 )}
               </div>
               {errors.password && (
