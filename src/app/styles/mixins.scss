@@ -142,10 +142,19 @@
 
 %input {
   padding: 0.5rem 1rem;
-  font-size: 2rem;
+  font-size: 1.6rem;
   width: 30rem;
   border: 0.2rem solid rgba(77, 77, 77, 0.51);
   border-radius: 0.8rem;
+}
+
+%textarea {
+  padding: 0.5rem 1rem;
+  font-size: 1.6rem;
+  width: 100%;
+  border: 0.2rem solid rgba(77, 77, 77, 0.51);
+  border-radius: 0.8rem;
+  resize: none;
 }
 
 %fieldError {

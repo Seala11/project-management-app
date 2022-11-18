@@ -127,13 +127,13 @@ const ConfirmationModal = ({ onClose }: Props) => {
       {modal?.inputDescr && (
         <div className={styles.inputWrraper}>
           <label htmlFor={modal.inputDescr}>{modal.inputDescr}</label>
-          <input
+          <textarea
             id={modal.inputDescr}
-            type="text"
             {...register(UserInput.DESCRIPTION, {
               onChange: () => changeHandler(UserInput.DESCRIPTION),
             })}
             className={`${errors.description ? styles.inputError : ''}`}
+            maxLength={150}
           />
           {errors.description && (
             <span className={styles.fieldError}>{errors.description.message}</span>

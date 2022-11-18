@@ -35,6 +35,11 @@
     @extend %input;
   }
 
+  & textarea {
+    @extend %textarea;
+    height: 17rem;
+  }
+
   & .fieldError {
     @extend %fieldError;
   }
