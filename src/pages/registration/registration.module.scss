@@ -63,3 +63,13 @@
   height: auto;
   width: max-content;
 }
+
+.wrapperEye {
+  position: relative;
+  & .eye {
+    position: absolute;
+    right: 1rem;
+    top: calc(50% - 1.2rem);
+    cursor: pointer;
+  }
+}

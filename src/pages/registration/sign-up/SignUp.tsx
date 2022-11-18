@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { thunkSignUp } from 'store/authSlice';
 import { useAppDispatch } from 'store/hooks';
@@ -6,20 +6,43 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import signImage from 'assets/images/login.png';
 import { Signup } from 'api/types';
 import { useTranslation } from 'react-i18next';
+import { ReactComponent as OpenedEye } from 'assets/images/show.svg';
+import { ReactComponent as ClosedEye } from 'assets/images/hide.svg';
 import styles from '../registration.module.scss';
 
 const SignUp = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-
+  const passwordField = useRef<HTMLInputElement | null>(null);
+  const [isShowText, setIsShowText] = useState(false);
   const {
     register,
     handleSubmit,
+    clearErrors,
     formState: { errors },
-  } = useForm<Signup>();
+  } = useForm<Signup>({ reValidateMode: 'onSubmit' });
+
+  const { ref, ...rest } = register('password', {
+    required: { value: true, message: 'LENGTH' },
+    pattern: { value: /^\S[a-zA-Z0-9_]+$/i, message: 'PATTERN' },
+    minLength: { value: 4, message: 'LENGTH' },
+    onChange: (e) => clearErrors(e.target.name),
+  });
 
   const onSubmit: SubmitHandler<Signup> = (data) => {
     dispatch(thunkSignUp(data));
+  };
+
+  const showPassword: React.MouseEventHandler<SVGSVGElement> = () => {
+    if (passwordField?.current) {
+      if (passwordField?.current.getAttribute('type') === 'text') {
+        setIsShowText(false);
+        (passwordField?.current as HTMLInputElement).setAttribute('type', 'password');
+      } else {
+        setIsShowText(true);
+        (passwordField?.current as HTMLInputElement).setAttribute('type', 'text');
+      }
+    }
   };
 
   return (
@@ -32,29 +55,63 @@ const SignUp = () => {
               <label htmlFor="name">{t('AUTH.NAME')}</label>
               <input
                 id="name"
-                {...register('name', { required: true, pattern: /^[A-Za-z]+$/i })}
+                {...register('name', {
+                  required: { value: true, message: 'LENGTH' },
+                  pattern: { value: /^\S[a-zA-Z0-9_]+$/i, message: 'PATTERN' },
+                  minLength: { value: 4, message: 'LENGTH' },
+                  onChange: (e) => clearErrors(e.target.name),
+                })}
                 className={errors.name && styles.inputError}
+                autoComplete="off"
+                placeholder="Konstantyn"
               />
-              {errors.name && <span className={styles.fieldError}>{t('AUTH.REQUIRED')}</span>}
+              {errors.name && (
+                <span className={styles.fieldError}>{t(`AUTH.${errors.name.message}`)}</span>
+              )}
             </div>
             <div className={styles.formItem}>
               <label htmlFor="login">{t('AUTH.LOGIN')}</label>
               <input
                 id="login"
-                {...register('login', { required: true })}
+                {...register('login', {
+                  required: { value: true, message: 'LENGTH' },
+                  pattern: { value: /^\S[a-zA-Z0-9_]+$/i, message: 'PATTERN' },
+                  minLength: { value: 4, message: 'LENGTH' },
+                  onChange: (e) => clearErrors(e.target.name),
+                })}
                 className={errors.login && styles.inputError}
+                autoComplete="off"
+                placeholder="Vasya323"
               />
-              {errors.login && <span className={styles.fieldError}>{t('AUTH.REQUIRED')}</span>}
+              {errors.login && (
+                <span className={styles.fieldError}>{t(`AUTH.${errors.login.message}`)}</span>
+              )}
             </div>
             <div className={styles.formItem}>
               <label htmlFor="password">{t('AUTH.PASSWORD')}</label>
-              <input
-                id="passeword"
-                type={'password'}
-                {...register('password', { required: true })}
-                className={errors.password && styles.inputError}
-              />
-              {errors.password && <span className={styles.fieldError}>{t('AUTH.REQUIRED')}</span>}
+              <div className={styles.wrapperEye}>
+                <input
+                  id="password"
+                  type={'password'}
+                  {...rest}
+                  name="password"
+                  ref={(e) => {
+                    ref(e);
+                    passwordField.current = e;
+                  }}
+                  className={errors.password && styles.inputError}
+                  autoComplete="off"
+                  placeholder="More then 4 characters"
+                />
+                {isShowText ? (
+                  <OpenedEye className={styles.eye} onClick={showPassword} />
+                ) : (
+                  <ClosedEye className={styles.eye} onClick={showPassword} />
+                )}
+              </div>
+              {errors.password && (
+                <span className={styles.fieldError}>{t(`AUTH.${errors.password.message}`)}</span>
+              )}
             </div>
             <button type="submit">{t('AUTH.SUBMIT')}</button>
           </form>

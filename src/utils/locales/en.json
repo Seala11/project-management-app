@@ -18,7 +18,7 @@
     "HAVE_ACCOUNT": "I already have an account",
     "HAVENT_ACCOUNT": "I dont`t have an account",
     "REQUIRED": "This field is required",
-    "LENGTH": "Minimal length 6 characters",
+    "LENGTH": "Minimal length 4 characters",
     "PATTERN": "Only letters, numbers or underscore"
   },
   "NOTFOUND": {
