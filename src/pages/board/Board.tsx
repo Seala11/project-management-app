@@ -112,7 +112,11 @@ const Board = () => {
       <section className={styles.wrapper}>
         <div className={styles.mainContent}>
           <h2 className={styles.title}>
-            {title.title} <span className={styles.description}>({title.descr})</span>
+            {title.title !== '' && (
+              <>
+                {title.title} <span className={styles.description}>({title.descr})</span>
+              </>
+            )}
           </h2>
           <ul className={styles.columnsList}>
             {[...columns]
