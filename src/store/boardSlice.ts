@@ -24,7 +24,6 @@ export type TaskType = {
   files?: FileType[];
 };
 
-// NEW TASK TYPE
 type TaskParsedType = {
   _id: string;
   title: string;
@@ -157,14 +156,12 @@ export const boardSlice = createSlice({
         const taskObj = action.payload.tasks.map((task) => parseTaskObj(task));
         state.tasks[action.payload.column] = taskObj;
       })
+
       .addCase(thunkCreateTasks.pending, (state) => {
         state.pending = true;
       })
       .addCase(thunkCreateTasks.fulfilled, (state, action) => {
         state.pending = false;
-        // была ошибка тк не находил объект state.tasks[action.payload.column], после добавления колонок в стор по ключам надо переписать
-        // это демо, работают запросы, можно глянуть в девтулзах
-
         state.tasks[action.payload.column].push(parseTaskObj(action.payload.task));
       })
       .addCase(thunkCreateTasks.rejected, (state, action) => {

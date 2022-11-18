@@ -4,24 +4,26 @@ import { thunkGetSingleBoard } from 'store/boardSlice';
 import styles from './board.module.scss';
 import { useAppSelector, useAppDispatch } from 'store/hooks';
 import ROUTES from 'utils/constants/ROUTES';
-import { thunkGetAllColumns, thunkCreateColumn } from 'store/middleware/columns';
-import { setAuth } from 'store/authSlice';
+import { thunkGetAllColumns, thunkCreateColumn, thunkDeleteColumn } from 'store/middleware/columns';
+import { setAuth, userSelector } from 'store/authSlice';
 import Icon from 'components/Icon/Icon';
 import {
   BtnColor,
   ModalAction,
   modalActionSelector,
+  modalColumnIdSelector,
   resetModal,
   setModalOpen,
+  userDescriptionSelector,
   userTitleSelector,
 } from 'store/modalSlice';
 import { useTranslation } from 'react-i18next';
 import Column from './column/Column';
+import { thunkCreateTasks } from 'store/middleware/tasks';
 
 /* ToDo
 - оттестировать ошибки errors
 - logOut() ??
-- column component
 - task component
 */
 
@@ -30,11 +32,14 @@ const Board = () => {
   const dispatch = useAppDispatch();
   const { id } = useParams<'id'>();
   const navigate = useNavigate();
+  const modalColumnId = useAppSelector(modalColumnIdSelector);
   const { t } = useTranslation();
 
   // MODAL ACTIONS AND HANDLERS
   const modalAction = useAppSelector(modalActionSelector);
   const userInputTitle = useAppSelector(userTitleSelector);
+  const userInputDescr = useAppSelector(userDescriptionSelector);
+  const user = useAppSelector(userSelector);
 
   useEffect(() => {
     dispatch(thunkGetSingleBoard(`${id}`));
@@ -57,6 +62,27 @@ const Board = () => {
   }, [error, dispatch, navigate]);
 
   useEffect(() => {
+    if (modalAction === ModalAction.COLUMN_DELETE) {
+      dispatch(thunkDeleteColumn({ boardId: `${id}`, columnId: modalColumnId }));
+      dispatch(resetModal());
+    }
+
+    if (modalAction === ModalAction.TASK_CREATE) {
+      console.log('dispatch', user, Number(user._id));
+      const newDescr = JSON.stringify({ description: userInputDescr, color: '' });
+      dispatch(
+        thunkCreateTasks({
+          boardId: `${id}`,
+          columnId: modalColumnId,
+          title: userInputTitle,
+          description: newDescr,
+          order: 0,
+          userId: user._id,
+        })
+      );
+      dispatch(resetModal());
+    }
+
     if (modalAction === ModalAction.COLUMN_CREATE) {
       dispatch(
         thunkCreateColumn({
@@ -65,12 +91,9 @@ const Board = () => {
           order: columns.length ? columns[columns.length - 1].order + 1 : 0,
         })
       );
-
       dispatch(resetModal());
     }
-
-    // после того как ты разнесешь на компоненты - зависисмоти почищу, можно рефами вынести
-  }, [columns, dispatch, id, modalAction, userInputTitle]);
+  }, [modalAction, columns, dispatch, id, userInputTitle, user, userInputDescr, modalColumnId]);
 
   const createColumn = () => {
     dispatch(

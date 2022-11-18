@@ -2,24 +2,17 @@ import React, { useEffect } from 'react';
 import { ColumnType } from 'store/boardSlice';
 import styles from './board.module.scss';
 import { useAppSelector, useAppDispatch } from 'store/hooks';
-import { thunkDeleteColumn } from 'store/middleware/columns';
-import { userSelector } from 'store/authSlice';
 import Icon from 'components/Icon/Icon';
 import {
   BtnColor,
-  modalColumnIdSelector,
   ModalAction,
-  modalActionSelector,
-  resetModal,
   setModalColumnId,
   setModalOpen,
   setTaskId,
   setTaskModalOpen,
-  userDescriptionSelector,
-  userTitleSelector,
 } from 'store/modalSlice';
 import { useTranslation } from 'react-i18next';
-import { thunkCreateTasks, thunkGetAllTasks } from 'store/middleware/tasks';
+import { thunkGetAllTasks } from 'store/middleware/tasks';
 
 type Props = {
   columnData: ColumnType;
@@ -31,48 +24,9 @@ const Column = (props: Props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
-  // MODAL ACTIONS AND HANDLERS
-  const modalAction = useAppSelector(modalActionSelector);
-  const modalColumnId = useAppSelector(modalColumnIdSelector);
-  const userInputTitle = useAppSelector(userTitleSelector);
-  const userInputDescr = useAppSelector(userDescriptionSelector);
-  const user = useAppSelector(userSelector);
-
   useEffect(() => {
     dispatch(thunkGetAllTasks({ boardId: column.boardId, columnId: column._id }));
   }, [column.boardId, column._id, dispatch]);
-
-  useEffect(() => {
-    if (modalAction === ModalAction.COLUMN_DELETE && modalColumnId === column._id) {
-      dispatch(thunkDeleteColumn({ boardId: column.boardId, columnId: column._id }));
-      dispatch(resetModal());
-    }
-
-    if (modalAction === ModalAction.TASK_CREATE) {
-      console.log('dispatch', user, Number(user._id));
-      const newDescr = JSON.stringify({ description: userInputDescr, color: '' });
-      dispatch(
-        thunkCreateTasks({
-          boardId: column.boardId,
-          columnId: column._id,
-          title: userInputTitle,
-          description: newDescr,
-          order: 0,
-          userId: user._id,
-        })
-      );
-      dispatch(resetModal());
-    }
-  }, [
-    modalAction,
-    column._id,
-    column.boardId,
-    dispatch,
-    modalColumnId,
-    user,
-    userInputDescr,
-    userInputTitle,
-  ]);
 
   const deleteColumn = (title: string) => {
     dispatch(setModalColumnId(column._id));
@@ -87,6 +41,7 @@ const Column = (props: Props) => {
   };
 
   const createTask = () => {
+    dispatch(setModalColumnId(column._id));
     dispatch(
       setModalOpen({
         title: `${t('BOARD.CREATE_TASK_TITLE')}`,
