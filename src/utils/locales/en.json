@@ -82,7 +82,9 @@
   },
   "BOARD": {
     "CREATE_COLUMN_TITLE": "Create new column",
-    "CREATE_TASK_TITLE": "Create new task"
+    "CREATE_TASK_TITLE": "Create new task",
+    "CREATE_COLUMN_BUTTON": "New column",
+    "CREATE_TASK_BUTTON": "New task"
   },
   "TOAST": {
     "Authorization error": "Authorization error",

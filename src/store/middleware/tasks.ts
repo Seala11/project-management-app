@@ -14,11 +14,11 @@ export type TaskRequestDataType = {
   columnId: string;
 };
 
-export const getAllColumnTasks = createAsyncThunk<
+export const thunkGetAllTasks = createAsyncThunk<
   TaskResponseType,
   TaskRequestDataType,
   { rejectValue: string }
->('task/getAllColumnTasks', async ({ boardId, columnId }, { rejectWithValue }) => {
+>('task/getAllTasks', async ({ boardId, columnId }, { rejectWithValue }) => {
   const token = getTokenFromLS();
   const response = await fetch(`${BASE}/boards/${boardId}/columns/${columnId}/tasks`, {
     method: 'GET',
