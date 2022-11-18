@@ -31,6 +31,8 @@ type Props = {
 
 const ConfirmationModal = ({ onClose }: Props) => {
   const [descrValue, setDescrValue] = useState(0);
+  const DESCR_MAX_LENGTH = 150;
+
   const dispatch = useAppDispatch();
   const taskId = useAppSelector(taskIdSelector);
   const modal = useAppSelector(modalSelector);
@@ -134,12 +136,12 @@ const ConfirmationModal = ({ onClose }: Props) => {
               onChange: (e) => changeHandler(UserInput.DESCRIPTION, e),
             })}
             className={`${errors.description ? styles.inputError : ''}`}
-            maxLength={150}
+            maxLength={DESCR_MAX_LENGTH}
           />
           <div className={`${styles.counter} ${descrValue > 140 ? styles.counterLim : ''}`}>
             <span>{descrValue}</span>
             <span>/</span>
-            <span>150</span>
+            <span>{DESCR_MAX_LENGTH}</span>
           </div>
 
           {errors.description && (
