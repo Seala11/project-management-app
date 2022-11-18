@@ -34,7 +34,7 @@
   top: 50%;
   left: 50%;
   min-width: 40rem;
-  max-height: 80vh;
+  max-height: 95vh;
   overflow: auto;
   transform: translate(-50%, -50%) scale(1);
   background-color: var(--white);
@@ -45,6 +45,11 @@
 
   &:hover {
     cursor: auto;
+  }
+
+  @include media-mobile {
+    width: 90%;
+    min-width: 30rem;
   }
 }
 

@@ -5,15 +5,29 @@
   gap: 3rem;
   padding: 2rem 0;
   justify-content: center;
+
+  @include media-mobile {
+    padding: 0 0 1rem;
+  }
 }
 
 .modal {
   padding: 2rem;
+  overflow: auto;
+  width: 90%;
+
+  @include media-mobile {
+    padding: 0.8rem;
+  }
 }
 
 .title {
   @extend %title;
   align-self: flex-start;
+
+  @include media-mobile {
+    font-size: 2rem;
+  }
 }
 
 .blue {
@@ -33,6 +47,7 @@
 
   & input {
     @extend %input;
+    width: 100%;
   }
 
   & textarea {
