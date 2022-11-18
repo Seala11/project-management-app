@@ -37,12 +37,25 @@
 
   & textarea {
     @extend %textarea;
-    height: 17rem;
+    height: 13rem;
   }
 
   & .fieldError {
     @extend %fieldError;
   }
+}
+
+.counter {
+  position: absolute;
+  position: absolute;
+  bottom: 4rem;
+  right: 1.4rem;
+  font-size: 1.4rem;
+  transition: color 0.3s ease-in;
+}
+
+.counterLim {
+  color: var(--error);
 }
 
 .inputError {

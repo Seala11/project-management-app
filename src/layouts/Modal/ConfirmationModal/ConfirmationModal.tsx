@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   BtnColor,
   modalSelector,
@@ -30,6 +30,7 @@ type Props = {
 };
 
 const ConfirmationModal = ({ onClose }: Props) => {
+  const [descrValue, setDescrValue] = useState(0);
   const dispatch = useAppDispatch();
   const taskId = useAppSelector(taskIdSelector);
   const modal = useAppSelector(modalSelector);
@@ -81,10 +82,6 @@ const ConfirmationModal = ({ onClose }: Props) => {
             setError(UserInput.DESCRIPTION, {
               message: errMessage.required,
             });
-          if (value && typeof value === 'string' && value.trim().length > 150)
-            setError(UserInput.DESCRIPTION, {
-              message: errMessage.descrLim,
-            });
           break;
         }
       }
@@ -97,8 +94,12 @@ const ConfirmationModal = ({ onClose }: Props) => {
     return !formIsInvalid;
   };
 
-  const changeHandler = (key: UserInput) => {
+  const changeHandler = (key: UserInput, e: React.ChangeEvent<HTMLInputElement>) => {
     clearErrors(key);
+
+    if (key === UserInput.DESCRIPTION) {
+      setDescrValue(e.target.value.length);
+    }
   };
 
   const backToTaskModal = () => {
@@ -117,7 +118,7 @@ const ConfirmationModal = ({ onClose }: Props) => {
           <input
             id={modal.inputTitle}
             type="text"
-            {...register(UserInput.TITLE, { onChange: () => changeHandler(UserInput.TITLE) })}
+            {...register(UserInput.TITLE, { onChange: (e) => changeHandler(UserInput.TITLE, e) })}
             className={`${errors.title ? styles.inputError : ''}`}
           />
           {errors.title && <span className={styles.fieldError}>{errors.title.message}</span>}
@@ -130,11 +131,17 @@ const ConfirmationModal = ({ onClose }: Props) => {
           <textarea
             id={modal.inputDescr}
             {...register(UserInput.DESCRIPTION, {
-              onChange: () => changeHandler(UserInput.DESCRIPTION),
+              onChange: (e) => changeHandler(UserInput.DESCRIPTION, e),
             })}
             className={`${errors.description ? styles.inputError : ''}`}
             maxLength={150}
           />
+          <div className={`${styles.counter} ${descrValue > 140 ? styles.counterLim : ''}`}>
+            <span>{descrValue}</span>
+            <span>/</span>
+            <span>150</span>
+          </div>
+
           {errors.description && (
             <span className={styles.fieldError}>{errors.description.message}</span>
           )}
