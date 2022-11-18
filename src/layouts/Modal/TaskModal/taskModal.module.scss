@@ -19,6 +19,10 @@
   width: stretch;
   padding: 2rem;
   justify-content: flex-end;
+
+  @include media-mobile {
+    padding: 1rem;
+  }
 }
 
 .taskWrapper {
@@ -28,6 +32,7 @@
   align-items: flex-start;
   width: 100%;
   padding: 0 2rem 2rem;
+  overflow-y: auto;
 }
 
 .taskInfo {

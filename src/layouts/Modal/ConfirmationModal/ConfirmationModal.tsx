@@ -112,7 +112,7 @@ const ConfirmationModal = ({ onClose }: Props) => {
     <form className={styles.modal} onSubmit={handleSubmit(onSubmit)}>
       {modal?.title && <p className={styles.title}>{modal.title}</p>}
 
-      {modal?.message && <p>{modal.message}</p>}
+      {modal?.message && <p className={styles.message}>{modal.message}</p>}
 
       {modal?.inputTitle && (
         <div className={styles.inputWrraper}>

@@ -15,6 +15,7 @@
   padding: 2rem;
   overflow: auto;
   width: 90%;
+  margin: 0 auto;
 
   @include media-mobile {
     padding: 0.8rem;
@@ -28,6 +29,11 @@
   @include media-mobile {
     font-size: 2rem;
   }
+}
+
+.message {
+  text-align: center;
+  line-height: 1.5;
 }
 
 .blue {
