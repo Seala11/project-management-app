@@ -104,7 +104,7 @@ const SignIn = () => {
                   }}
                   className={errors.password && styles.inputError}
                   autoComplete="off"
-                  placeholder="More then 4 characters"
+                  placeholder="****"
                 />
                 {isShowText ? (
                   <OpenedEye className={styles.eye} onClick={showPassword} />
