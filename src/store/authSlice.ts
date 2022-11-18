@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchSignIn, fetchSignUp } from '../api/apiAuth';
 import { Signup, Signin, User } from '../api/types';
 import { RootState } from 'store';
-import { removeTokenFromLS, setTokenToLS } from 'utils/func/localStorage';
+import { getTokenFromLS, removeTokenFromLS, setTokenToLS } from 'utils/func/localStorage';
 import { getUserById } from 'api/apiUsers';
 import { parseJwt } from 'utils/func/parsejwt';
 import { toast } from 'react-toastify';
@@ -24,7 +24,7 @@ const userInit: Omit<User, 'password'> = {
 };
 
 const initialState: Auth = {
-  isLogged: false,
+  isLogged: !!getTokenFromLS(),
   user: userInit,
   // toastMessage: null,
 };
