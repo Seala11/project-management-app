@@ -98,6 +98,10 @@
   width: 11.4rem;
   height: 7.5rem;
   margin-top: 3rem;
+
+  @include media-mobile {
+    margin-top: 2rem;
+  }
 }
 
 .description {

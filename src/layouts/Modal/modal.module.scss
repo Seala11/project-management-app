@@ -13,6 +13,7 @@
   overflow-y: hidden;
   cursor: pointer;
   animation: overlay 0.5s forwards;
+  z-index: 10;
 }
 
 @keyframes overlay {
@@ -26,15 +27,12 @@
 }
 
 .modal {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
+  display: block;
   position: fixed;
   top: 50%;
   left: 50%;
   min-width: 40rem;
-  max-height: 80vh;
+  max-height: 95vh;
   overflow: auto;
   transform: translate(-50%, -50%) scale(1);
   background-color: var(--white);
@@ -42,9 +40,15 @@
   border-radius: 0.8rem;
   opacity: 1;
   animation: show 0.5s forwards;
+  z-index: 11;
 
   &:hover {
     cursor: auto;
+  }
+
+  @include media-mobile {
+    width: 90%;
+    min-width: 30rem;
   }
 }
 
