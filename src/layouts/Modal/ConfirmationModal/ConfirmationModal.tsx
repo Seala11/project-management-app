@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   BtnColor,
   modalSelector,
@@ -30,6 +30,9 @@ type Props = {
 };
 
 const ConfirmationModal = ({ onClose }: Props) => {
+  const [descrValue, setDescrValue] = useState(0);
+  const DESCR_MAX_LENGTH = 150;
+
   const dispatch = useAppDispatch();
   const taskId = useAppSelector(taskIdSelector);
   const modal = useAppSelector(modalSelector);
@@ -81,10 +84,6 @@ const ConfirmationModal = ({ onClose }: Props) => {
             setError(UserInput.DESCRIPTION, {
               message: errMessage.required,
             });
-          if (value && typeof value === 'string' && value.trim().length > 150)
-            setError(UserInput.DESCRIPTION, {
-              message: errMessage.descrLim,
-            });
           break;
         }
       }
@@ -97,8 +96,12 @@ const ConfirmationModal = ({ onClose }: Props) => {
     return !formIsInvalid;
   };
 
-  const changeHandler = (key: UserInput) => {
+  const changeHandler = (key: UserInput, e: React.ChangeEvent<HTMLInputElement>) => {
     clearErrors(key);
+
+    if (key === UserInput.DESCRIPTION) {
+      setDescrValue(e.target.value.length);
+    }
   };
 
   const backToTaskModal = () => {
@@ -109,15 +112,15 @@ const ConfirmationModal = ({ onClose }: Props) => {
     <form className={styles.modal} onSubmit={handleSubmit(onSubmit)}>
       {modal?.title && <p className={styles.title}>{modal.title}</p>}
 
-      {modal?.message && <p>{modal.message}</p>}
+      {modal?.message && <p className={styles.message}>{modal.message}</p>}
 
       {modal?.inputTitle && (
         <div className={styles.inputWrraper}>
-          <label htmlFor={modal.inputTitle}>{modal.inputTitle}</label>
+          <label htmlFor={modal.inputTitle}>{modal.inputTitle}*</label>
           <input
             id={modal.inputTitle}
             type="text"
-            {...register(UserInput.TITLE, { onChange: () => changeHandler(UserInput.TITLE) })}
+            {...register(UserInput.TITLE, { onChange: (e) => changeHandler(UserInput.TITLE, e) })}
             className={`${errors.title ? styles.inputError : ''}`}
           />
           {errors.title && <span className={styles.fieldError}>{errors.title.message}</span>}
@@ -126,15 +129,21 @@ const ConfirmationModal = ({ onClose }: Props) => {
 
       {modal?.inputDescr && (
         <div className={styles.inputWrraper}>
-          <label htmlFor={modal.inputDescr}>{modal.inputDescr}</label>
-          <input
+          <label htmlFor={modal.inputDescr}>{modal.inputDescr}*</label>
+          <textarea
             id={modal.inputDescr}
-            type="text"
             {...register(UserInput.DESCRIPTION, {
-              onChange: () => changeHandler(UserInput.DESCRIPTION),
+              onChange: (e) => changeHandler(UserInput.DESCRIPTION, e),
             })}
             className={`${errors.description ? styles.inputError : ''}`}
+            maxLength={DESCR_MAX_LENGTH}
           />
+          <div className={`${styles.counter} ${descrValue > 140 ? styles.counterLim : ''}`}>
+            <span>{descrValue}</span>
+            <span>/</span>
+            <span>{DESCR_MAX_LENGTH}</span>
+          </div>
+
           {errors.description && (
             <span className={styles.fieldError}>{errors.description.message}</span>
           )}

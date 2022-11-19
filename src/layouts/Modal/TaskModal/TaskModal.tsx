@@ -43,7 +43,10 @@ const TaskModal = ({ onClose }: Props) => {
 
         <div className={styles.taskInfo}>
           <h3 className={styles.title}>{t('MODAL.DESCRIPTION')}</h3>
-          <p className={styles.subtitle}>task description</p>
+          <p className={styles.subtitle}>
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
+            has been the industrys standard dummy text ever since the 1500
+          </p>
         </div>
 
         <div className={styles.taskInfo}>
