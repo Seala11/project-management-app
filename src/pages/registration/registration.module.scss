@@ -57,6 +57,7 @@
 
     & .fieldError {
       @extend %fieldError;
+      top: 5.8rem;
     }
 
     @include media-mobile-s {
