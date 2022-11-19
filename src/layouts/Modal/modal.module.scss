@@ -13,6 +13,7 @@
   overflow-y: hidden;
   cursor: pointer;
   animation: overlay 0.5s forwards;
+  z-index: 10;
 }
 
 @keyframes overlay {
@@ -39,6 +40,7 @@
   border-radius: 0.8rem;
   opacity: 1;
   animation: show 0.5s forwards;
+  z-index: 11;
 
   &:hover {
     cursor: auto;
