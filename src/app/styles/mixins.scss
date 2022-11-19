@@ -129,6 +129,36 @@
 %title {
   font-size: 2.4rem;
   font-weight: 600;
+  @include media-mobile {
+    font-size: 2.1rem;
+  }
+}
+
+%subtitle {
+  font-weight: 400;
+  font-size: 1.8rem;
+  line-height: 3rem;
+  max-width: 42.2rem;
+
+  @include media-tablet {
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  @include media-mobile {
+    font-size: 1.6rem;
+    line-height: 2.2rem;
+  }
+}
+
+%mainContent {
+  display: flex;
+  justify-content: space-between;
+
+  @include media-big-tablet {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }
 
 %formItem {

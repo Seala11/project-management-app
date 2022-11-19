@@ -52,6 +52,9 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+  @include media-mobile {
+    padding: 0 1rem;
+  }
 }
 
 .menuLanguage {
@@ -96,7 +99,7 @@ a.home:hover {
 
 @include media-tablet {
   .hamburger {
-    display: block;
+    // display: block;
     margin: 0 1rem 0 0;
   }
 
@@ -106,17 +109,7 @@ a.home:hover {
 }
 
 @include media-mobile {
-  .logo {
-    margin: 1rem 0;
-  }
-
   .hamburger {
     margin: 0 0rem 0 0;
-  }
-}
-
-@include media-mobile-s {
-  .logo {
-    font-size: 1rem;
   }
 }

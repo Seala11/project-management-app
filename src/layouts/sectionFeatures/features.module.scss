@@ -11,34 +11,59 @@
 .title {
   font-weight: 700;
   font-size: 4.8rem;
+
+  @include media-tablet {
+    text-align: center;
+    font-size: 3.8rem;
+  }
+
+  @include media-mobile {
+    font-size: 3rem;
+  }
+
+  @include media-mobile-s {
+    font-size: 2.7rem;
+  }
 }
 
 .titleWrapper {
   max-width: 49.3rem;
+
+  @include media-big-tablet {
+    order: 1;
+  }
 }
 
 .subtitle {
-  font-weight: 400;
-  font-size: 1.8rem;
-  line-height: 3rem;
-  max-width: 42.2rem;
+  @extend %subtitle;
+
+  @include media-mobile {
+    padding: 0 2rem;
+  }
 }
 
 .mainContent {
-  display: flex;
+  @extend %mainContent;
   padding: 15.85rem 0;
   gap: 10.3rem;
-  justify-content: space-between;
+
+  @include media-big-tablet {
+    gap: 6rem;
+    padding: 10rem 0;
+  }
+
+  @include media-mobile {
+    gap: 4.5rem;
+    padding: 5rem 0;
+  }
 }
 
 .img {
   height: auto;
   width: max-content;
   min-width: 0;
-}
 
-@include media-big-tablet {
-  .mainContent {
-    flex-wrap: wrap;
+  @include media-big-tablet {
+    order: 2;
   }
 }

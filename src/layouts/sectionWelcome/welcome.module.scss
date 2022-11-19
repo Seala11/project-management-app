@@ -15,6 +15,18 @@
 .title {
   font-weight: 700;
   font-size: 6.4rem;
+
+  @include media-tablet {
+    text-align: center;
+    font-size: 5rem;
+  }
+  @include media-mobile {
+    font-size: 4rem;
+    margin: 3rem auto;
+  }
+  @include media-mobile-s {
+    font-size: 3.3rem;
+  }
 }
 
 .titleWrapper {
@@ -22,16 +34,21 @@
 }
 
 .subtitle {
-  font-weight: 400;
-  font-size: 1.8rem;
-  line-height: 3rem;
-  max-width: 42.2rem;
+  @extend %subtitle;
 }
 
 .mainContent {
-  display: flex;
+  @extend %mainContent;
   padding: 16.7rem 0;
-  justify-content: space-between;
+
+  @include media-big-tablet {
+    gap: 6rem;
+    padding: 0 0 10rem 0;
+  }
+  @include media-mobile {
+    gap: 4.5rem;
+    padding: 1rem 0 5rem 0;
+  }
 }
 
 .img {
@@ -45,10 +62,11 @@
   gap: 1rem;
   padding-top: 4.5rem;
   justify-content: flex-end;
+
+  @include media-big-tablet {
+    padding-top: 2.5rem;
+  }
 }
 
 @include media-big-tablet {
-  .mainContent {
-    flex-wrap: wrap;
-  }
 }

@@ -76,7 +76,12 @@ const UserDropDown = () => {
           <Icon color="#4D4D4D" size={36} icon="user" />
           <span className={styles.name}>{isLogged ? user.name : userName}</span>
         </div>
-        <Icon color="" size={14} icon="arrow-down" />
+        <Icon
+          className={`${styles.iconDown} ${isOpen && styles.up}`}
+          color=""
+          size={14}
+          icon="arrow-down"
+        />
       </div>
       {isOpen && (
         <ul className={styles.dropdownList} ref={menuList}>
