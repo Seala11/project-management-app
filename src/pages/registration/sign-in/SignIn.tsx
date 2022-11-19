@@ -105,7 +105,7 @@ const SignIn = () => {
         </div>
 
         <div className={styles.imageBlock}>
-          <img className={styles.img} src={signImage} alt="sign in" />
+          <img src={signImage} alt="sign in" />
         </div>
       </div>
     </section>

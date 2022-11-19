@@ -122,7 +122,7 @@ const SignUp = () => {
           <NavLink to="/sign-in">{t('AUTH.HAVE_ACCOUNT')}</NavLink>
         </div>
         <div className={styles.imageBlock}>
-          <img className={styles.img} src={signImage} alt="sign up" />
+          <img src={signImage} alt="sign up" />
         </div>
       </div>
     </section>
