@@ -24,7 +24,7 @@ export type TaskType = {
   files?: FileType[];
 };
 
-type TaskParsedType = {
+export type TaskParsedType = {
   _id: string;
   title: string;
   order: number;
@@ -177,5 +177,6 @@ export const boardSlice = createSlice({
 export const { clearErrors } = boardSlice.actions;
 
 export const singleBoardRequestStatus = (state: RootState) => state.board.pending;
+export const columnsSelector = (state: RootState) => state.board.columns;
 
 export default boardSlice.reducer;
