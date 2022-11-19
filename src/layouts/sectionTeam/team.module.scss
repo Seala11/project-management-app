@@ -68,6 +68,7 @@
     display: block;
     width: 100%;
     max-width: max-content;
+    max-width: 18rem;
   }
 }
 
@@ -112,6 +113,18 @@
   gap: 1rem;
 }
 
+.memberHeaderName {
+  @include media-mobile {
+    min-width: 13.59rem;
+  }
+
+  @include media-mobile-s {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
 .featureList {
   padding-top: 1rem;
   display: flex;
@@ -128,6 +141,9 @@
     width: 100%;
     align-items: center;
     gap: 2rem;
+  }
+  @include media-mobile-xs {
+    gap: 1rem;
   }
 }
 

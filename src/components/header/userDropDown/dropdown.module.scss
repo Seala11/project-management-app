@@ -6,6 +6,10 @@
   z-index: 1;
   position: relative;
   margin: 0.2rem; //не менять! иначе шапака прыгает
+
+  @include media-mobile {
+    position: unset;
+  }
 }
 
 .dropdownHeader {
@@ -23,6 +27,7 @@
     justify-content: flex-end;
     min-width: 0rem;
   }
+
   @include media-mobile-s {
     justify-content: flex-end;
     padding: 0;
@@ -60,8 +65,11 @@
   animation: show 0.3s forwards;
 
   @include media-mobile {
-    width: max-content;
-    padding: 2rem 2rem 2rem 2rem;
+    width: 66%;
+    padding: 3rem 2rem 3rem 2rem;
+    right: auto;
+    left: 17%;
+    gap: 2.5rem;
   }
 }
 
@@ -88,6 +96,11 @@
   font-size: 1.6rem;
   line-height: 1.9rem;
   gap: 1.5rem;
+
+  @include media-mobile {
+    font-size: 1.8rem;
+    justify-content: center;
+  }
 }
 
 .dropdownListItem.active {

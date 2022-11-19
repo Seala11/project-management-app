@@ -18,6 +18,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @include media-mobile {
+    position: relative;
+  }
 }
 
 .header.sticky {
@@ -43,6 +47,10 @@
   align-items: center;
   position: relative;
   padding: 0.3rem 0;
+
+  @include media-mobile {
+    position: unset;
+  }
 }
 
 .menuList {
@@ -52,6 +60,7 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+
   @include media-mobile {
     padding: 0 1rem;
   }

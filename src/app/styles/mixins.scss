@@ -36,6 +36,12 @@
   }
 }
 
+@mixin media-mobile-xs {
+  @media (max-width: 330px) {
+    @content;
+  }
+}
+
 %wrapper {
   max-width: 120rem;
   margin: 0 auto;
