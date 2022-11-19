@@ -116,7 +116,7 @@ const ConfirmationModal = ({ onClose }: Props) => {
 
       {modal?.inputTitle && (
         <div className={styles.inputWrraper}>
-          <label htmlFor={modal.inputTitle}>{modal.inputTitle}</label>
+          <label htmlFor={modal.inputTitle}>{modal.inputTitle}*</label>
           <input
             id={modal.inputTitle}
             type="text"
@@ -129,7 +129,7 @@ const ConfirmationModal = ({ onClose }: Props) => {
 
       {modal?.inputDescr && (
         <div className={styles.inputWrraper}>
-          <label htmlFor={modal.inputDescr}>{modal.inputDescr}</label>
+          <label htmlFor={modal.inputDescr}>{modal.inputDescr}*</label>
           <textarea
             id={modal.inputDescr}
             {...register(UserInput.DESCRIPTION, {
