@@ -19,6 +19,10 @@
   width: stretch;
   padding: 2rem;
   justify-content: flex-end;
+
+  @include media-mobile {
+    padding: 1rem;
+  }
 }
 
 .taskWrapper {
@@ -26,8 +30,13 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  width: 100%;
+  width: 50rem;
   padding: 0 2rem 2rem;
+  overflow-y: auto;
+
+  @include media-mobile {
+    width: 90vw;
+  }
 }
 
 .taskInfo {
@@ -57,13 +66,14 @@
 
 .list {
   display: flex;
+  justify-content: center;
   gap: 1rem;
   list-style-type: none;
   padding: 0;
 }
 
 .label {
-  width: 7rem;
+  width: min(15%, 7rem);
   height: 3rem;
   border-radius: 0.8rem;
   cursor: pointer;
