@@ -70,10 +70,10 @@ const SignIn = () => {
               )}
             </div>
             <div className={styles.formItem}>
-              <label htmlFor="password">{t('AUTH.PASSWORD')}</label>
+              <label htmlFor={styles.password}>{t('AUTH.PASSWORD')}</label>
               <div className={styles.wrapperEye}>
                 <input
-                  id="password"
+                  id={styles.password}
                   type={'password'}
                   {...rest}
                   name="password"

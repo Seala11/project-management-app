@@ -59,6 +59,7 @@ const SignUp = () => {
                   required: { value: true, message: 'LENGTH' },
                   pattern: { value: /^\S[a-zA-Z0-9_]+$/i, message: 'PATTERN' },
                   minLength: { value: 4, message: 'LENGTH' },
+                  maxLength: { value: 10, message: 'MAXLENGTH' },
                   onChange: (e) => clearErrors(e.target.name),
                 })}
                 className={errors.name && styles.inputError}
@@ -88,10 +89,10 @@ const SignUp = () => {
               )}
             </div>
             <div className={styles.formItem}>
-              <label htmlFor="password">{t('AUTH.PASSWORD')}</label>
+              <label htmlFor={styles.password}>{t('AUTH.PASSWORD')}</label>
               <div className={styles.wrapperEye}>
                 <input
-                  id="password"
+                  id={styles.password}
                   type={'password'}
                   {...rest}
                   name="password"
