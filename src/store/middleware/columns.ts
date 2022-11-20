@@ -35,7 +35,7 @@ export const thunkCreateColumn = createAsyncThunk<
   { rejectValue: string }
 >('column/createColumn', async (data, { rejectWithValue }) => {
   const token = getTokenFromLS();
-  console.log(JSON.stringify({ title: data.title, order: data.order }));
+  // console.log(JSON.stringify({ title: data.title, order: data.order }));
   const response = await fetch(`${BASE}/boards/${data.boardId}/columns`, {
     method: 'POST',
     headers: {

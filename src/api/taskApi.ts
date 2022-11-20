@@ -21,3 +21,20 @@ export async function fetchCreateTask(
   });
   return response;
 }
+
+export async function fetchDeleteTask(
+  boardId: string,
+  columnId: string,
+  taskId: string,
+  token: string
+) {
+  const response = await fetch(`${BOARDS}/${boardId}/columns/${columnId}/tasks/${taskId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      accept: 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+}
