@@ -35,6 +35,13 @@
 
 .titleWrapper {
   max-width: 57rem;
+
+  @include media-mobile {
+    max-width: 45rem;
+  }
+  @include media-mobile-s {
+    max-width: 35rem;
+  }
 }
 
 .subtitle {
@@ -42,6 +49,7 @@
 
   @include media-mobile-s {
     padding: 0 2rem;
+    text-align: justify;
   }
 }
 

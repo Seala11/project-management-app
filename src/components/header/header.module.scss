@@ -36,6 +36,19 @@
   line-height: 140%;
   display: flex;
   gap: 0.8rem;
+
+  @include media-mobile-s {
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 150%;
+  }
+
+  @include media-mobile-xs {
+    font-size: 1.8rem;
+    font-weight: 600;
+    line-height: 170%;
+    gap: 0.5rem;
+  }
 }
 
 .logo img {

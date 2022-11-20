@@ -37,6 +37,10 @@
 .name {
   padding-right: 3rem;
 
+  @include media-mobile {
+    padding-right: 1rem;
+  }
+
   @include media-mobile-s {
     display: none;
   }
