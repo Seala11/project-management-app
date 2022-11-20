@@ -115,7 +115,7 @@ export const boardSlice = createSlice({
         state.pending = false;
       })
       .addCase(thunkGetSingleBoard.pending, (state) => {
-        state.pending = 'full';
+        state.pending = true;
       })
       // Columns
       .addCase(thunkGetAllColumns.fulfilled, (state, action) => {
@@ -123,7 +123,7 @@ export const boardSlice = createSlice({
         state.pending = false;
       })
       .addCase(thunkGetAllColumns.pending, (state) => {
-        state.pending = 'full';
+        state.pending = true;
       })
       .addCase(thunkCreateColumn.fulfilled, (state, action) => {
         state.columns.push(action.payload);

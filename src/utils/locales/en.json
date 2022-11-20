@@ -17,7 +17,11 @@
     "SUBMIT": "Submit",
     "HAVE_ACCOUNT": "I already have an account",
     "HAVENT_ACCOUNT": "I dont`t have an account",
-    "REQUIRED": "This field is required"
+    "REQUIRED": "This field is required",
+    "LENGTH": "Minimal length 4 characters",
+    "MAXLENGTH": "Maximal length 15 characters",
+    "PATTERN": "Only letters, numbers or underscore",
+    "PASSWORD_LENGTH": "Password must be at least 6 characters"
   },
   "NOTFOUND": {
     "TITLE": "Oops! The page you are looking for cannot be found.",
