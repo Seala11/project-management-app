@@ -3,7 +3,12 @@ import { toast } from 'react-toastify';
 import { parseTaskObj, parseBoardObj } from 'utils/func/boardHandler';
 import { getTokenFromLS } from 'utils/func/localStorage';
 import { BoardInfo } from './boardsSlice';
-import { thunkCreateColumn, thunkDeleteColumn, thunkGetAllColumns } from './middleware/columns';
+import {
+  thunkCreateColumn,
+  thunkDeleteColumn,
+  thunkGetAllColumns,
+  thunkUpdateTitleColumn,
+} from './middleware/columns';
 import { thunkGetAllTasks, thunkCreateTasks, thunkDeleteTasks } from './middleware/tasks';
 import { RootState } from 'store';
 import { fetchGetBoard } from 'api/apiBoard';
@@ -87,7 +92,7 @@ export const thunkGetSingleBoard = createAsyncThunk<
 
   if (!response.ok) {
     const resp = await response.json();
-    return rejectWithValue(`${resp?.statusCode}/${resp.message}`);
+    return rejectWithValue(`error code: ${resp?.statusCode} message: ${resp?.message}`);
   }
   const data: BoardResponseType = await response.json();
   return data;
@@ -145,6 +150,10 @@ export const boardSlice = createSlice({
       })
       .addCase(thunkDeleteColumn.pending, (state) => {
         state.pending = true;
+      })
+      .addCase(thunkUpdateTitleColumn.fulfilled, (state, action) => {
+        const index = state.columns.findIndex((obj) => obj._id === action.payload._id);
+        state.columns[index].title = action.payload.title;
       })
       // Tasks
       .addCase(thunkGetAllTasks.fulfilled, (state, action) => {

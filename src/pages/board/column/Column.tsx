@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { ColumnType, TaskParsedType } from 'store/boardSlice';
-import styles from './board.module.scss';
+import styles from './column.module.scss';
 import { useAppSelector, useAppDispatch } from 'store/hooks';
 import Icon from 'components/Icon/Icon';
 import {
@@ -13,16 +14,29 @@ import {
 } from 'store/modalSlice';
 import { useTranslation } from 'react-i18next';
 import { thunkGetAllTasks } from 'store/middleware/tasks';
+import { thunkUpdateTitleColumn } from 'store/middleware/columns';
 
 type Props = {
   columnData: ColumnType;
 };
+
+interface IFormInputs {
+  input: string;
+}
 
 const Column = (props: Props) => {
   const { tasks } = useAppSelector((state) => state.board);
   const column = props.columnData;
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
+
+  const [isEditable, setIsEditable] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<IFormInputs>();
 
   useEffect(() => {
     dispatch(thunkGetAllTasks({ boardId: column.boardId, columnId: column._id }));
@@ -60,15 +74,61 @@ const Column = (props: Props) => {
     dispatch(setTaskModalOpen());
   };
 
+  const onSubmitEdit: SubmitHandler<IFormInputs> = (data) => {
+    const newName = data.input;
+    console.log(newName);
+    dispatch(
+      thunkUpdateTitleColumn({
+        boardId: column.boardId,
+        columnId: column._id,
+        order: column.order,
+        title: data.input,
+      })
+    ).then(() => setIsEditable(false));
+  };
+
   return (
     <>
       <li data-key={column._id} className={styles.columnItem}>
-        <div className={styles.columnTitle}>
-          {column.title}
-          <button className={styles.button} onClick={() => deleteColumn(column.title)}>
-            <Icon color="#CC0707" size={100} icon="trash" className={styles.icon} />
-          </button>
-        </div>
+        {isEditable ? (
+          <form className={styles.form} onSubmit={handleSubmit(onSubmitEdit)}>
+            <input
+              autoFocus
+              type="text"
+              {...register('input', {
+                value: column.title,
+                required: 'Cannot be empty',
+              })}
+              className={`${styles.input} ${errors.input ? styles.error : ''}`}
+            />
+            <span className={styles.formError}>{errors.input && errors.input.message}</span>
+            <button
+              className={`${styles.buttonEdit} ${styles.submit}`}
+              type="submit"
+              disabled={!(Object.keys(errors).length === 0)}
+            >
+              <Icon color="#0047FF" size={100} icon="done" className={styles.icon} />
+            </button>
+            <button
+              className={styles.buttonEdit}
+              onClick={() => {
+                reset();
+                setIsEditable(false);
+              }}
+            >
+              <Icon color="#CC0707" size={100} icon="cancel" className={styles.icon} />
+            </button>
+          </form>
+        ) : (
+          <div className={styles.columnTitle}>
+            <div className={styles.titleName} onClick={() => setIsEditable(true)}>
+              {column.title}
+            </div>
+            <button className={styles.button} onClick={() => deleteColumn(column.title)}>
+              <Icon color="#CC0707" size={100} icon="trash" className={styles.icon} />
+            </button>
+          </div>
+        )}
         <hr className={styles.columnLine}></hr>
         <ul className={styles.tasksList}>
           {tasks[column._id] &&

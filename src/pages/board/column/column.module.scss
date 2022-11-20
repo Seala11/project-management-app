@@ -28,28 +28,6 @@
   display: flex;
   gap: 5rem;
   align-items: flex-start;
-
-  & ::-webkit-scrollbar-button {
-    height: 0;
-  }
-
-  & ::-webkit-scrollbar-track {
-    background-color: var(--primary-s);
-    border-radius: 0.6rem;
-  }
-
-  & ::-webkit-scrollbar-thumb {
-    background-color: var(--primary-l);
-    border-radius: 0.6rem;
-  }
-
-  & ::-webkit-resizer {
-    height: 0;
-  }
-
-  ::-webkit-scrollbar {
-    width: 0.6rem;
-  }
 }
 
 .columnTitle {
@@ -61,6 +39,22 @@
   justify-content: space-between;
 }
 
+.form {
+  display: flex;
+  align-items: center;
+}
+
+.input {
+  max-width: 70%;
+  margin: 0.4rem 0.5rem 0.4rem 0rem;
+  border: 0.1rem solid var(--border);
+  box-shadow: 0 0.3rem 1.6rem 0.1rem var(--card);
+  border-radius: 0.8rem;
+  font-size: 2rem;
+  line-height: 2.4rem;
+  padding: 0.5rem 1rem;
+}
+
 .columnItem {
   display: flex;
   flex-direction: column;
@@ -69,6 +63,11 @@
   width: 30rem;
   padding: 2.5rem 2.5rem 1.6rem;
   border-radius: 0.8rem;
+}
+
+.titleName {
+  width: 100%;
+  line-height: 4.4rem;
 }
 
 .tasksList {
@@ -135,5 +134,23 @@
 
   &:hover {
     background: var(--error-m);
+  }
+}
+
+.buttonEdit {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 100%;
+
+  &:hover {
+    background: var(--error-m);
+  }
+}
+
+.buttonEdit.submit {
+  &:hover {
+    background: var(--primary-m);
   }
 }
