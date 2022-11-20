@@ -7,9 +7,7 @@
 
 .settings {
   display: flex;
-  align-items: flex-start;
   justify-content: space-around;
-  // column-gap: 10rem;
   .leftBlock {
     display: flex;
     flex-direction: column;
@@ -47,12 +45,6 @@ h1 {
   @extend %title;
 }
 
-.buttonBlock {
-  button {
-    @extend %btnBlue;
-  }
-}
-
 .wrapperEye {
   position: relative;
 
@@ -73,9 +65,27 @@ h1 {
 }
 
 .rightBlock {
+  align-self: flex-end;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-end;
   row-gap: 8rem;
+
+  & .buttonBlock {
+    display: flex;
+    column-gap: 2rem;
+
+    .btnSave {
+      @extend %btnBlue;
+    }
+
+    .btnDelete {
+      @extend %btnRed;
+    }
+  }
+
+  & .imageBlock {
+    flex: 1 1 auto;
+  }
 }
