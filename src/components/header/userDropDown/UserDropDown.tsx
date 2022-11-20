@@ -59,6 +59,7 @@ const UserDropDown = () => {
 
   const currPage = 'homepage';
   const userName = 'User Name';
+  const userNameCut = user.name.length < 11 ? user.name : user.name.slice(0, 11) + '...';
 
   const onOptionClicked = (value: string) => () => {
     if (currPage === value) return;
@@ -74,9 +75,14 @@ const UserDropDown = () => {
       <div className={styles.dropdownHeader} onClick={toggling} ref={menuHeader}>
         <div className={styles.wrapperIconWithName}>
           <Icon color="#4D4D4D" size={36} icon="user" />
-          <span className={styles.name}>{isLogged ? user.name : userName}</span>
+          <span className={styles.name}>{isLogged ? userNameCut : userName}</span>
         </div>
-        <Icon color="" size={14} icon="arrow-down" />
+        <Icon
+          className={`${styles.iconDown} ${isOpen && styles.up}`}
+          color=""
+          size={14}
+          icon="arrow-down"
+        />
       </div>
       {isOpen && (
         <ul className={styles.dropdownList} ref={menuList}>

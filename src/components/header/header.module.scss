@@ -18,6 +18,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @include media-mobile {
+    position: relative;
+  }
 }
 
 .header.sticky {
@@ -32,6 +36,19 @@
   line-height: 140%;
   display: flex;
   gap: 0.8rem;
+
+  @include media-mobile-s {
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 150%;
+  }
+
+  @include media-mobile-xs {
+    font-size: 1.8rem;
+    font-weight: 600;
+    line-height: 170%;
+    gap: 0.5rem;
+  }
 }
 
 .logo img {
@@ -43,6 +60,10 @@
   align-items: center;
   position: relative;
   padding: 0.3rem 0;
+
+  @include media-mobile {
+    position: unset;
+  }
 }
 
 .menuList {
@@ -52,6 +73,10 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+
+  @include media-mobile {
+    padding: 0 1rem;
+  }
 }
 
 .menuLanguage {
@@ -96,7 +121,7 @@ a.home:hover {
 
 @include media-tablet {
   .hamburger {
-    display: block;
+    // display: block;
     margin: 0 1rem 0 0;
   }
 
@@ -106,17 +131,7 @@ a.home:hover {
 }
 
 @include media-mobile {
-  .logo {
-    margin: 1rem 0;
-  }
-
   .hamburger {
     margin: 0 0rem 0 0;
-  }
-}
-
-@include media-mobile-s {
-  .logo {
-    font-size: 1rem;
   }
 }

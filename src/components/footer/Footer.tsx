@@ -9,8 +9,10 @@ const Footer = () => {
     <footer className={styles.footer}>
       <div className={`${styles.wrapper} ${styles.footerWrapper}`}>
         <div className={styles.footerCopyright}>
-          <span className={styles.copyright}>©</span>
-          <span className={styles.footerYear}>2022</span>
+          <div className={styles.copyrightWrapper}>
+            <span className={styles.copyright}>©</span>
+            <span className={styles.footerYear}>2022</span>
+          </div>
           <div className={styles.footerInfo}>
             {teamData.map((dev) => (
               <a
