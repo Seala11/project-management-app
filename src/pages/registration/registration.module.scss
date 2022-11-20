@@ -57,16 +57,18 @@
 
     & .fieldError {
       @extend %fieldError;
-      top: 5.8rem;
+      top: 6rem;
     }
 
     @include media-mobile-s {
       padding-bottom: 3.7rem;
     }
   }
+
   & a:hover {
     text-decoration: underline;
   }
+
   & button {
     @extend %btnBlue;
 
@@ -78,7 +80,7 @@
   }
 
   @include media-big-tablet {
-    padding: 3.5rem 1rem;
+    padding: 3.5rem 2rem;
   }
 
   @include media-mobile-s {
@@ -90,9 +92,11 @@
   @include media-big-tablet {
     max-width: 100%;
   }
+
   & img {
     height: auto;
     width: max-content;
+
     @include media-big-tablet {
       max-width: 100%;
     }
@@ -120,6 +124,7 @@
     padding: 0;
     margin: 0;
     border-radius: 100%;
+
     &:hover {
       background-color: transparent;
     }
