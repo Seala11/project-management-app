@@ -1,6 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'store';
+import { TaskParsedType } from './boardSlice';
+import { thunkGetAllUsers, UserType } from './middleware/users';
 
 export enum BtnColor {
   RED = 'red',
@@ -35,7 +37,9 @@ type ModalState = {
   userInputDescr: string;
   taskOpen: boolean;
   columnId: string;
-  taskId: string;
+  taskId: TaskParsedType | null;
+  users: UserType[];
+  pending: boolean;
 };
 
 export const initialState: ModalState = {
@@ -46,7 +50,9 @@ export const initialState: ModalState = {
   userInputDescr: '',
   taskOpen: false,
   columnId: '',
-  taskId: '',
+  taskId: null,
+  users: [],
+  pending: false,
 };
 
 export const modalSlice = createSlice({
@@ -61,7 +67,6 @@ export const modalSlice = createSlice({
       state.modalOpen = false;
       state.modal = null;
       state.taskOpen = false;
-      state.taskId = '';
     },
     setModalAction: (state, action: PayloadAction<ModalAction | undefined>) => {
       state.modalAction = action.payload;
@@ -84,12 +89,22 @@ export const modalSlice = createSlice({
     setTaskModalClose: (state) => {
       state.taskOpen = false;
     },
-    setTaskId: (state, action: PayloadAction<string>) => {
+    setTaskId: (state, action: PayloadAction<TaskParsedType | null>) => {
       state.taskId = action.payload;
     },
     setModalColumnId: (state, action: PayloadAction<string>) => {
       state.columnId = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(thunkGetAllUsers.fulfilled, (state, action) => {
+        state.users = action.payload;
+        state.pending = false;
+      })
+      .addCase(thunkGetAllUsers.pending, (state) => {
+        state.pending = true;
+      });
   },
 });
 
@@ -114,5 +129,6 @@ export const userTitleSelector = (state: RootState) => state.modal.userInputTitl
 export const userDescriptionSelector = (state: RootState) => state.modal.userInputDescr;
 export const taskIdSelector = (state: RootState) => state.modal.taskId;
 export const modalColumnIdSelector = (state: RootState) => state.modal.columnId;
+export const usersSelector = (state: RootState) => state.modal.users;
 
 export default modalSlice.reducer;

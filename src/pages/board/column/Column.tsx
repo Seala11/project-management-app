@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ColumnType } from 'store/boardSlice';
+import { ColumnType, TaskParsedType } from 'store/boardSlice';
 import styles from './board.module.scss';
 import { useAppSelector, useAppDispatch } from 'store/hooks';
 import Icon from 'components/Icon/Icon';
@@ -54,8 +54,9 @@ const Column = (props: Props) => {
     );
   };
 
-  const openTaskModal = (task: string) => {
+  const openTaskModal = (task: TaskParsedType, columnId: string) => {
     dispatch(setTaskId(task));
+    dispatch(setModalColumnId(columnId));
     dispatch(setTaskModalOpen());
   };
 
@@ -75,7 +76,7 @@ const Column = (props: Props) => {
               <li
                 className={styles.taskItem}
                 key={task._id}
-                onClick={() => openTaskModal(task._id)}
+                onClick={() => openTaskModal(task, column._id)}
               >
                 <div className={styles.taskTitle}>{task.title}</div>
               </li>
