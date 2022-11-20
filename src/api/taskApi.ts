@@ -1,5 +1,15 @@
 import { BOARDS } from 'api/config';
 
+export async function fetchGetTasks(boardId: string, columnId: string, token: string) {
+  const response = await fetch(`${BOARDS}/${boardId}/columns/${columnId}/tasks`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+}
+
 export async function fetchCreateTask(
   boardId: string,
   columnId: string,

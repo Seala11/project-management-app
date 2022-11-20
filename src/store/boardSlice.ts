@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { BASE } from 'api/config';
 import { toast } from 'react-toastify';
 import { parseTaskObj, parseBoardObj } from 'utils/func/boardHandler';
 import { getTokenFromLS } from 'utils/func/localStorage';
@@ -7,6 +6,7 @@ import { BoardInfo } from './boardsSlice';
 import { thunkCreateColumn, thunkDeleteColumn, thunkGetAllColumns } from './middleware/columns';
 import { thunkGetAllTasks, thunkCreateTasks, thunkDeleteTasks } from './middleware/tasks';
 import { RootState } from 'store';
+import { fetchGetBoard } from 'api/apiBoard';
 
 export type FileType = {
   filename: string;
@@ -83,12 +83,7 @@ export const thunkGetSingleBoard = createAsyncThunk<
   { rejectValue: string }
 >('board/getSingleBoard', async (id, { rejectWithValue }) => {
   const token = getTokenFromLS();
-  const response = await fetch(`${BASE}/boards/${id}`, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await fetchGetBoard(id, token);
 
   if (!response.ok) {
     const resp = await response.json();
