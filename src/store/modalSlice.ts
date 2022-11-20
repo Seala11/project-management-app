@@ -15,6 +15,8 @@ export enum ModalAction {
   TASK_CREATE = 'create new task',
   TASK_DELETE = 'delete task',
   USER_DELETE = 'delete user account',
+  EDIT_USER_PROFILE = 'edit user profile',
+  SAVE_USER_PROFILE = 'save user profile',
 }
 
 type ModalType = {
@@ -114,5 +116,6 @@ export const userTitleSelector = (state: RootState) => state.modal.userInputTitl
 export const userDescriptionSelector = (state: RootState) => state.modal.userInputDescr;
 export const taskIdSelector = (state: RootState) => state.modal.taskId;
 export const modalColumnIdSelector = (state: RootState) => state.modal.columnId;
+export const stateModalSelector = (state: RootState) => state.modal;
 
 export default modalSlice.reducer;

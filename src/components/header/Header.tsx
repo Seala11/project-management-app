@@ -4,7 +4,6 @@ import ROUTES from 'utils/constants/ROUTES';
 import styles from './header.module.scss';
 import SwitchButton from './switchButton/switchButton';
 import logoIcon from 'assets/images/trello-mark-blue.svg';
-
 import UserDropDown from './userDropDown/UserDropDown';
 import { useAppSelector } from 'store/hooks';
 import { authSelector } from 'store/authSlice';

@@ -4,7 +4,7 @@ import { fetchSignIn, fetchSignUp } from '../api/apiAuth';
 import { Signup, Signin, User } from '../api/types';
 import { RootState } from 'store';
 import { getTokenFromLS, removeTokenFromLS, setTokenToLS } from 'utils/func/localStorage';
-import { getUserById } from 'api/apiUsers';
+import { getUserById, updateUser } from 'api/apiUsers';
 import { parseJwt } from 'utils/func/parsejwt';
 import { toast } from 'react-toastify';
 import { getErrorMessage } from 'utils/func/handleError';
@@ -15,7 +15,7 @@ type Auth = {
   user: Omit<User, 'password'>;
 };
 
-const errorArray = [400, 401, 403, 404, 409];
+export const errorArray = [400, 401, 403, 404, 409];
 
 const userInit: Omit<User, 'password'> = {
   _id: '',
@@ -102,6 +102,29 @@ export const thunkGetUserById = createAsyncThunk(
   }
 );
 
+export const thunkUpdateUser = createAsyncThunk(
+  'users/thunkUpdateUser',
+  async ({ user, token }: { user: User; token: string }, { rejectWithValue, dispatch }) => {
+    try {
+      const res = await updateUser(user, token);
+      if (!res.ok) {
+        const err: { message: string; statusCode: number } = await res.json();
+        if (errorArray.includes(err.statusCode)) {
+          dispatch(setToastMessage(err.message));
+        }
+        throw new Error(err.message);
+      }
+      const response: Omit<User, 'password'> = await res.json();
+      const login = user.login;
+      const password = user.password;
+      dispatch(thunkSignIn({ login, password }));
+      return response;
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -116,46 +139,17 @@ export const authSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    // builder.addCase(thunkSignUp.fulfilled, () => {
-
-    // toast.success('user is created');
-    // });
-
-    // builder.addCase(thunkSignUp.rejected, (state, action) => {
-
-    // if (typeof action.payload === 'string') {
-    //   toast.error(action.payload);
-    // }
-    // });
-
-    // sign in
-
-    // builder.addCase(thunkSignIn.fulfilled, () => {
-    //   console.log('user is created');
-    // });
-
-    // builder.addCase(thunkSignIn.rejected, (state, action) => {
-    // console.log('rejected');
-    // if (typeof action.payload === 'string') {
-    //   toast.error(action.payload);
-    // }
-    // });
-
     builder.addCase(thunkGetUserById.fulfilled, (state, action) => {
       state.user = action.payload;
-      // setUserToLS(action.payload);
       state.isLogged = true;
-      // toast.success('User sign in successfully');
-      // state.toastMessage = '200';
     });
 
     builder.addCase(thunkGetUserById.rejected, (state, action) => {
-      // console.log('rejected');
-      // state.isLogged = false;
       removeTokenFromLS();
-      // if (typeof action.payload === 'string') {
-      // state.toastMessage = action.payload;
-      // }
+    });
+
+    builder.addCase(thunkUpdateUser.rejected, (state, action) => {
+      removeTokenFromLS();
     });
   },
 });
