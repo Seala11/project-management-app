@@ -5,7 +5,7 @@ import { parseTaskObj, parseBoardObj } from 'utils/func/boardHandler';
 import { getTokenFromLS } from 'utils/func/localStorage';
 import { BoardInfo } from './boardsSlice';
 import { thunkCreateColumn, thunkDeleteColumn, thunkGetAllColumns } from './middleware/columns';
-import { thunkGetAllTasks, thunkCreateTasks } from './middleware/tasks';
+import { thunkGetAllTasks, thunkCreateTasks, thunkDeleteTasks } from './middleware/tasks';
 import { RootState } from 'store';
 
 export type FileType = {
@@ -170,6 +170,23 @@ export const boardSlice = createSlice({
         if (typeof action.payload === 'string') {
           toast.error(action.payload);
         }
+      })
+      .addCase(thunkDeleteTasks.pending, (state) => {
+        state.pending = true;
+      })
+      .addCase(thunkDeleteTasks.fulfilled, (state, action) => {
+        state.pending = false;
+        const newTaskState = state.tasks[action.payload.column].filter(
+          (task) => task._id !== action.payload.task._id
+        );
+        state.tasks[action.payload.column] = newTaskState;
+      })
+      .addCase(thunkDeleteTasks.rejected, (state, action) => {
+        state.pending = false;
+        console.log(action.payload);
+        if (typeof action.payload === 'string') {
+          toast.error(action.payload);
+        }
       });
   },
 });
@@ -178,5 +195,6 @@ export const { clearErrors } = boardSlice.actions;
 
 export const singleBoardRequestStatus = (state: RootState) => state.board.pending;
 export const columnsSelector = (state: RootState) => state.board.columns;
+export const boardIdSelector = (state: RootState) => state.board.id;
 
 export default boardSlice.reducer;

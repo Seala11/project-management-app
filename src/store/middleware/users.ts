@@ -14,13 +14,11 @@ export const thunkGetAllUsers = createAsyncThunk(
     const token = getTokenFromLS();
     const response = await getAllUsers(token);
 
-    console.log(response);
     if (!response.ok) {
       const resp = await response.json();
       return rejectWithValue(`${resp?.statusCode}/${resp.message}`);
     }
     const users: UserType[] = await response.json();
-    console.log(users);
     return users;
   }
 );

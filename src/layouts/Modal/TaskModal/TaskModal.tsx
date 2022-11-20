@@ -30,7 +30,6 @@ const TaskModal = ({ onClose }: Props) => {
   const columns = useAppSelector(columnsSelector);
   const selectedColumn = columns.find((column) => column._id === columnId);
 
-  console.log(selectedTask);
   useEffect(() => {
     if (allUsers.length === 0) {
       dispatch(thunkGetAllUsers());
@@ -41,7 +40,7 @@ const TaskModal = ({ onClose }: Props) => {
     dispatch(setTaskModalClose());
     dispatch(
       setModalOpen({
-        message: `${t('MODAL.DELETE_MSG')} ${selectedTask}?`,
+        message: `${t('MODAL.DELETE_MSG')} task ${selectedTask?.title}?`,
         color: BtnColor.RED,
         btnText: `${t('MODAL.DELETE')}`,
         action: ModalAction.TASK_DELETE,
@@ -72,7 +71,7 @@ const TaskModal = ({ onClose }: Props) => {
           {selectedTask?.users.map((id) => {
             const userAssigned = allUsers.find((user) => user._id === id);
             return (
-              <p key={userAssigned?._id} className={styles.member}>
+              <p key={id} className={styles.member}>
                 {userAssigned?.login}
               </p>
             );

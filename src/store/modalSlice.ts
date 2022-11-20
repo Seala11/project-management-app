@@ -67,8 +67,6 @@ export const modalSlice = createSlice({
       state.modalOpen = false;
       state.modal = null;
       state.taskOpen = false;
-      state.taskId = null;
-      state.columnId = '';
     },
     setModalAction: (state, action: PayloadAction<ModalAction | undefined>) => {
       state.modalAction = action.payload;
