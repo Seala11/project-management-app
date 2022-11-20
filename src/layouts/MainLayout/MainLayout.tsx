@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import Header from 'components/header/Header';
 import Footer from 'components/footer/Footer';
 import { toast, ToastContainer } from 'react-toastify';
@@ -43,7 +43,7 @@ const MainLayout = ({ children }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toastMessage]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (getTokenFromLS()) {
       const token = getTokenFromLS();
       dispatch(thunkGetUserById({ userId: parseJwt(token).id, token: token })).then(() => {
