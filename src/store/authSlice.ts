@@ -4,7 +4,7 @@ import { fetchSignIn, fetchSignUp } from '../api/apiAuth';
 import { Signup, Signin, User } from '../api/types';
 import { RootState } from 'store';
 import { getTokenFromLS, removeTokenFromLS, setTokenToLS } from 'utils/func/localStorage';
-import { getUserById, updateUser } from 'api/apiUsers';
+import { deleteUser, getUserById, updateUser } from 'api/apiUsers';
 import { parseJwt } from 'utils/func/parsejwt';
 import { toast } from 'react-toastify';
 import { getErrorMessage } from 'utils/func/handleError';
@@ -125,6 +125,26 @@ export const thunkUpdateUser = createAsyncThunk(
   }
 );
 
+export const thunkDeleteUser = createAsyncThunk(
+  'users/thunkDeleteUser',
+  async ({ id, token }: { id: string; token: string }, { rejectWithValue, dispatch }) => {
+    try {
+      const res = await deleteUser(id, token);
+      if (!res.ok) {
+        const err: { message: string; statusCode: number } = await res.json();
+        if (errorArray.includes(err.statusCode)) {
+          dispatch(setToastMessage(err.message));
+        }
+        throw new Error(err.message);
+      }
+      const response: Omit<User, 'password'> = await res.json();
+      return response;
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -149,7 +169,12 @@ export const authSlice = createSlice({
     });
 
     builder.addCase(thunkUpdateUser.rejected, (state, action) => {
+      // removeTokenFromLS();
+    });
+
+    builder.addCase(thunkDeleteUser.fulfilled, (state, action) => {
       removeTokenFromLS();
+      state.isLogged = false;
     });
   },
 });

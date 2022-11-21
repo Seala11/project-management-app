@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { MouseEventHandler, useEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { authSelector, thunkSignUp, thunkUpdateUser } from 'store/authSlice';
+import { authSelector, thunkDeleteUser, thunkSignUp, thunkUpdateUser } from 'store/authSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import signImage from 'assets/images/login.png';
@@ -18,7 +18,6 @@ import {
   resetModal,
   setModalAction,
   setModalOpen,
-  // setUserEdit,
   stateModalSelector,
 } from 'store/modalSlice';
 
@@ -28,13 +27,11 @@ const Settings = () => {
   const { user } = useAppSelector(authSelector);
   const passwordField = useRef<HTMLInputElement | null>(null);
   const [isShowText, setIsShowText] = useState(false);
-  // const [isFormDisabled, setFormDisabled] = useState(true);
   const { modalAction } = useAppSelector(stateModalSelector);
   const [userEdit, setUserEdit] = useState(false);
 
   const {
     register,
-    handleSubmit,
     getValues,
     trigger,
     clearErrors,
@@ -50,27 +47,24 @@ const Settings = () => {
     setValue('login', user.login);
   }, [user.name, user.login, setValue]);
 
-  const handleSaveNewProfile: React.MouseEventHandler<HTMLButtonElement> = async (data) => {
+  const handleSaveNewProfile: React.MouseEventHandler<HTMLButtonElement> = async () => {
     if (!userEdit) {
-      console.log('modal cofirmation on change');
       dispatch(
         setModalOpen({
-          message: `Would you like to edit your profile? You will need enter your password`,
-          color: BtnColor.RED,
-          btnText: `Edit`,
+          message: t('SETTINGS.EDIT_MODAL_TEXT'),
+          color: BtnColor.BLUE,
+          btnText: t('MODAL.OK'),
           action: ModalAction.EDIT_USER_PROFILE,
         })
       );
     } else {
-      console.log('modal cofirmation on save changes');
       const res = await trigger();
       if (res) {
-        console.log('data is saved');
         dispatch(
           setModalOpen({
-            message: `Would you like to save your profile?`,
-            color: BtnColor.RED,
-            btnText: `Edit`,
+            message: t('SETTINGS.SAVE_MODAL_TEXT'),
+            color: BtnColor.BLUE,
+            btnText: t('MODAL.SAVE'),
             action: ModalAction.SAVE_USER_PROFILE,
           })
         );
@@ -79,6 +73,8 @@ const Settings = () => {
   };
 
   useEffect(() => {
+    const token = getTokenFromLS();
+    const { id } = parseJwt(token);
     switch (modalAction) {
       case ModalAction.EDIT_USER_PROFILE:
         setUserEdit(true);
@@ -88,10 +84,14 @@ const Settings = () => {
       case ModalAction.SAVE_USER_PROFILE:
         dispatch(resetModal());
         const userData = getValues();
-        const token = getTokenFromLS();
-        const { id } = parseJwt(token);
         const user = Object.assign(userData, { _id: id });
         dispatch(thunkUpdateUser({ user, token })).then(() => setUserEdit(false));
+        break;
+
+      case ModalAction.DELETE_USER_PROFILE:
+        setUserEdit(false);
+        dispatch(resetModal());
+        dispatch(thunkDeleteUser({ id, token }));
         break;
 
       default:
@@ -101,7 +101,14 @@ const Settings = () => {
   }, [dispatch, modalAction]);
 
   const handleDeleteProfile = () => {
-    console.log('deleteUser');
+    dispatch(
+      setModalOpen({
+        message: t('MODAL.DELETE_MSG'),
+        color: BtnColor.RED,
+        btnText: t('MODAL.DELETE'),
+        action: ModalAction.DELETE_USER_PROFILE,
+      })
+    );
   };
 
   const { ref, ...rest } = register('password', {
@@ -202,7 +209,7 @@ const Settings = () => {
         <div className={styles.rightBlock}>
           <div className={styles.buttonBlock}>
             <button className={styles.btnSave} onClick={handleSaveNewProfile}>
-              {userEdit ? 'Save change' : 'Edit'}
+              {userEdit ? t('MODAL.SAVE') : t('SETTINGS.EDIT')}
             </button>
             <button className={styles.btnDelete} onClick={handleDeleteProfile}>
               delete profile

@@ -36,3 +36,14 @@ export async function updateUser(user: User, token: string) {
   });
   return res;
 }
+
+export async function deleteUser(userId: string, token: string) {
+  const res = await fetch(`${USERS}/${userId}`, {
+    method: 'DELETE',
+    headers: {
+      accept: 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res;
+}

@@ -17,6 +17,7 @@ export enum ModalAction {
   USER_DELETE = 'delete user account',
   EDIT_USER_PROFILE = 'edit user profile',
   SAVE_USER_PROFILE = 'save user profile',
+  DELETE_USER_PROFILE = 'delete user profile',
 }
 
 type ModalType = {

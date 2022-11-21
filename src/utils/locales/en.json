@@ -65,12 +65,14 @@
     "CREATE": "Create new board"
   },
   "MODAL": {
-    "DELETE_MSG": "Are you sure you want to delete",
-    "CHANGE_MSG": "Are you sure you want to change",
+    "DELETE_MSG": "Are you sure you want to delete?",
+    "CHANGE_MSG": "Are you sure you want to change?",
     "DELETE": "Delete",
     "CANCEL": "Cancel",
     "CREATE": "Create",
     "CHANGE": "Change",
+    "SAVE": "Save",
+    "OK": "Ok",
     "TITLE": "Title",
     "DESCRIPTION": "Description",
     "REQUIRED": "This field is required",
@@ -94,5 +96,10 @@
     "Bad Request": "Bad Request",
     "User was not founded!": "User was not founded!",
     "Login already exist": "Login already exist"
+  },
+  "SETTINGS": {
+    "EDIT_MODAL_TEXT": "Would you like to edit your profile? You will need enter your password",
+    "SAVE_MODAL_TEXT": "Would you like to save your profile?",
+    "EDIT": "Edit"
   }
 }
