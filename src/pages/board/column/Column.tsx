@@ -36,7 +36,9 @@ const Column = (props: Props) => {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<IFormInputs>();
+  } = useForm<IFormInputs>({
+    mode: 'onChange',
+  });
 
   useEffect(() => {
     dispatch(thunkGetAllTasks({ boardId: column.boardId, columnId: column._id }));
