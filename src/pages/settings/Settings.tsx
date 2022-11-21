@@ -36,6 +36,7 @@ const Settings = () => {
     trigger,
     clearErrors,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<Signup>({
     reValidateMode: 'onSubmit',
@@ -109,6 +110,13 @@ const Settings = () => {
         action: ModalAction.DELETE_USER_PROFILE,
       })
     );
+  };
+
+  const handlerCancelSave: React.MouseEventHandler<HTMLButtonElement> = () => {
+    setUserEdit(false);
+    reset();
+    setValue('name', user.name);
+    setValue('login', user.login);
   };
 
   const { ref, ...rest } = register('password', {
@@ -205,6 +213,11 @@ const Settings = () => {
               )}
             </div>
           </form>
+          {userEdit ? (
+            <button className={styles.btnCancelSave} onClick={handlerCancelSave}>
+              {t('MODAL.CANCEL')}
+            </button>
+          ) : null}
         </div>
         <div className={styles.rightBlock}>
           <div className={styles.buttonBlock}>

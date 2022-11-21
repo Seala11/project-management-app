@@ -89,3 +89,7 @@ h1 {
     flex: 1 1 auto;
   }
 }
+
+.btnCancelSave {
+  @extend %btnGray;
+}
