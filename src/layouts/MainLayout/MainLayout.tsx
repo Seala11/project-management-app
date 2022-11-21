@@ -6,7 +6,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import TOASTER from 'utils/constants/TOASTER';
 import { getTokenFromLS } from 'utils/func/localStorage';
-import { thunkGetUserById } from 'store/authSlice';
+import { authSelectorStatus, thunkGetUserById } from 'store/authSlice';
 import { parseJwt } from 'utils/func/parsejwt';
 import { useTranslation } from 'react-i18next';
 import { toastMessageSelector } from 'store/appSlice';
@@ -32,7 +32,8 @@ const MainLayout = ({ children }: Props) => {
 
   const boardState = useAppSelector(singleBoardRequestStatus);
   const boardsState = useAppSelector(boardsLoadingSelector);
-  const pending = boardState || boardsState || loading;
+  const authState = useAppSelector(authSelectorStatus);
+  const pending = boardState || boardsState || authState || loading;
 
   useEffect(() => {
     if (toastMessage) {

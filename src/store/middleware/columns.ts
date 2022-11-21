@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { fetchGetColumns } from 'api/apiBoard';
 import { BASE } from 'api/config';
 import { getTokenFromLS } from 'utils/func/localStorage';
 import { ColumnType } from '../boardSlice';
@@ -7,16 +8,11 @@ export const thunkGetAllColumns = createAsyncThunk<ColumnType[], string, { rejec
   'column/getAllColumns',
   async (boardId, { rejectWithValue }) => {
     const token = getTokenFromLS();
-    const response = await fetch(`${BASE}/boards/${boardId}/columns`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetchGetColumns(boardId, token);
 
     if (!response.ok) {
       const resp = await response.json();
-      return rejectWithValue(`${resp?.statusCode}/${resp.message}`);
+      return rejectWithValue(`error code: ${resp?.statusCode} message: ${resp?.message}`);
     }
     const data: ColumnType[] = await response.json();
     return data;
@@ -35,7 +31,6 @@ export const thunkCreateColumn = createAsyncThunk<
   { rejectValue: string }
 >('column/createColumn', async (data, { rejectWithValue }) => {
   const token = getTokenFromLS();
-  // console.log(JSON.stringify({ title: data.title, order: data.order }));
   const response = await fetch(`${BASE}/boards/${data.boardId}/columns`, {
     method: 'POST',
     headers: {
@@ -47,7 +42,7 @@ export const thunkCreateColumn = createAsyncThunk<
   });
   if (!response.ok) {
     const resp = await response.json();
-    return rejectWithValue(`${resp?.statusCode}/${resp.message}`);
+    return rejectWithValue(`error code: ${resp?.statusCode} message: ${resp?.message}`);
   }
   return await response.json();
 });
@@ -69,8 +64,38 @@ export const thunkDeleteColumn = createAsyncThunk<string, deleteColumn, { reject
     });
     if (!response.ok) {
       const resp = await response.json();
-      return rejectWithValue(`${resp?.statusCode}/${resp.message}`);
+      return rejectWithValue(`error code: ${resp?.statusCode} message: ${resp?.message}`);
     }
     return data.columnId;
   }
 );
+
+type UpdateColumnRequestType = {
+  boardId: string;
+  columnId: string;
+  title: string;
+  order: number;
+};
+
+export const thunkUpdateTitleColumn = createAsyncThunk<
+  ColumnType,
+  UpdateColumnRequestType,
+  { rejectValue: string }
+>('column/updateTitleColumn', async (data, { rejectWithValue }) => {
+  const token = getTokenFromLS();
+  const response = await fetch(`${BASE}/boards/${data.boardId}/columns/${data.columnId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ title: data.title, order: data.order }),
+  });
+
+  if (!response.ok) {
+    const resp = await response.json();
+    return rejectWithValue(`error code: ${resp?.statusCode} message: ${resp?.message}`);
+  }
+  const column: ColumnType = await response.json();
+  return column;
+});

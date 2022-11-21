@@ -88,6 +88,10 @@
     "CREATE_COLUMN_BUTTON": "New column",
     "CREATE_TASK_BUTTON": "New task"
   },
+  "COLUMN": {
+    "REQ_ER": "cannot be empty",
+    "MAX_ER": "max length 25"
+  },
   "TOAST": {
     "Authorization error": "Authorization error",
     "Invalid token": "Authorization is required",
