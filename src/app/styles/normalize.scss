@@ -40,6 +40,9 @@ body {
 
 * {
   box-sizing: border-box;
+  @include media-tablet {
+    -webkit-tap-highlight-color: transparent;
+  }
 }
 
 input,
@@ -51,7 +54,6 @@ textarea {
 a,
 a:visited,
 a:link {
-  -webkit-tap-highlight-color: transparent;
   text-decoration: none;
   color: inherit;
 }

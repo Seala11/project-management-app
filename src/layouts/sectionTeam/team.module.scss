@@ -7,6 +7,19 @@
 .title {
   font-weight: 700;
   font-size: 4.8rem;
+
+  @include media-tablet {
+    text-align: center;
+    font-size: 3.8rem;
+  }
+
+  @include media-mobile {
+    font-size: 3rem;
+  }
+
+  @include media-mobile-s {
+    font-size: 2.7rem;
+  }
 }
 
 .titleWrapper {
@@ -21,18 +34,42 @@
 }
 
 .mainContent {
-  display: flex;
+  @extend %mainContent;
   padding: 15.85rem 0;
   gap: 3rem;
   flex-direction: column;
   align-items: center;
   padding-bottom: 20.7rem;
+
+  @include media-big-tablet {
+    padding: 10rem 0;
+  }
+
+  @include media-mobile {
+    padding: 5rem 0;
+    gap: 1rem;
+  }
 }
 
 .img {
   height: auto;
   width: max-content;
   min-width: 0;
+
+  @include media-mobile {
+    display: none;
+  }
+}
+
+.imgSmall {
+  display: none;
+
+  @include media-mobile {
+    display: block;
+    width: 100%;
+    max-width: max-content;
+    max-width: 18rem;
+  }
 }
 
 .teamWrapper {
@@ -41,6 +78,14 @@
   flex-direction: column;
   width: 100%;
   align-items: flex-start;
+
+  @include media-big-tablet {
+    gap: 5rem;
+  }
+
+  @include media-mobile {
+    gap: 3rem;
+  }
 }
 
 .teamMember {
@@ -49,6 +94,15 @@
   align-items: center;
   gap: 5rem;
   padding: 4rem 3.7rem 4rem 5rem;
+
+  @include media-mobile {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  @include media-mobile-s {
+    flex-direction: column;
+  }
 }
 
 .memberData {
@@ -59,6 +113,18 @@
   gap: 1rem;
 }
 
+.memberHeaderName {
+  @include media-mobile {
+    min-width: 13.59rem;
+  }
+
+  @include media-mobile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
 .featureList {
   padding-top: 1rem;
   display: flex;
@@ -67,8 +133,26 @@
   gap: 1rem;
 }
 
+.memberHeader {
+  @include media-mobile {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    align-items: center;
+    gap: 2rem;
+  }
+  @include media-mobile-xs {
+    gap: 1rem;
+  }
+}
+
 .teamMember:nth-child(2) {
   align-self: flex-end;
+
+  @include media-mobile {
+    align-self: auto;
+  }
 }
 
 .teamMember:nth-child(2) .img {
@@ -86,6 +170,11 @@
   align-items: center;
   gap: 0.5rem;
   padding-bottom: 1rem;
+
+  @include media-mobile {
+    line-height: 2.3rem;
+    padding-bottom: 0.5rem;
+  }
 }
 
 .memberRole {
@@ -113,10 +202,4 @@
   display: flex;
   justify-content: center;
   line-height: 1.4rem;
-}
-
-@include media-big-tablet {
-  .mainContent {
-    flex-wrap: wrap;
-  }
 }

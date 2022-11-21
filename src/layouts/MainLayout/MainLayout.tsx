@@ -74,11 +74,9 @@ const MainLayout = ({ children }: Props) => {
       <ToastContainer autoClose={TOASTER.time} />
 
       <div className={styles.container}>
+        <Loader status={pending} />
         <Header />
-        <main className={styles.main}>
-          <Loader status={pending} />
-          {children}
-        </main>
+        <main className={styles.main}>{children}</main>
         <Footer />
       </div>
     </>

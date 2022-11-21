@@ -14,12 +14,13 @@ import {
   modalColumnIdSelector,
   resetModal,
   setModalOpen,
+  taskIdSelector,
   userDescriptionSelector,
   userTitleSelector,
 } from 'store/modalSlice';
 import { useTranslation } from 'react-i18next';
 import Column from './column/Column';
-import { thunkCreateTasks } from 'store/middleware/tasks';
+import { thunkCreateTasks, thunkDeleteTasks } from 'store/middleware/tasks';
 
 /* ToDo
 - оттестировать ошибки errors
@@ -40,6 +41,7 @@ const Board = () => {
   const userInputTitle = useAppSelector(userTitleSelector);
   const userInputDescr = useAppSelector(userDescriptionSelector);
   const user = useAppSelector(userSelector);
+  const selectedTask = useAppSelector(taskIdSelector);
 
   useEffect(() => {
     dispatch(thunkGetSingleBoard(`${id}`));
@@ -68,7 +70,6 @@ const Board = () => {
     }
 
     if (modalAction === ModalAction.TASK_CREATE) {
-      console.log('dispatch', user, Number(user._id));
       const newDescr = JSON.stringify({ description: userInputDescr, color: '' });
       dispatch(
         thunkCreateTasks({
@@ -93,7 +94,28 @@ const Board = () => {
       );
       dispatch(resetModal());
     }
-  }, [modalAction, columns, dispatch, id, userInputTitle, user, userInputDescr, modalColumnId]);
+
+    if (modalAction === ModalAction.TASK_DELETE && selectedTask) {
+      dispatch(
+        thunkDeleteTasks({
+          boardId: `${id}`,
+          columnId: modalColumnId,
+          taskId: selectedTask._id,
+        })
+      );
+      dispatch(resetModal());
+    }
+  }, [
+    modalAction,
+    columns,
+    dispatch,
+    id,
+    userInputTitle,
+    user,
+    userInputDescr,
+    modalColumnId,
+    selectedTask,
+  ]);
 
   const createColumn = () => {
     dispatch(
@@ -112,7 +134,11 @@ const Board = () => {
       <section className={styles.wrapper}>
         <div className={styles.mainContent}>
           <h2 className={styles.title}>
-            {title.title} <span className={styles.description}>({title.descr})</span>
+            {title.title !== '' && (
+              <>
+                {title.title} <span className={styles.description}>({title.descr})</span>
+              </>
+            )}
           </h2>
           <ul className={styles.columnsList}>
             {[...columns]

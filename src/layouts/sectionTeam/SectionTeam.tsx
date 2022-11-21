@@ -21,10 +21,19 @@ const SectionTeam = () => {
               <div className={styles.teamMember} key={dev.name}>
                 <img className={styles.img} src={dev.imgLink[`${dev.ghNick}`]} alt={dev.name} />
                 <div className={styles.memberData}>
-                  <div className={styles.memberName}>
-                    {dev.name} <Icon color="" size={20} icon="github" className={styles.icon} />
+                  <div className={styles.memberHeader}>
+                    <img
+                      className={`${styles.img} ${styles.imgSmall}`}
+                      src={dev.imgLink[`${dev.ghNick}`]}
+                      alt={dev.name}
+                    />
+                    <div className={styles.memberHeaderName}>
+                      <div className={styles.memberName}>
+                        {dev.name} <Icon color="" size={20} icon="github" className={styles.icon} />
+                      </div>
+                      <div className={styles.memberRole}>{dev.role}</div>
+                    </div>
                   </div>
-                  <div className={styles.memberRole}>{dev.role}</div>
                   <div className={styles.featureList}>
                     <div className={styles.featureItem}>
                       <span className={styles.dot}>&#8226;</span>
