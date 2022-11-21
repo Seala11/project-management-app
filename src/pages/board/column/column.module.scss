@@ -88,7 +88,9 @@
 
 .titleName {
   width: 100%;
-  line-height: 4.4rem;
+  line-height: 2.5rem;
+  overflow: hidden;
+  overflow-wrap: break-word;
 }
 
 .tasksList {

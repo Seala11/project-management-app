@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { ColumnType, TaskParsedType } from 'store/boardSlice';
 import styles from './column.module.scss';
@@ -40,9 +40,40 @@ const Column = (props: Props) => {
     mode: 'onChange',
   });
 
+  const formEdit = useRef<HTMLFormElement>(null);
+  const columnTitle = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     dispatch(thunkGetAllTasks({ boardId: column.boardId, columnId: column._id }));
   }, [column.boardId, column._id, dispatch]);
+
+  const onSubmitEdit: SubmitHandler<IFormInputs> = (data) => {
+    dispatch(
+      thunkUpdateTitleColumn({
+        boardId: column.boardId,
+        columnId: column._id,
+        order: column.order,
+        title: data.input,
+      })
+    ).then(() => setIsEditable(false));
+  };
+
+  /* useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      console.log(formEdit.current && formEdit.current.contains(e.target as HTMLElement));
+      if (
+        !isEditable ||
+        (formEdit.current && formEdit.current.contains(e.target as HTMLElement)) ||
+        (columnTitle.current && columnTitle.current.contains(e.target as HTMLElement))
+      ) {
+        return;
+      }
+      console.log('win');
+      handleSubmit(onSubmitEdit)();
+    };
+    document.addEventListener('click', onClick);
+    return () => document.removeEventListener('click', onClick);
+  }, [isEditable, reset, handleSubmit]);*/
 
   const deleteColumn = (title: string) => {
     dispatch(setModalColumnId(column._id));
@@ -76,30 +107,18 @@ const Column = (props: Props) => {
     dispatch(setTaskModalOpen());
   };
 
-  const onSubmitEdit: SubmitHandler<IFormInputs> = (data) => {
-    const newName = data.input;
-    console.log(newName);
-    dispatch(
-      thunkUpdateTitleColumn({
-        boardId: column.boardId,
-        columnId: column._id,
-        order: column.order,
-        title: data.input,
-      })
-    ).then(() => setIsEditable(false));
-  };
-
   return (
     <>
       <li data-key={column._id} className={styles.columnItem}>
         {isEditable ? (
-          <form className={styles.form} onSubmit={handleSubmit(onSubmitEdit)}>
+          <form ref={formEdit} className={styles.form} onSubmit={handleSubmit(onSubmitEdit)}>
             <input
               autoFocus
               type="text"
               {...register('input', {
                 value: column.title,
-                required: 'cannot be empty',
+                required: `${t('COLUMN.REQ_ER')}`,
+                maxLength: { value: 25, message: `${t('COLUMN.MAX_ER')}` },
               })}
               className={`${styles.input} ${errors.input ? styles.error : ''}`}
             />
@@ -122,7 +141,7 @@ const Column = (props: Props) => {
             <span className={styles.formError}>{errors.input && errors.input.message}</span>
           </form>
         ) : (
-          <div className={styles.columnTitle}>
+          <div ref={columnTitle} className={styles.columnTitle}>
             <div className={styles.titleName} onClick={() => setIsEditable(true)}>
               {column.title}
             </div>
