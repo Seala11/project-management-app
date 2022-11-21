@@ -1,10 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { MouseEventHandler, useEffect, useRef, useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import { authSelector, thunkDeleteUser, thunkSignUp, thunkUpdateUser } from 'store/authSlice';
+import { authSelector, thunkDeleteUser, thunkUpdateUser } from 'store/authSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import signImage from 'assets/images/login.png';
+import { useForm } from 'react-hook-form';
 import { Signup } from 'api/types';
 import { useTranslation } from 'react-i18next';
 import Icon from 'components/Icon/Icon';
@@ -16,7 +13,6 @@ import {
   BtnColor,
   ModalAction,
   resetModal,
-  setModalAction,
   setModalOpen,
   stateModalSelector,
 } from 'store/modalSlice';
@@ -104,7 +100,7 @@ const Settings = () => {
   const handleDeleteProfile = () => {
     dispatch(
       setModalOpen({
-        message: t('MODAL.DELETE_MSG'),
+        message: `${t('MODAL.DELETE_MSG')} ${t('MODAL.PROFILE')}`,
         color: BtnColor.RED,
         btnText: t('MODAL.DELETE'),
         action: ModalAction.DELETE_USER_PROFILE,
@@ -126,8 +122,7 @@ const Settings = () => {
     onChange: (e) => clearErrors(e.target.name),
   });
 
-  const showPassword: MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.preventDefault();
+  const showPassword: MouseEventHandler<HTMLButtonElement> = () => {
     if (passwordField?.current) {
       if (passwordField?.current.getAttribute('type') === 'text') {
         setIsShowText(false);
@@ -199,11 +194,11 @@ const Settings = () => {
                   placeholder="******"
                 />
                 {isShowText ? (
-                  <button className={styles.button} onClick={(e) => showPassword(e)}>
+                  <button type="button" className={styles.button} onClick={(e) => showPassword(e)}>
                     <Icon icon="eye-slashed" size="24" color="#9a9a9a" />
                   </button>
                 ) : (
-                  <button className={styles.button} onClick={(e) => showPassword(e)}>
+                  <button type="button" className={styles.button} onClick={(e) => showPassword(e)}>
                     <Icon icon="eye-open" size="24" color="#9a9a9a" />
                   </button>
                 )}
@@ -225,7 +220,7 @@ const Settings = () => {
               {userEdit ? t('MODAL.SAVE') : t('SETTINGS.EDIT')}
             </button>
             <button className={styles.btnDelete} onClick={handleDeleteProfile}>
-              delete profile
+              {t('MODAL.DELETE')}
             </button>
           </div>
           <div className={styles.imageBlock}>
