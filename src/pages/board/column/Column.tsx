@@ -15,6 +15,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { thunkGetAllTasks } from 'store/middleware/tasks';
 import { thunkUpdateTitleColumn } from 'store/middleware/columns';
+import { Draggable /*, Droppable*/ } from 'react-beautiful-dnd';
 
 type Props = {
   columnData: ColumnType;
@@ -108,69 +109,77 @@ const Column = (props: Props) => {
   };
 
   return (
-    <>
-      <li data-key={column._id} className={styles.columnItem}>
-        {isEditable ? (
-          <form ref={formEdit} className={styles.form} onSubmit={handleSubmit(onSubmitEdit)}>
-            <input
-              autoFocus
-              type="text"
-              {...register('input', {
-                value: column.title,
-                required: 'REQ_ER',
-                maxLength: { value: 25, message: 'MAX_ER' },
-              })}
-              className={`${styles.input} ${errors.input ? styles.error : ''}`}
-            />
-            <button
-              className={`${styles.buttonEdit} ${styles.submit}`}
-              type="submit"
-              disabled={!(Object.keys(errors).length === 0)}
-            >
-              <Icon color="#0047FF" size={100} icon="done" className={styles.icon} />
-            </button>
-            <button
-              className={styles.buttonEdit}
-              onClick={() => {
-                reset();
-                setIsEditable(false);
-              }}
-            >
-              <Icon color="#CC0707" size={100} icon="cancel" className={styles.icon} />
-            </button>
-            <span className={styles.formError}>
-              {errors.input && t(`COLUMN.${errors.input.message}`)}
-            </span>
-          </form>
-        ) : (
-          <div ref={columnTitle} className={styles.columnTitle}>
-            <div className={styles.titleName} onClick={() => setIsEditable(true)}>
-              {column.title}
-            </div>
-            <button className={styles.button} onClick={() => deleteColumn(column.title)}>
-              <Icon color="#CC0707" size={100} icon="trash" className={styles.icon} />
-            </button>
-          </div>
-        )}
-        <hr className={styles.columnLine}></hr>
-        <ul className={styles.tasksList}>
-          {tasks[column._id] &&
-            tasks[column._id].map((task) => (
-              <li
-                className={styles.taskItem}
-                key={task._id}
-                onClick={() => openTaskModal(task, column._id)}
+    <Draggable draggableId={column._id} index={column.order}>
+      {(provided) => (
+        <li
+          data-key={column._id}
+          className={styles.columnItem}
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+        >
+          {isEditable ? (
+            <form ref={formEdit} className={styles.form} onSubmit={handleSubmit(onSubmitEdit)}>
+              <input
+                autoFocus
+                type="text"
+                {...register('input', {
+                  value: column.title,
+                  required: 'REQ_ER',
+                  maxLength: { value: 25, message: 'MAX_ER' },
+                })}
+                className={`${styles.input} ${errors.input ? styles.error : ''}`}
+              />
+              <button
+                className={`${styles.buttonEdit} ${styles.submit}`}
+                type="submit"
+                disabled={!(Object.keys(errors).length === 0)}
               >
-                <div className={styles.taskTitle}>{task.title}</div>
-              </li>
-            ))}
-        </ul>
-        <div className={`${styles.taskButton} ${styles.addButton}`} onClick={createTask}>
-          {t('BOARD.CREATE_TASK_BUTTON')}
-          <Icon color="#0047FF" size={100} icon="add" className={styles.icon} />
-        </div>
-      </li>
-    </>
+                <Icon color="#0047FF" size={100} icon="done" className={styles.icon} />
+              </button>
+              <button
+                className={styles.buttonEdit}
+                onClick={() => {
+                  reset();
+                  setIsEditable(false);
+                }}
+              >
+                <Icon color="#CC0707" size={100} icon="cancel" className={styles.icon} />
+              </button>
+              <span className={styles.formError}>
+                {errors.input && t(`COLUMN.${errors.input.message}`)}
+              </span>
+            </form>
+          ) : (
+            <div ref={columnTitle} className={styles.columnTitle}>
+              <div className={styles.titleName} onClick={() => setIsEditable(true)}>
+                {column.title}
+              </div>
+              <button className={styles.button} onClick={() => deleteColumn(column.title)}>
+                <Icon color="#CC0707" size={100} icon="trash" className={styles.icon} />
+              </button>
+            </div>
+          )}
+          <hr className={styles.columnLine}></hr>
+          <ul className={styles.tasksList}>
+            {tasks[column._id] &&
+              tasks[column._id].map((task) => (
+                <li
+                  className={styles.taskItem}
+                  key={task._id}
+                  onClick={() => openTaskModal(task, column._id)}
+                >
+                  <div className={styles.taskTitle}>{task.title}</div>
+                </li>
+              ))}
+          </ul>
+          <div className={`${styles.taskButton} ${styles.addButton}`} onClick={createTask}>
+            {t('BOARD.CREATE_TASK_BUTTON')}
+            <Icon color="#0047FF" size={100} icon="add" className={styles.icon} />
+          </div>
+        </li>
+      )}
+    </Draggable>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { thunkGetSingleBoard } from 'store/boardSlice';
 import styles from './board.module.scss';
@@ -21,6 +21,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import Column from './column/Column';
 import { thunkCreateTasks, thunkDeleteTasks } from 'store/middleware/tasks';
+import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 
 /* ToDo
 - оттестировать ошибки errors
@@ -130,6 +131,23 @@ const Board = () => {
     );
   };
 
+  /* const onBeforeCapture = useCallback(() => {
+
+  }, []);
+  const onBeforeDragStart = useCallback(() => {
+
+  }, []);
+  const onDragStart = useCallback(() => {
+
+  }, []);
+  const onDragUpdate = useCallback(() => {
+
+  }, []);*/
+
+  const onDragEnd = useCallback((result: DropResult) => {
+    console.log(result);
+  }, []);
+
   return (
     <>
       <section className={styles.wrapper}>
@@ -141,17 +159,31 @@ const Board = () => {
               </>
             )}
           </h2>
-          <ul className={styles.columnsList}>
-            {[...columns]
-              .sort((a, b) => a.order - b.order)
-              .map((column) => (
-                <Column key={column._id} columnData={column} />
-              ))}
-            <li className={`${styles.columnButton} ${styles.addButton}`} onClick={createColumn}>
-              {t('BOARD.CREATE_COLUMN_BUTTON')}
-              <Icon color="#0047FF" size={100} icon="add" className={styles.icon} />
-            </li>
-          </ul>
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="board" direction={'horizontal'} mode={'standard'}>
+              {(provided) => (
+                <ul
+                  className={styles.columnsList}
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                >
+                  {[...columns]
+                    .sort((a, b) => a.order - b.order)
+                    .map((column) => (
+                      <Column key={column._id} columnData={column} />
+                    ))}
+                  {provided.placeholder}
+                  <li
+                    className={`${styles.columnButton} ${styles.addButton}`}
+                    onClick={createColumn}
+                  >
+                    {t('BOARD.CREATE_COLUMN_BUTTON')}
+                    <Icon color="#0047FF" size={100} icon="add" className={styles.icon} />
+                  </li>
+                </ul>
+              )}
+            </Droppable>
+          </DragDropContext>
         </div>
       </section>
     </>
