@@ -96,9 +96,11 @@ h1 {
 
 .btnSave {
   @extend %btnBlue;
+  flex: 1 0 auto;
 }
 
 .buttonBlock {
   display: flex;
   column-gap: 2rem;
+  width: 100%;
 }
