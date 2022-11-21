@@ -117,8 +117,8 @@ const Column = (props: Props) => {
               type="text"
               {...register('input', {
                 value: column.title,
-                required: `${t('COLUMN.REQ_ER')}`,
-                maxLength: { value: 25, message: `${t('COLUMN.MAX_ER')}` },
+                required: 'REQ_ER',
+                maxLength: { value: 25, message: 'MAX_ER' },
               })}
               className={`${styles.input} ${errors.input ? styles.error : ''}`}
             />
@@ -138,7 +138,9 @@ const Column = (props: Props) => {
             >
               <Icon color="#CC0707" size={100} icon="cancel" className={styles.icon} />
             </button>
-            <span className={styles.formError}>{errors.input && errors.input.message}</span>
+            <span className={styles.formError}>
+              {errors.input && t(`COLUMN.${errors.input.message}`)}
+            </span>
           </form>
         ) : (
           <div ref={columnTitle} className={styles.columnTitle}>
