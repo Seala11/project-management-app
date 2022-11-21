@@ -24,7 +24,7 @@ const Settings = () => {
   const passwordField = useRef<HTMLInputElement | null>(null);
   const [isShowText, setIsShowText] = useState(false);
   const { modalAction } = useAppSelector(stateModalSelector);
-  const [userEdit, setUserEdit] = useState(false);
+  // const [userEdit, setUserEdit] = useState(false);
 
   const {
     register,
@@ -32,7 +32,7 @@ const Settings = () => {
     trigger,
     clearErrors,
     setValue,
-    reset,
+    // reset,
     formState: { errors },
   } = useForm<Signup>({
     reValidateMode: 'onSubmit',
@@ -45,28 +45,28 @@ const Settings = () => {
   }, [user.name, user.login, setValue]);
 
   const handleSaveNewProfile: React.MouseEventHandler<HTMLButtonElement> = async () => {
-    if (!userEdit) {
+    // if (!userEdit) {
+    // dispatch(
+    //   setModalOpen({
+    //     message: t('SETTINGS.EDIT_MODAL_TEXT'),
+    //     color: BtnColor.BLUE,
+    //     btnText: t('MODAL.OK'),
+    //     action: ModalAction.EDIT_USER_PROFILE,
+    //   })
+    // );
+    // } else {
+    const res = await trigger();
+    if (res) {
       dispatch(
         setModalOpen({
-          message: t('SETTINGS.EDIT_MODAL_TEXT'),
+          message: t('SETTINGS.SAVE_MODAL_TEXT'),
           color: BtnColor.BLUE,
-          btnText: t('MODAL.OK'),
-          action: ModalAction.EDIT_USER_PROFILE,
+          btnText: t('MODAL.SAVE'),
+          action: ModalAction.SAVE_USER_PROFILE,
         })
       );
-    } else {
-      const res = await trigger();
-      if (res) {
-        dispatch(
-          setModalOpen({
-            message: t('SETTINGS.SAVE_MODAL_TEXT'),
-            color: BtnColor.BLUE,
-            btnText: t('MODAL.SAVE'),
-            action: ModalAction.SAVE_USER_PROFILE,
-          })
-        );
-      }
     }
+    // }
   };
 
   useEffect(() => {
@@ -74,7 +74,7 @@ const Settings = () => {
     const { id } = parseJwt(token);
     switch (modalAction) {
       case ModalAction.EDIT_USER_PROFILE:
-        setUserEdit(true);
+        // setUserEdit(true);
         dispatch(resetModal());
         break;
 
@@ -82,11 +82,12 @@ const Settings = () => {
         dispatch(resetModal());
         const userData = getValues();
         const user = Object.assign(userData, { _id: id });
-        dispatch(thunkUpdateUser({ user, token })).then(() => setUserEdit(false));
+        dispatch(thunkUpdateUser({ user, token }));
+        // .then(() => setUserEdit(false));
         break;
 
       case ModalAction.DELETE_USER_PROFILE:
-        setUserEdit(false);
+        // setUserEdit(false);
         dispatch(resetModal());
         dispatch(thunkDeleteUser({ id, token }));
         break;
@@ -108,12 +109,12 @@ const Settings = () => {
     );
   };
 
-  const handlerCancelSave: React.MouseEventHandler<HTMLButtonElement> = () => {
-    setUserEdit(false);
-    reset();
-    setValue('name', user.name);
-    setValue('login', user.login);
-  };
+  // const handlerCancelSave: React.MouseEventHandler<HTMLButtonElement> = () => {
+  //   // setUserEdit(false);
+  //   reset();
+  //   setValue('name', user.name);
+  //   setValue('login', user.login);
+  // };
 
   const { ref, ...rest } = register('password', {
     required: { value: true, message: 'PASSWORD_LENGTH' },
@@ -152,7 +153,6 @@ const Settings = () => {
                 })}
                 className={errors.name && styles.inputError}
                 autoComplete="off"
-                disabled={!userEdit}
               />
               {errors.name && (
                 <span className={styles.fieldError}>{t(`AUTH.${errors.name.message}`)}</span>
@@ -170,7 +170,6 @@ const Settings = () => {
                 })}
                 className={errors.login && styles.inputError}
                 autoComplete="off"
-                disabled={!userEdit}
               />
               {errors.login && (
                 <span className={styles.fieldError}>{t(`AUTH.${errors.login.message}`)}</span>
@@ -190,7 +189,6 @@ const Settings = () => {
                   }}
                   className={errors.password && styles.inputError}
                   autoComplete="off"
-                  disabled={!userEdit}
                   placeholder="******"
                 />
                 {isShowText ? (
@@ -208,19 +206,22 @@ const Settings = () => {
               )}
             </div>
           </form>
-          {userEdit ? (
+
+          {/* {userEdit ? (
             <button className={styles.btnCancelSave} onClick={handlerCancelSave}>
               {t('MODAL.CANCEL')}
             </button>
-          ) : null}
+          ) : null} */}
         </div>
         <div className={styles.rightBlock}>
           <div className={styles.buttonBlock}>
             <button className={styles.btnSave} onClick={handleSaveNewProfile}>
-              {userEdit ? t('MODAL.SAVE') : t('SETTINGS.EDIT')}
+              {/* {userEdit ? */}
+              {t('MODAL.SAVE')}
+              {/* : t('SETTINGS.EDIT')} */}
             </button>
             <button className={styles.btnDelete} onClick={handleDeleteProfile}>
-              {t('MODAL.DELETE')}
+              {t('SETTINGS.DELETE_ACCOUNT')}
             </button>
           </div>
           <div className={styles.imageBlock}>
