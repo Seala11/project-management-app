@@ -97,11 +97,10 @@ const Column = (props: Props) => {
               type="text"
               {...register('input', {
                 value: column.title,
-                required: 'Cannot be empty',
+                required: 'cannot be empty',
               })}
               className={`${styles.input} ${errors.input ? styles.error : ''}`}
             />
-            <span className={styles.formError}>{errors.input && errors.input.message}</span>
             <button
               className={`${styles.buttonEdit} ${styles.submit}`}
               type="submit"
@@ -118,6 +117,7 @@ const Column = (props: Props) => {
             >
               <Icon color="#CC0707" size={100} icon="cancel" className={styles.icon} />
             </button>
+            <span className={styles.formError}>{errors.input && errors.input.message}</span>
           </form>
         ) : (
           <div className={styles.columnTitle}>

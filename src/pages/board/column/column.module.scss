@@ -42,17 +42,38 @@
 .form {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  position: relative;
+}
+
+.formError {
+  width: 100%;
+  color: var(--error);
+  font-size: 1.2rem;
+  position: absolute;
+  bottom: -0.8rem;
+  left: 0.5rem;
 }
 
 .input {
   max-width: 70%;
-  margin: 0.4rem 0.5rem 0.4rem 0rem;
+  margin: 0.6rem 0.5rem 0.6rem 0rem;
   border: 0.1rem solid var(--border);
   box-shadow: 0 0.3rem 1.6rem 0.1rem var(--card);
   border-radius: 0.8rem;
   font-size: 2rem;
   line-height: 2.4rem;
-  padding: 0.5rem 1rem;
+  padding: 0.3rem 1rem;
+}
+
+.input:focus {
+  outline-width: 0;
+  border: 0.1rem solid var(--black);
+}
+
+.input.error {
+  border: 0.1rem solid var(--error);
 }
 
 .columnItem {
