@@ -208,19 +208,21 @@ const Settings = () => {
               )}
             </div>
           </form>
-          {userEdit ? (
-            <button className={styles.btnCancelSave} onClick={handlerCancelSave}>
-              {t('MODAL.CANCEL')}
-            </button>
-          ) : null}
-        </div>
-        <div className={styles.rightBlock}>
           <div className={styles.buttonBlock}>
             <button className={styles.btnSave} onClick={handleSaveNewProfile}>
               {userEdit ? t('MODAL.SAVE') : t('SETTINGS.EDIT')}
             </button>
+            {userEdit ? (
+              <button className={styles.btnCancelSave} onClick={handlerCancelSave}>
+                {t('MODAL.CANCEL')}
+              </button>
+            ) : null}
+          </div>
+        </div>
+        <div className={styles.rightBlock}>
+          <div className={styles.buttonBlockRight}>
             <button className={styles.btnDelete} onClick={handleDeleteProfile}>
-              {t('MODAL.DELETE')}
+              {t('SETTINGS.DELETE_ACCOUNT')}
             </button>
           </div>
           <div className={styles.imageBlock}>

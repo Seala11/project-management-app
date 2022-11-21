@@ -72,13 +72,13 @@ h1 {
   align-items: flex-end;
   row-gap: 8rem;
 
-  & .buttonBlock {
-    display: flex;
-    column-gap: 2rem;
+  & .buttonBlockRight {
+    // display: flex;
+    // column-gap: 2rem;
 
-    .btnSave {
-      @extend %btnBlue;
-    }
+    // .btnSave {
+    //   @extend %btnBlue;
+    // }
 
     .btnDelete {
       @extend %btnRed;
@@ -92,4 +92,13 @@ h1 {
 
 .btnCancelSave {
   @extend %btnGray;
+}
+
+.btnSave {
+  @extend %btnBlue;
+}
+
+.buttonBlock {
+  display: flex;
+  column-gap: 2rem;
 }
