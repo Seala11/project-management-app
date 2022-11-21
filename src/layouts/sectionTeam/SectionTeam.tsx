@@ -29,25 +29,22 @@ const SectionTeam = () => {
                     />
                     <div className={styles.memberHeaderName}>
                       <div className={styles.memberName}>
-                        {dev.name} <Icon color="" size={20} icon="github" className={styles.icon} />
+                        {dev.name}
+                        <a target="_blank" rel="noreferrer" href={dev.ghLink}>
+                          <Icon color="" size={20} icon="github" className={styles.icon} />
+                        </a>
                       </div>
                       <div className={styles.memberRole}>{dev.role}</div>
                     </div>
                   </div>
-                  <div className={styles.featureList}>
-                    <div className={styles.featureItem}>
-                      <span className={styles.dot}>&#8226;</span>
-                      <div>{dev.features.first}</div>
-                    </div>
-                    <div className={styles.featureItem}>
-                      <span className={styles.dot}>&#8226;</span>
-                      <div>{dev.features.second}</div>
-                    </div>
-                    <div className={styles.featureItem}>
-                      <span className={styles.dot}>&#8226;</span>
-                      <div>{dev.features.third}</div>
-                    </div>
-                  </div>
+                  <ul className={styles.featureList}>
+                    {dev.features.map((item, i) => (
+                      <li key={dev.name + i} className={styles.featureItem}>
+                        <span className={styles.dot}>&#8226;</span>
+                        <div>{item}</div>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             ))}

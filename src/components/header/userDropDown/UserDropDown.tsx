@@ -40,16 +40,24 @@ const UserDropDown = () => {
 
   const toggling = useCallback(() => setIsOpen(!isOpen), [isOpen]);
 
+  function assertIsNode(e: EventTarget | null): asserts e is Node {
+    //from https://stackoverflow.com/questions/71193818/react-onclick-argument-of-type-eventtarget-is-not-assignable-to-parameter-of-t
+    if (!e || !('nodeType' in e)) {
+      throw new Error(`Node expected`);
+    }
+  }
+
   useEffect(() => {
-    const onClick = (e: MouseEvent) => {
+    const onClick = ({ target }: MouseEvent) => {
+      assertIsNode(target);
       if (
         !isOpen ||
         !menuList.current ||
         !menuHeader.current ||
-        menuHeader.current.contains(e.target as HTMLElement)
+        menuHeader.current.contains(target)
       )
         return;
-      if (!menuList.current.contains(e.target as HTMLElement)) {
+      if (!menuList.current.contains(target)) {
         toggling();
       }
     };
