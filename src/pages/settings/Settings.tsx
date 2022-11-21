@@ -210,7 +210,7 @@ const Settings = () => {
           </form>
           <div className={styles.buttonBlock}>
             <button className={styles.btnSave} onClick={handleSaveNewProfile}>
-              {userEdit ? t('MODAL.SAVE') : t('SETTINGS.EDIT')}
+              {userEdit ? t('SETTINGS.SAVE_CHANGES') : t('SETTINGS.EDIT')}
             </button>
             {userEdit ? (
               <button className={styles.btnCancelSave} onClick={handlerCancelSave}>
