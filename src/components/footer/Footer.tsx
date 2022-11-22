@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './footer.module.scss';
-import { useGetTeamData } from 'utils/TEAM';
+import { useGetTeamData } from 'utils/hooks/useGetTeamData';
 
 const Footer = () => {
   const teamData = useGetTeamData();

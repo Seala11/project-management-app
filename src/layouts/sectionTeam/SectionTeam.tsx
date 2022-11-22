@@ -1,14 +1,13 @@
 import React from 'react';
 import styles from './team.module.scss';
 import { useTranslation } from 'react-i18next';
-import { useGetTeamData } from 'utils/TEAM';
+import { useGetTeamData } from 'utils/hooks/useGetTeamData';
 import Icon from 'components/Icon/Icon';
 
 const SectionTeam = () => {
   const { t } = useTranslation();
   const teamData = useGetTeamData();
 
-  // TODO: refactor semantic tags in teamData map -> to ul instead of divs
   return (
     <section>
       <div className={styles.wrapper}>
