@@ -13,6 +13,7 @@ import { setToastMessage } from './appSlice';
 type Auth = {
   isLogged: boolean;
   user: Omit<User, 'password'>;
+  pending: boolean;
 };
 
 export const errorArray = [400, 401, 403, 404, 409];
@@ -26,6 +27,7 @@ const userInit: Omit<User, 'password'> = {
 const initialState: Auth = {
   isLogged: !!getTokenFromLS(),
   user: userInit,
+  pending: false,
   // toastMessage: null,
 };
 
@@ -159,27 +161,64 @@ export const authSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    builder.addCase(thunkGetUserById.fulfilled, (state, action) => {
-      state.user = action.payload;
-      state.isLogged = true;
-    });
+    // builder.addCase(thunkSignUp.fulfilled, () => {
 
-    builder.addCase(thunkGetUserById.rejected, (state, action) => {
-      removeTokenFromLS();
-    });
+    // toast.success('user is created');
+    // });
 
-    builder.addCase(thunkUpdateUser.rejected, (state, action) => {
-      // removeTokenFromLS();
-    });
+    // builder.addCase(thunkSignUp.rejected, (state, action) => {
 
-    builder.addCase(thunkDeleteUser.fulfilled, (state, action) => {
-      removeTokenFromLS();
-      state.isLogged = false;
-    });
+    // if (typeof action.payload === 'string') {
+    //   toast.error(action.payload);
+    // }
+    // });
+
+    // sign in
+
+    // builder.addCase(thunkSignIn.fulfilled, () => {
+    //   console.log('user is created');
+    // });
+
+    // builder.addCase(thunkSignIn.rejected, (state, action) => {
+    // console.log('rejected');
+    // if (typeof action.payload === 'string') {
+    //   toast.error(action.payload);
+    // }
+    // });
+
+    builder
+      .addCase(thunkGetUserById.fulfilled, (state, action) => {
+        state.user = action.payload;
+        // setUserToLS(action.payload);
+        state.isLogged = true;
+        // toast.success('User sign in successfully');
+        // state.toastMessage = '200';
+      })
+      .addCase(thunkGetUserById.rejected, (state, action) => {
+        // console.log('rejected');
+        // state.isLogged = false;
+        removeTokenFromLS();
+        // if (typeof action.payload === 'string') {
+        // state.toastMessage = action.payload;
+        // }
+      })
+      .addCase(thunkSignIn.fulfilled, (state) => {
+        state.pending = false;
+      })
+      .addCase(thunkSignIn.pending, (state) => {
+        state.pending = true;
+      })
+      .addCase(thunkSignUp.fulfilled, (state) => {
+        state.pending = false;
+      })
+      .addCase(thunkSignUp.pending, (state) => {
+        state.pending = true;
+      });
   },
 });
 
 export default authSlice.reducer;
 export const { setUser, setAuth } = authSlice.actions;
+export const authSelectorStatus = (state: RootState) => state.auth.pending;
 export const authSelector = (state: RootState) => state.auth;
 export const userSelector = (state: RootState) => state.auth.user;

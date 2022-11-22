@@ -98,6 +98,7 @@
   @include media-mobile {
     width: 100%;
     flex-direction: column;
+    padding: 2.5rem;
   }
 
   @include media-mobile-s {
@@ -110,7 +111,11 @@
   align-items: flex-start;
   flex-direction: column;
   max-width: 44.4rem;
-  gap: 1rem;
+  gap: 1.5rem;
+
+  @include media-mobile {
+    gap: 2.5rem;
+  }
 }
 
 .memberHeaderName {
@@ -131,6 +136,8 @@
   align-items: flex-start;
   flex-direction: column;
   gap: 1rem;
+  margin: 0;
+  padding: 0;
 }
 
 .memberHeader {
@@ -142,6 +149,7 @@
     align-items: center;
     gap: 2rem;
   }
+
   @include media-mobile-xs {
     gap: 1rem;
   }
@@ -169,7 +177,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding-bottom: 1rem;
+  padding-bottom: 1.5rem;
 
   @include media-mobile {
     line-height: 2.3rem;

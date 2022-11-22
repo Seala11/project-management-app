@@ -26,6 +26,7 @@ import { thunkCreateTasks, thunkDeleteTasks } from 'store/middleware/tasks';
 - оттестировать ошибки errors
 - logOut() ??
 - task component
+- colors for task
 */
 
 const Board = () => {
