@@ -131,6 +131,11 @@ const Board = () => {
     );
   };
 
+  const onDragEndColumns = (result: DropResult) => {
+    const { destination, source } = result;
+    console.log(destination, source);
+  };
+
   /* const onBeforeCapture = useCallback(() => {
 
   }, []);
@@ -145,7 +150,14 @@ const Board = () => {
   }, []);*/
 
   const onDragEnd = useCallback((result: DropResult) => {
-    console.log(result);
+    const { destination, source } = result;
+    if (
+      !destination ||
+      (destination.index === source.index && destination.droppableId === source.droppableId)
+    ) {
+      return;
+    }
+    onDragEndColumns(result);
   }, []);
 
   return (

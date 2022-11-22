@@ -29,43 +29,7 @@
   list-style: none;
   padding: 0;
   display: flex;
-  gap: 5rem;
   align-items: flex-start;
-}
-
-.columnTitle {
-  font-weight: 500;
-  font-size: 2rem;
-  line-height: 2.4rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.columnItem {
-  display: flex;
-  flex-direction: column;
-  max-height: calc(100vh - 32rem);
-  background-color: var(--primary-s);
-  width: 30rem;
-  padding: 2.5rem 2.5rem 1.6rem;
-  border-radius: 0.8rem;
-}
-
-.tasksList {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
-  overflow: hidden auto;
-  padding-right: 1.6rem;
-}
-
-.taskItem {
-  @extend %cardShadow;
-  width: 100%;
-  background: var(--white);
 }
 
 .addButton {
@@ -73,48 +37,7 @@
   width: 30rem;
 }
 
-.taskButton {
-  padding: 1.6rem;
-  width: 100%;
-  margin-top: 1.6rem;
-  background: transparent;
-
-  &:hover {
-    background: var(--primary-s);
-  }
-}
-
-.taskTitle {
-  font-weight: 400;
-  font-size: 1.6rem;
-  line-height: 1.9rem;
-  display: flex;
-  align-items: center;
-  padding: 1.6rem;
-}
-
 .icon {
   height: 2.4rem;
   width: 2.2rem;
-}
-
-.columnLine {
-  height: 0.6rem;
-  border-radius: 7.5rem;
-  background-color: var(--primary-m);
-  outline: none;
-  border: 0;
-  margin: 1.1rem 0 1.6rem 0;
-}
-
-.button {
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-  padding: 1rem;
-  border-radius: 100%;
-
-  &:hover {
-    background: var(--error-m);
-  }
 }
