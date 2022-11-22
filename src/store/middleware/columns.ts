@@ -15,7 +15,7 @@ export const thunkGetAllColumns = createAsyncThunk<ColumnType[], string, { rejec
       return rejectWithValue(`error code: ${resp?.statusCode} message: ${resp?.message}`);
     }
     const data: ColumnType[] = await response.json();
-    return data;
+    return data.sort((a, b) => a.order - b.order);
   }
 );
 
@@ -76,6 +76,27 @@ type UpdateColumnRequestType = {
   title: string;
   order: number;
 };
+
+export const thunkUpdateColumn = createAsyncThunk<
+  undefined,
+  UpdateColumnRequestType,
+  { rejectValue: string }
+>('column/updateColumn', async (data, { rejectWithValue }) => {
+  const token = getTokenFromLS();
+  const response = await fetch(`${BASE}/boards/${data.boardId}/columns/${data.columnId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ title: data.title, order: data.order }),
+  });
+
+  if (!response.ok) {
+    const resp = await response.json();
+    return rejectWithValue(`error code: ${resp?.statusCode} message: ${resp?.message}`);
+  }
+});
 
 export const thunkUpdateTitleColumn = createAsyncThunk<
   ColumnType,

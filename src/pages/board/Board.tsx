@@ -1,10 +1,15 @@
 import React, { useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { thunkGetSingleBoard } from 'store/boardSlice';
+import { thunkGetSingleBoard, updateColumnsOrder } from 'store/boardSlice';
 import styles from './board.module.scss';
 import { useAppSelector, useAppDispatch } from 'store/hooks';
 import ROUTES from 'utils/constants/ROUTES';
-import { thunkGetAllColumns, thunkCreateColumn, thunkDeleteColumn } from 'store/middleware/columns';
+import {
+  thunkGetAllColumns,
+  thunkCreateColumn,
+  thunkDeleteColumn,
+  thunkUpdateColumn,
+} from 'store/middleware/columns';
 import { setAuth, userSelector } from 'store/authSlice';
 import Icon from 'components/Icon/Icon';
 import {
@@ -131,10 +136,37 @@ const Board = () => {
     );
   };
 
-  const onDragEndColumns = (result: DropResult) => {
-    const { destination, source } = result;
-    console.log(destination, source);
-  };
+  const handleDragEndColumns = useCallback(
+    (result: DropResult) => {
+      const { destination, source } = result;
+      if (!destination) return;
+      const destinationOrder = columns[destination.index].order;
+      const dragSpanIndex = source.index - destination.index;
+      const newColumns = columns
+        .map((item, i) => {
+          if (i === source.index) return { ...item, order: destinationOrder };
+          else if (dragSpanIndex > 0 && i >= destination.index && i < source.index)
+            return { ...item, order: item.order + 1 };
+          else if (dragSpanIndex < 0 && i <= destination.index && i > source.index)
+            return { ...item, order: item.order - 1 };
+          return item;
+        })
+        .sort((a, b) => a.order - b.order);
+
+      dispatch(updateColumnsOrder(newColumns));
+      newColumns.forEach((column) => {
+        dispatch(
+          thunkUpdateColumn({
+            boardId: `${id}`,
+            columnId: column._id,
+            title: column.title,
+            order: column.order,
+          })
+        );
+      });
+    },
+    [columns, dispatch, id]
+  );
 
   /* const onBeforeCapture = useCallback(() => {
 
@@ -149,17 +181,19 @@ const Board = () => {
 
   }, []);*/
 
-  const onDragEnd = useCallback((result: DropResult) => {
-    const { destination, source } = result;
-    if (
-      !destination ||
-      (destination.index === source.index && destination.droppableId === source.droppableId)
-    ) {
-      return;
-    }
-    onDragEndColumns(result);
-  }, []);
-
+  const onDragEnd = useCallback(
+    (result: DropResult) => {
+      const { destination, source } = result;
+      if (
+        !destination ||
+        (destination.index === source.index && destination.droppableId === source.droppableId)
+      ) {
+        return;
+      }
+      handleDragEndColumns(result);
+    },
+    [handleDragEndColumns]
+  );
   return (
     <>
       <section className={styles.wrapper}>
@@ -171,31 +205,30 @@ const Board = () => {
               </>
             )}
           </h2>
-          <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="board" direction={'horizontal'} mode={'standard'}>
-              {(provided) => (
-                <ul
-                  className={styles.columnsList}
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                >
-                  {[...columns]
-                    .sort((a, b) => a.order - b.order)
-                    .map((column) => (
-                      <Column key={column._id} columnData={column} />
-                    ))}
-                  {provided.placeholder}
-                  <li
-                    className={`${styles.columnButton} ${styles.addButton}`}
-                    onClick={createColumn}
-                  >
-                    {t('BOARD.CREATE_COLUMN_BUTTON')}
-                    <Icon color="#0047FF" size={100} icon="add" className={styles.icon} />
-                  </li>
-                </ul>
-              )}
-            </Droppable>
-          </DragDropContext>
+          <div className={styles.columnsWrapper}>
+            {columns.length > 0 && (
+              <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="board" direction={'horizontal'} mode={'standard'}>
+                  {(provided) => (
+                    <ul
+                      className={styles.columnsList}
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                    >
+                      {[...columns].map((column) => (
+                        <Column key={column._id} columnData={column} />
+                      ))}
+                      {provided.placeholder}
+                    </ul>
+                  )}
+                </Droppable>
+              </DragDropContext>
+            )}
+            <div className={`${styles.columnButton} ${styles.addButton}`} onClick={createColumn}>
+              {t('BOARD.CREATE_COLUMN_BUTTON')}
+              <Icon color="#0047FF" size={100} icon="add" className={styles.icon} />
+            </div>
+          </div>
         </div>
       </section>
     </>
