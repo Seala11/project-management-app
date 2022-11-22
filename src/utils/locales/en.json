@@ -92,12 +92,14 @@
     "CREATE_TASK_BUTTON": "New task"
   },
   "TOAST": {
-    "Authorization error": "Authorization error",
+    "Authorization error": "Authorization error. Try it again",
     "Invalid token": "Authorization is required",
-    "Successeful login": "Welcome to app",
+    "Welcome to": "Welcome to app, ",
     "Bad Request": "Bad Request",
     "User was not founded!": "User was not founded!",
-    "Login already exist": "Login already exist"
+    "Login already exist": "Login already exist",
+    "New user is created": "New user is created",
+    "Server error": "Server error"
   },
   "SETTINGS": {
     "EDIT_MODAL_TEXT": "Would you like to edit your profile? You need to enter your password or create a new one",

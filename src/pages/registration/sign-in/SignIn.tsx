@@ -8,12 +8,14 @@ import signImage from 'assets/images/login.png';
 import { useTranslation } from 'react-i18next';
 import Icon from 'components/Icon/Icon';
 import styles from '../registration.module.scss';
+// import { toast } from 'react-toastify';
 
 const SignIn = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const passwordField = useRef<HTMLInputElement | null>(null);
   const [isShowText, setIsShowText] = useState(false);
+  // const { user } = useAppSelector(authSelector);
   const {
     register,
     handleSubmit,
@@ -30,6 +32,8 @@ const SignIn = () => {
 
   const onSubmit: SubmitHandler<Signin> = (data) => {
     dispatch(thunkSignIn(data));
+
+    // .then(() => toast.success(`${t('SIGNIN.200')}${data.name}`));
   };
 
   const showPassword: MouseEventHandler<HTMLButtonElement> = (e) => {

@@ -48,10 +48,11 @@ export const thunkCreateBoards = createAsyncThunk(
 
       if (!response.ok) {
         const err: { message: string; statusCode: number } = await response.json();
-        if (err.statusCode === 403) {
-          dispatch(setAuth(false));
-          dispatch(setToastMessage(String(err.statusCode)));
-        }
+        // if (err.statusCode === 403) {
+        dispatch(setAuth(false));
+        // dispatch(setToastMessage(String(err.statusCode)));
+        dispatch(setToastMessage({ error: true, text: err.message, arg: '' }));
+        // }
         throw new Error(err.message);
       }
 

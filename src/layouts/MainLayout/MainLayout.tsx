@@ -19,9 +19,10 @@ import TaskModal from 'layouts/Modal/TaskModal/TaskModal';
 import { singleBoardRequestStatus } from 'store/boardSlice';
 import Loader from 'components/loader/Loader';
 import { boardsLoadingSelector } from 'store/boardsSlice';
+import json from 'utils/locales/en.json';
 
 type Props = React.HTMLAttributes<HTMLDivElement>;
-
+// const arrError = ['Authorization error', 'Successeful login'];
 const MainLayout = ({ children }: Props) => {
   const modalIsOpen = useAppSelector(modalStatusSelector);
   const taskIsOpen = useAppSelector(taskStatusSelector);
@@ -35,10 +36,16 @@ const MainLayout = ({ children }: Props) => {
   const pending = boardState || boardsState || loading;
 
   useEffect(() => {
+    console.log(toastMessage);
+    const arr = Object.keys(json.TOAST);
     if (toastMessage) {
-      console.log(toastMessage);
-
-      toast(t(`TOAST.${toastMessage}`));
+      if (toastMessage.error) {
+        arr.includes(toastMessage.text)
+          ? toast.error(t(`TOAST.${toastMessage.text}`))
+          : toast.error(t('TOAST.Server error'));
+      } else {
+        toast.success(t(`TOAST.${toastMessage.text}`) + toastMessage.arg);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toastMessage]);

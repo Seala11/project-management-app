@@ -15,7 +15,7 @@ type Auth = {
   user: Omit<User, 'password'>;
 };
 
-export const errorArray = [400, 401, 403, 404, 409];
+// export const errorArray = [400, 401, 403, 404, 409];
 
 const userInit: Omit<User, 'password'> = {
   _id: '',
@@ -26,7 +26,6 @@ const userInit: Omit<User, 'password'> = {
 const initialState: Auth = {
   isLogged: !!getTokenFromLS(),
   user: userInit,
-  // toastMessage: null,
 };
 
 export const thunkSignUp = createAsyncThunk(
@@ -36,14 +35,15 @@ export const thunkSignUp = createAsyncThunk(
       const res = await fetchSignUp(options);
       if (!res.ok) {
         const err: { message: string; statusCode: number } = await res.json();
-        if (errorArray.includes(err.statusCode)) {
-          dispatch(setToastMessage(err.message));
-        }
+        // if (errorArray.includes(err.statusCode)) {
+        //   dispatch(setToastMessage(err.message));
+        // }
         throw new Error(err.message);
       }
-      const response: User = await res.json();
+      const response: Omit<User, 'password'> = await res.json();
       const login = options.login;
       const password = options.password;
+      dispatch(setToastMessage({ error: false, text: 'New user is created', arg: '' }));
       dispatch(thunkSignIn({ login, password }));
       return response;
     } catch (error) {
@@ -60,19 +60,22 @@ export const thunkSignIn = createAsyncThunk(
 
       if (!res.ok) {
         const err: { message: string; statusCode: number } = await res.json();
-        if (errorArray.includes(err.statusCode)) {
-          dispatch(setToastMessage(err.message));
-        }
+        // if (errorArray.includes(err.statusCode)) {
+        //   dispatch(setToastMessage({ error: true, text: err.statusCode }));
+        // }
         throw new Error(err.message);
       }
 
       const { token }: { token: string } = await res.json();
+
       setTokenToLS(token);
 
       const userId = parseJwt(token).id;
       dispatch(thunkGetUserById({ token, userId }));
       return token;
     } catch (error) {
+      const err = getErrorMessage(error);
+      dispatch(setToastMessage({ error: true, text: err }));
       return rejectWithValue(getErrorMessage(error));
     }
   }
@@ -86,18 +89,20 @@ export const thunkGetUserById = createAsyncThunk(
       if (!res.ok) {
         const err: { message: string; statusCode: number } = await res.json();
 
-        if (errorArray.includes(err.statusCode)) {
-          dispatch(setAuth(false));
-          dispatch(setToastMessage(err.message));
-        }
-
-        throw new Error(String(err.message));
+        // if (errorArray.includes(err.statusCode)) {
+        // dispatch(setToastMessage(err.message));
+        // }
+        dispatch(setAuth(false));
+        throw new Error(err.message);
       }
       const response: User = await res.json();
-      dispatch(setToastMessage('Successeful login'));
+      dispatch(setToastMessage({ error: false, text: `Welcome to`, arg: response.name }));
+      // dispatch(setToastMessage('Successeful login'));
       return response;
     } catch (error) {
-      return rejectWithValue(getErrorMessage(error));
+      const err = getErrorMessage(error);
+      dispatch(setToastMessage({ error: true, text: err }));
+      return rejectWithValue(err);
     }
   }
 );
@@ -109,9 +114,9 @@ export const thunkUpdateUser = createAsyncThunk(
       const res = await updateUser(user, token);
       if (!res.ok) {
         const err: { message: string; statusCode: number } = await res.json();
-        if (errorArray.includes(err.statusCode)) {
-          dispatch(setToastMessage(err.message));
-        }
+        // if (errorArray.includes(err.statusCode)) {
+        //   dispatch(setToastMessage(err.message));
+        // }
         throw new Error(err.message);
       }
       const response: Omit<User, 'password'> = await res.json();
@@ -132,9 +137,9 @@ export const thunkDeleteUser = createAsyncThunk(
       const res = await deleteUser(id, token);
       if (!res.ok) {
         const err: { message: string; statusCode: number } = await res.json();
-        if (errorArray.includes(err.statusCode)) {
-          dispatch(setToastMessage(err.message));
-        }
+        // if (errorArray.includes(err.statusCode)) {
+        //   dispatch(setToastMessage(err.message));
+        // }
         throw new Error(err.message);
       }
       const response: Omit<User, 'password'> = await res.json();

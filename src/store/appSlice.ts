@@ -9,7 +9,11 @@ export enum Lang {
 
 type AppState = {
   lang: Lang;
-  toastMessage: string | null;
+  toastMessage: {
+    error: boolean;
+    text: string;
+    arg: string;
+  } | null;
 };
 
 export const initialState: AppState = {
