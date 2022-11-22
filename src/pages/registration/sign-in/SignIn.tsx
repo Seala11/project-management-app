@@ -83,7 +83,7 @@ const SignIn = () => {
                   }}
                   className={errors.password && styles.inputError}
                   autoComplete="off"
-                  placeholder="****"
+                  placeholder="******"
                 />
                 {isShowText ? (
                   <button className={styles.button} onClick={(e) => showPassword(e)}>

@@ -4,7 +4,7 @@ import { fetchSignIn, fetchSignUp } from '../api/apiAuth';
 import { Signup, Signin, User } from '../api/types';
 import { RootState } from 'store';
 import { getTokenFromLS, removeTokenFromLS, setTokenToLS } from 'utils/func/localStorage';
-import { getUserById } from 'api/apiUsers';
+import { deleteUser, getUserById, updateUser } from 'api/apiUsers';
 import { parseJwt } from 'utils/func/parsejwt';
 import { toast } from 'react-toastify';
 import { getErrorMessage } from 'utils/func/handleError';
@@ -16,7 +16,7 @@ type Auth = {
   pending: boolean;
 };
 
-const errorArray = [400, 401, 403, 404, 409];
+export const errorArray = [400, 401, 403, 404, 409];
 
 const userInit: Omit<User, 'password'> = {
   _id: '',
@@ -97,6 +97,49 @@ export const thunkGetUserById = createAsyncThunk(
       }
       const response: User = await res.json();
       dispatch(setToastMessage('Successeful login'));
+      return response;
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
+
+export const thunkUpdateUser = createAsyncThunk(
+  'users/thunkUpdateUser',
+  async ({ user, token }: { user: User; token: string }, { rejectWithValue, dispatch }) => {
+    try {
+      const res = await updateUser(user, token);
+      if (!res.ok) {
+        const err: { message: string; statusCode: number } = await res.json();
+        if (errorArray.includes(err.statusCode)) {
+          dispatch(setToastMessage(err.message));
+        }
+        throw new Error(err.message);
+      }
+      const response: Omit<User, 'password'> = await res.json();
+      const login = user.login;
+      const password = user.password;
+      dispatch(thunkSignIn({ login, password }));
+      return response;
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error));
+    }
+  }
+);
+
+export const thunkDeleteUser = createAsyncThunk(
+  'users/thunkDeleteUser',
+  async ({ id, token }: { id: string; token: string }, { rejectWithValue, dispatch }) => {
+    try {
+      const res = await deleteUser(id, token);
+      if (!res.ok) {
+        const err: { message: string; statusCode: number } = await res.json();
+        if (errorArray.includes(err.statusCode)) {
+          dispatch(setToastMessage(err.message));
+        }
+        throw new Error(err.message);
+      }
+      const response: Omit<User, 'password'> = await res.json();
       return response;
     } catch (error) {
       return rejectWithValue(getErrorMessage(error));

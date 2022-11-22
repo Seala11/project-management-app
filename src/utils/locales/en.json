@@ -72,6 +72,8 @@
     "CANCEL": "Cancel",
     "CREATE": "Create",
     "CHANGE": "Change",
+    "SAVE": "Save",
+    "OK": "Ok",
     "TITLE": "Title",
     "DESCRIPTION": "Description",
     "REQUIRED": "This field is required",
@@ -80,7 +82,8 @@
     "IN_COLUMN": "In column",
     "MEMBERS": "Members",
     "LABEL": "Cover",
-    "DELETE_TASK": "Delete task"
+    "DELETE_TASK": "Delete task",
+    "PROFILE": "your profile?"
   },
   "BOARD": {
     "CREATE_COLUMN_TITLE": "Create new column",
@@ -99,5 +102,12 @@
     "Bad Request": "Bad Request",
     "User was not founded!": "User was not founded!",
     "Login already exist": "Login already exist"
+  },
+  "SETTINGS": {
+    "EDIT_MODAL_TEXT": "Would you like to edit your profile? You need to enter your password or create a new one",
+    "SAVE_MODAL_TEXT": "Would you like to save changes to your profile?",
+    "EDIT": "Edit",
+    "DELETE_ACCOUNT": "Delete account",
+    "SAVE_CHANGES": "Save changes"
   }
 }

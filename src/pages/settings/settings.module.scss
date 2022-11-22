@@ -2,10 +2,105 @@
 
 .wrapper {
   @extend %wrapper;
-  flex-grow: 1;
+  width: 100%;
 }
 
-.title {
+.settings {
+  display: flex;
+  justify-content: space-around;
+  .leftBlock {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.formSettings {
+  display: flex;
+  flex-direction: column;
+
+  & .formItem {
+    @extend %formItem;
+
+    & input {
+      @extend %input;
+
+      @include media-mobile-s {
+        width: 25rem;
+      }
+    }
+
+    & .fieldError {
+      @extend %fieldError;
+      top: 5.8rem;
+    }
+
+    @include media-mobile-s {
+      padding-bottom: 3.7rem;
+    }
+  }
+}
+
+h1 {
   @extend %title;
-  padding: 3rem 0 0;
+}
+
+.wrapperEye {
+  position: relative;
+
+  .button {
+    position: absolute;
+    right: 0.5rem;
+    top: calc(50% - 1.2rem);
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    border-radius: 100%;
+    &:hover {
+      background-color: transparent;
+    }
+  }
+}
+
+.rightBlock {
+  align-self: flex-end;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  row-gap: 8rem;
+
+  & .buttonBlockRight {
+    // display: flex;
+    // column-gap: 2rem;
+
+    // .btnSave {
+    //   @extend %btnBlue;
+    // }
+
+    .btnDelete {
+      @extend %btnRed;
+    }
+  }
+
+  & .imageBlock {
+    flex: 1 1 auto;
+  }
+}
+
+.btnCancelSave {
+  @extend %btnGray;
+}
+
+.btnSave {
+  @extend %btnBlue;
+  flex: 1 0 auto;
+}
+
+.buttonBlock {
+  display: flex;
+  column-gap: 2rem;
+  width: 100%;
 }
