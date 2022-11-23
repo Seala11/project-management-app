@@ -1,5 +1,5 @@
 import React, { MouseEventHandler, useRef, useState } from 'react';
-import { thunkSignIn } from 'store/authSlice';
+import { thunkGetUserById, thunkSignIn } from 'store/authSlice';
 import { useAppDispatch } from 'store/hooks';
 import { NavLink } from 'react-router-dom';
 import { Signin } from 'api/types';
@@ -8,6 +8,7 @@ import signImage from 'assets/images/login.png';
 import { useTranslation } from 'react-i18next';
 import Icon from 'components/Icon/Icon';
 import styles from '../registration.module.scss';
+import { toast } from 'react-toastify';
 
 const SignIn = () => {
   const { t } = useTranslation();
@@ -29,7 +30,16 @@ const SignIn = () => {
   });
 
   const onSubmit: SubmitHandler<Signin> = (data) => {
-    dispatch(thunkSignIn(data));
+    dispatch(thunkSignIn(data))
+      .unwrap()
+      .then((res) => {
+        toast.success(t(`TOAST.NEW_USER`));
+        dispatch(thunkGetUserById(res))
+          .unwrap()
+          .then((data) => toast.success(t(`TOAST.WELCOME`) + `${data.name}`))
+          .catch((err) => toast.error(t(`TOAST.${err}`)));
+      })
+      .catch((err) => toast.error(t(`TOAST.${err}`)));
   };
 
   const showPassword: MouseEventHandler<HTMLButtonElement> = (e) => {

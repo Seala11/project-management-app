@@ -60,10 +60,10 @@ export const thunkSignIn = createAsyncThunk(
 
       if (!res.ok) {
         const err: { message: string; statusCode: number } = await res.json();
-        if (errorArray.includes(err.statusCode)) {
-          dispatch(setToastMessage(err.message));
-        }
-        throw new Error(err.message);
+        // if (errorArray.includes(err.statusCode)) {
+        //   dispatch(setToastMessage(err.message));
+        // }
+        throw new Error(String(err.statusCode) + 'SIGNIN');
       }
 
       const { token }: { token: string } = await res.json();
@@ -71,8 +71,10 @@ export const thunkSignIn = createAsyncThunk(
 
       const userId = parseJwt(token).id;
       dispatch(thunkGetUserById({ token, userId }));
-      return token;
+      return { token, userId };
     } catch (error) {
+      console.log('catch in slice' + error);
+
       return rejectWithValue(getErrorMessage(error));
     }
   }
@@ -82,19 +84,19 @@ export const thunkGetUserById = createAsyncThunk(
   'auth/thunkGetUserById',
   async ({ userId, token }: { token: string; userId: string }, { rejectWithValue, dispatch }) => {
     try {
-      const res = await getUserById(userId, token);
+      const res = await getUserById('userId', token);
       if (!res.ok) {
         const err: { message: string; statusCode: number } = await res.json();
 
-        if (errorArray.includes(err.statusCode)) {
-          dispatch(setAuth(false));
-          dispatch(setToastMessage(err.message));
-        }
+        // if (errorArray.includes(err.statusCode)) {
 
+        // dispatch(setToastMessage(err.message));
+        // }
+        dispatch(setAuth(false));
         throw new Error(String(err.message));
       }
       const response: User = await res.json();
-      dispatch(setToastMessage('Successeful login'));
+      // dispatch(setToastMessage('Successeful login'));
       return response;
     } catch (error) {
       return rejectWithValue(getErrorMessage(error));
