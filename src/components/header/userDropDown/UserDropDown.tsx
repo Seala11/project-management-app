@@ -6,6 +6,7 @@ import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { authSelector, setAuth } from 'store/authSlice';
+import { BtnColor, ModalAction, setModalOpen } from 'store/modalSlice';
 
 const UserDropDown = () => {
   const { t } = useTranslation();
@@ -73,6 +74,19 @@ const UserDropDown = () => {
     if (currPage === value) return;
     if (value === `${t('MENU.SIGN_OUT')}`) {
       dispatch(setAuth(false));
+    }
+
+    if (value === `${t('MENU.NEW_BOARD')}`) {
+      dispatch(
+        setModalOpen({
+          title: `${t('BOARDS.CREATE')}`,
+          inputTitle: `${t('MODAL.TITLE')}`,
+          inputDescr: `${t('MODAL.DESCRIPTION')}`,
+          color: BtnColor.BLUE,
+          btnText: `${t('MODAL.CREATE')}`,
+          action: ModalAction.BOARD_CREATE,
+        })
+      );
     }
 
     toggling();
