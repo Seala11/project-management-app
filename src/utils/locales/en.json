@@ -99,7 +99,8 @@
     "Bad Request": "Bad Request",
     "User was not founded!": "User was not founded!",
     "Login already exist": "Login already exist",
-    "NEW_USER": "New user is created"
+    "NEW_USER": "New user is created",
+    "401SIGNIN": "Error of Authorization"
   },
   "SETTINGS": {
     "EDIT_MODAL_TEXT": "Would you like to edit your profile? You need to enter your password or create a new one",

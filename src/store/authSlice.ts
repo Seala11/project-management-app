@@ -70,7 +70,7 @@ export const thunkSignIn = createAsyncThunk(
       setTokenToLS(token);
 
       const userId = parseJwt(token).id;
-      dispatch(thunkGetUserById({ token, userId }));
+      // dispatch(thunkGetUserById({ token, userId }));
       return { token, userId };
     } catch (error) {
       console.log('catch in slice' + error);
@@ -84,7 +84,7 @@ export const thunkGetUserById = createAsyncThunk(
   'auth/thunkGetUserById',
   async ({ userId, token }: { token: string; userId: string }, { rejectWithValue, dispatch }) => {
     try {
-      const res = await getUserById('userId', token);
+      const res = await getUserById(userId, token);
       if (!res.ok) {
         const err: { message: string; statusCode: number } = await res.json();
 
