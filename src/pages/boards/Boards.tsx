@@ -104,7 +104,6 @@ const Boards = () => {
           <h3 className={`${styles.cardName} ${styles.cardCreateName}`}>{t('BOARDS.CREATE')}</h3>
           <img src={pencil} alt="yellow pencil" className={styles.image} />
         </li>
-        {loading && <p>Loading...</p>}
         {!loading &&
           boards.map((board) => (
             <li
