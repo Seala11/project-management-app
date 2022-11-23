@@ -190,7 +190,12 @@ const Board = () => {
       ) {
         return;
       }
-      handleDragEndColumns(result);
+
+      if (destination.droppableId === 'boardId') {
+        handleDragEndColumns(result);
+      } else {
+        console.log(result);
+      }
     },
     [handleDragEndColumns]
   );
@@ -208,7 +213,12 @@ const Board = () => {
           <div className={styles.columnsWrapper}>
             {columns.length > 0 && (
               <DragDropContext onDragEnd={onDragEnd}>
-                <Droppable droppableId="board" direction={'horizontal'} mode={'standard'}>
+                <Droppable
+                  droppableId="boardId"
+                  direction={'horizontal'}
+                  mode={'standard'}
+                  type="COLUMN"
+                >
                   {(provided) => (
                     <ul
                       className={styles.columnsList}

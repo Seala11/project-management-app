@@ -15,7 +15,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { thunkGetAllTasks } from 'store/middleware/tasks';
 import { thunkUpdateTitleColumn } from 'store/middleware/columns';
-import { Draggable /*, Droppable*/ } from 'react-beautiful-dnd';
+import { Draggable, Droppable } from 'react-beautiful-dnd';
 
 type Props = {
   columnData: ColumnType;
@@ -152,7 +152,7 @@ const Column = (props: Props) => {
               </span>
             </form>
           ) : (
-            <div ref={columnTitle} className={styles.columnTitle}>
+            <div ref={columnTitle} className={styles.columnTitle} {...provided.dragHandleProps}>
               <div className={styles.titleName} onClick={() => setIsEditable(true)}>
                 {column.title}
               </div>
@@ -162,18 +162,34 @@ const Column = (props: Props) => {
             </div>
           )}
           <hr className={styles.columnLine}></hr>
-          <ul className={styles.tasksList}>
-            {tasks[column._id] &&
-              tasks[column._id].map((task) => (
-                <li
-                  className={styles.taskItem}
-                  key={task._id}
-                  onClick={() => openTaskModal(task, column._id)}
-                >
-                  <div className={styles.taskTitle}>{task.title}</div>
-                </li>
-              ))}
-          </ul>
+          <Droppable droppableId={column._id} direction={'vertical'} mode={'standard'} type="TASK">
+            {(providedColumn) => (
+              <ul
+                className={styles.tasksList}
+                {...providedColumn.droppableProps}
+                ref={providedColumn.innerRef}
+              >
+                {tasks[column._id] &&
+                  tasks[column._id].map((task, i) => (
+                    <Draggable draggableId={task._id} index={i} key={task._id}>
+                      {(providedTask) => (
+                        <li
+                          className={styles.taskItem}
+                          onClick={() => openTaskModal(task, column._id)}
+                          ref={providedTask.innerRef}
+                          {...providedTask.draggableProps}
+                        >
+                          <div className={styles.taskTitle} {...providedTask.dragHandleProps}>
+                            {task.title}
+                          </div>
+                        </li>
+                      )}
+                    </Draggable>
+                  ))}
+                {providedColumn.placeholder}
+              </ul>
+            )}
+          </Droppable>
           <div className={`${styles.taskButton} ${styles.addButton}`} onClick={createTask}>
             {t('BOARD.CREATE_TASK_BUTTON')}
             <Icon color="#0047FF" size={100} icon="add" className={styles.icon} />

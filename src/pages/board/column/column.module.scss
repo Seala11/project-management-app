@@ -69,15 +69,16 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
   overflow: hidden auto;
   padding-right: 1.6rem;
+  min-height: 1rem;
 }
 
 .taskItem {
   @extend %cardShadow;
   width: 100%;
   background: var(--white);
+  margin: 0.8rem 0;
 }
 
 .addButton {
@@ -88,7 +89,7 @@
 .taskButton {
   padding: 1.6rem;
   width: 100%;
-  margin-top: 1.6rem;
+  margin-top: 0.8rem;
   background: transparent;
 
   &:hover {
@@ -116,7 +117,7 @@
   background-color: var(--primary-m);
   outline: none;
   border: 0;
-  margin: 1.1rem 0 1.6rem 0;
+  margin: 1.1rem 0 0.8rem 0;
 }
 
 .button {
