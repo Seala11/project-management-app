@@ -225,8 +225,8 @@ const Board = () => {
                       ref={provided.innerRef}
                       {...provided.droppableProps}
                     >
-                      {[...columns].map((column) => (
-                        <Column key={column._id} columnData={column} />
+                      {[...columns].map((column, index) => (
+                        <Column key={column._id} columnData={column} index={index} />
                       ))}
                       {provided.placeholder}
                     </ul>

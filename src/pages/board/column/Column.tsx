@@ -19,6 +19,7 @@ import { Draggable, Droppable } from 'react-beautiful-dnd';
 
 type Props = {
   columnData: ColumnType;
+  index: number;
 };
 
 interface IFormInputs {
@@ -110,7 +111,7 @@ const Column = (props: Props) => {
   };
 
   return (
-    <Draggable draggableId={column._id} index={column.order}>
+    <Draggable draggableId={column._id} index={props.index}>
       {(provided) => (
         <li
           data-key={column._id}
