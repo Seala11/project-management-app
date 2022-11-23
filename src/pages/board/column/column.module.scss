@@ -1,35 +1,5 @@
 @use './app/styles/mixins.scss' as *;
 
-.wrapper {
-  @extend %wrapper;
-  flex-grow: 1;
-  width: 100%;
-}
-
-.title {
-  @extend %title;
-  padding: 3rem 0 0;
-}
-
-.description {
-  color: var(--gray);
-  font-size: 1.8rem;
-}
-
-.mainContent {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-}
-
-.columnsList {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  gap: 5rem;
-  align-items: flex-start;
-}
-
 .columnTitle {
   font-weight: 500;
   font-size: 2rem;
@@ -84,6 +54,7 @@
   width: 30rem;
   padding: 2.5rem 2.5rem 1.6rem;
   border-radius: 0.8rem;
+  margin: 0 2.5rem;
 }
 
 .titleName {

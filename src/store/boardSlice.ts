@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import { parseTaskObj, parseBoardObj } from 'utils/func/boardHandler';
 import { getTokenFromLS } from 'utils/func/localStorage';
@@ -102,6 +102,9 @@ export const boardSlice = createSlice({
   name: 'board',
   initialState: initialBoardState,
   reducers: {
+    updateColumnsOrder(state, { payload }: PayloadAction<ColumnType[]>) {
+      state.columns = payload;
+    },
     clearErrors: (state) => {
       state.error = '';
     },
@@ -195,7 +198,7 @@ export const boardSlice = createSlice({
   },
 });
 
-export const { clearErrors } = boardSlice.actions;
+export const { clearErrors, updateColumnsOrder } = boardSlice.actions;
 
 export const singleBoardRequestStatus = (state: RootState) => state.board.pending;
 export const columnsSelector = (state: RootState) => state.board.columns;

@@ -208,11 +208,17 @@ export const authSlice = createSlice({
       .addCase(thunkSignIn.pending, (state) => {
         state.pending = true;
       })
+      .addCase(thunkSignIn.rejected, (state) => {
+        state.pending = false;
+      })
       .addCase(thunkSignUp.fulfilled, (state) => {
         state.pending = false;
       })
       .addCase(thunkSignUp.pending, (state) => {
         state.pending = true;
+      })
+      .addCase(thunkSignUp.rejected, (state) => {
+        state.pending = false;
       });
   },
 });
