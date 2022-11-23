@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { ColumnType, TaskParsedType } from 'store/boardSlice';
+import { ColumnType } from 'store/boardSlice';
 import styles from './column.module.scss';
 import { useAppSelector, useAppDispatch } from 'store/hooks';
 import Icon from 'components/Icon/Icon';
@@ -9,13 +9,13 @@ import {
   ModalAction,
   setModalColumnId,
   setModalOpen,
-  setTaskId,
-  setTaskModalOpen,
+  setTaskOrder,
 } from 'store/modalSlice';
 import { useTranslation } from 'react-i18next';
 import { thunkGetAllTasks } from 'store/middleware/tasks';
 import { thunkUpdateTitleColumn } from 'store/middleware/columns';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
+import Task from '../task/Task';
 
 type Props = {
   columnData: ColumnType;
@@ -29,6 +29,7 @@ interface IFormInputs {
 const Column = (props: Props) => {
   const { tasks } = useAppSelector((state) => state.board);
   const column = props.columnData;
+  const columnTasks = tasks[column._id];
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
@@ -91,6 +92,7 @@ const Column = (props: Props) => {
   };
 
   const createTask = () => {
+    const taskOrder = columnTasks.length ? columnTasks[columnTasks.length - 1].order + 1 : 0;
     dispatch(setModalColumnId(column._id));
     dispatch(
       setModalOpen({
@@ -102,12 +104,7 @@ const Column = (props: Props) => {
         action: ModalAction.TASK_CREATE,
       })
     );
-  };
-
-  const openTaskModal = (task: TaskParsedType, columnId: string) => {
-    dispatch(setTaskId(task));
-    dispatch(setModalColumnId(columnId));
-    dispatch(setTaskModalOpen());
+    dispatch(setTaskOrder(taskOrder));
   };
 
   return (
@@ -170,22 +167,9 @@ const Column = (props: Props) => {
                 {...providedColumn.droppableProps}
                 ref={providedColumn.innerRef}
               >
-                {tasks[column._id] &&
-                  tasks[column._id].map((task, i) => (
-                    <Draggable draggableId={task._id} index={i} key={task._id}>
-                      {(providedTask) => (
-                        <li
-                          className={styles.taskItem}
-                          onClick={() => openTaskModal(task, column._id)}
-                          ref={providedTask.innerRef}
-                          {...providedTask.draggableProps}
-                        >
-                          <div className={styles.taskTitle} {...providedTask.dragHandleProps}>
-                            {task.title}
-                          </div>
-                        </li>
-                      )}
-                    </Draggable>
+                {columnTasks &&
+                  columnTasks.map((task, i) => (
+                    <Task key={task._id} taskData={task} columnId={column._id} index={i} />
                   ))}
                 {providedColumn.placeholder}
               </ul>
