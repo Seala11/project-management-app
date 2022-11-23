@@ -1,15 +1,15 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import Header from 'components/header/Header';
 import Footer from 'components/footer/Footer';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import TOASTER from 'utils/constants/TOASTER';
 import { getTokenFromLS } from 'utils/func/localStorage';
 import { thunkGetUserById } from 'store/authSlice';
 import { parseJwt } from 'utils/func/parsejwt';
-import { useTranslation } from 'react-i18next';
-import { toastMessageSelector } from 'store/appSlice';
+// import { useTranslation } from 'react-i18next';
+// import { toastMessageSelector } from 'store/appSlice';
 import { modalStatusSelector, setModalClose, taskStatusSelector } from 'store/modalSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import styles from './mainLayout.module.scss';
@@ -19,7 +19,7 @@ import TaskModal from 'layouts/Modal/TaskModal/TaskModal';
 import { singleBoardRequestStatus } from 'store/boardSlice';
 import Loader from 'components/loader/Loader';
 import { boardsLoadingSelector } from 'store/boardsSlice';
-import json from 'utils/locales/en.json';
+// import json from 'utils/locales/en.json';
 
 type Props = React.HTMLAttributes<HTMLDivElement>;
 // const arrError = ['Authorization error', 'Successeful login'];
@@ -27,28 +27,28 @@ const MainLayout = ({ children }: Props) => {
   const modalIsOpen = useAppSelector(modalStatusSelector);
   const taskIsOpen = useAppSelector(taskStatusSelector);
   const dispatch = useAppDispatch();
-  const { t } = useTranslation();
-  const toastMessage = useAppSelector(toastMessageSelector);
+  // const { t } = useTranslation();
+  // const toastMessage = useAppSelector(toastMessageSelector);
   const [loading, setLoading] = useState(true);
 
   const boardState = useAppSelector(singleBoardRequestStatus);
   const boardsState = useAppSelector(boardsLoadingSelector);
   const pending = boardState || boardsState || loading;
 
-  useEffect(() => {
-    console.log(toastMessage);
-    const arr = Object.keys(json.TOAST);
-    if (toastMessage) {
-      if (toastMessage.error) {
-        arr.includes(toastMessage.text)
-          ? toast.error(t(`TOAST.${toastMessage.text}`))
-          : toast.error(t('TOAST.Server error'));
-      } else {
-        toast.success(t(`TOAST.${toastMessage.text}`) + toastMessage.arg);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [toastMessage]);
+  // useEffect(() => {
+  //   // console.log(toastMessage);
+  //   const arr = Object.keys(json.TOAST);
+  //   if (toastMessage) {
+  //     if (toastMessage.error) {
+  //       arr.includes(toastMessage.text)
+  //         ? toast.error(t(`TOAST.${toastMessage.text}`))
+  //         : toast.error(t('TOAST.Server error'));
+  //     } else {
+  //       toast.success(t(`TOAST.${toastMessage.text}`) + toastMessage.arg);
+  //     }
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [toastMessage]);
 
   useLayoutEffect(() => {
     if (getTokenFromLS()) {

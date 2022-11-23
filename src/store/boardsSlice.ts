@@ -5,7 +5,7 @@ import { getErrorMessage } from 'utils/func/handleError';
 import { toast } from 'react-toastify';
 import { parseBoardObj } from 'utils/func/boardHandler';
 import { setAuth } from './authSlice';
-import { setToastMessage } from './appSlice';
+// import { setToastMessage } from './appSlice';
 
 export type BoardResponseType = {
   _id: string;
@@ -40,20 +40,21 @@ export const thunkGetUserBoards = createAsyncThunk(
   }
 );
 
-export const thunkCreateBoards = createAsyncThunk(
+export const thunkCreateBoards = createAsyncThunk<
+  BoardResponseType,
+  CreateBoardProps,
+  { rejectValue: string }
+>(
   'boards/fetchCreateBoards',
-  async ({ owner, title, users, token }: CreateBoardProps, { rejectWithValue, dispatch }) => {
+  async ({ owner, title, users, token }, { rejectWithValue, dispatch }) => {
     try {
       const response = await fetchCreateBoards({ title, owner, users }, token);
-
       if (!response.ok) {
         const err: { message: string; statusCode: number } = await response.json();
-        // if (err.statusCode === 403) {
-        dispatch(setAuth(false));
-        // dispatch(setToastMessage(String(err.statusCode)));
-        dispatch(setToastMessage({ error: true, text: err.message, arg: '' }));
-        // }
-        throw new Error(err.message);
+        if (err.statusCode === 403) {
+          dispatch(setAuth(false));
+        }
+        throw new Error(`${err.statusCode}`);
       }
 
       const data: BoardResponseType = await response.json();
@@ -131,6 +132,7 @@ export const boardsSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(thunkCreateBoards.fulfilled, (state, action) => {
+      console.log('fullfill');
       state.loading = false;
       const board = action.payload;
       const newBoard = parseBoardObj(board);

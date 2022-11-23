@@ -1,3 +1,3 @@
 export default {
-  time: 2000,
+  time: 3500,
 };

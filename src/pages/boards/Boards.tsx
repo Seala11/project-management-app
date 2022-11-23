@@ -24,6 +24,7 @@ import pencil from 'assets/images/pencil.png';
 import styles from './boards.module.scss';
 import { userSelector } from 'store/authSlice';
 import { getTokenFromLS } from 'utils/func/localStorage';
+import { toast } from 'react-toastify';
 
 const Boards = () => {
   const [selectedBoard, setSelectedBoard] = useState<string>();
@@ -76,6 +77,10 @@ const Boards = () => {
     setSelectedBoard(board._id);
   };
 
+  const ERR_OBJ = {
+    403: `${t('MODAL.DELETE')}`,
+  };
+
   useEffect(() => {
     if (modalAction === ModalAction.BOARD_CREATE) {
       const info = JSON.stringify({ title: userInputTitle, descr: userInputDescr });
@@ -84,9 +89,20 @@ const Boards = () => {
           owner: user._id,
           title: info,
           users: [user._id],
-          token: getTokenFromLS(),
+          token: 'jjjj',
         })
-      );
+      )
+        .unwrap()
+        .then((originalPromiseResult) => {
+          console.log(originalPromiseResult);
+          toast.success('board created');
+        })
+        .catch((rejectedValue: keyof typeof ERR_OBJ) => {
+          console.log(rejectedValue);
+          const message = ERR_OBJ[rejectedValue];
+          toast.error(message);
+        });
+
       dispatch(resetModal());
     }
 
@@ -94,6 +110,7 @@ const Boards = () => {
       dispatch(thunkDeleteBoard({ boardId: selectedBoard, token: getTokenFromLS() }));
       dispatch(resetModal());
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalAction, dispatch, selectedBoard, userInputTitle, userInputDescr, user._id]);
 
   return (
