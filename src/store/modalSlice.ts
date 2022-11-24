@@ -42,6 +42,7 @@ type ModalState = {
   taskDeleteConfirm: boolean;
   columnId: string;
   taskId: TaskParsedType | null;
+  taskOrder: number;
   users: UserType[];
   pending: boolean;
 };
@@ -56,6 +57,7 @@ export const initialState: ModalState = {
   taskDeleteConfirm: false,
   columnId: '',
   taskId: null,
+  taskOrder: 0,
   users: [],
   pending: false,
 };
@@ -99,6 +101,9 @@ export const modalSlice = createSlice({
     setTaskId: (state, action: PayloadAction<TaskParsedType | null>) => {
       state.taskId = action.payload;
     },
+    setTaskOrder: (state, action: PayloadAction<number>) => {
+      state.taskOrder = action.payload;
+    },
     setModalColumnId: (state, action: PayloadAction<string>) => {
       state.columnId = action.payload;
     },
@@ -128,6 +133,7 @@ export const {
   setTaskModalOpen,
   setTaskModalClose,
   setTaskId,
+  setTaskOrder,
   setModalColumnId,
   setTaskDeleteConfirm,
 } = modalSlice.actions;

@@ -26,7 +26,7 @@ export const thunkGetAllTasks = createAsyncThunk<
     return rejectWithValue(`${resp?.statusCode}/${resp.message}`);
   }
   const data: TaskType[] = await response.json();
-  return { column: columnId, tasks: data };
+  return { column: columnId, tasks: data.sort((a, b) => a.order - b.order) };
 });
 
 // create Task
@@ -45,7 +45,7 @@ type CreateTaskResponseType = {
   task: TaskType;
 };
 
-export const thunkCreateTasks = createAsyncThunk<
+export const thunkCreateTask = createAsyncThunk<
   CreateTaskResponseType,
   CreateTaskRequestType,
   { rejectValue: string }
