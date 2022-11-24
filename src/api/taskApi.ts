@@ -48,3 +48,29 @@ export async function fetchDeleteTask(
   });
   return response;
 }
+
+export async function fetchUpdateTask(
+  boardId: string,
+  columnId: string,
+  taskId: string,
+  taskUpdate: {
+    title: string;
+    order: number;
+    columnId: string;
+    description: string;
+    userId: string;
+    users: string[];
+  },
+  token: string
+) {
+  const response = await fetch(`${BOARDS}/${boardId}/columns/${columnId}/tasks/${taskId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      accept: 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(taskUpdate),
+  });
+  return response;
+}

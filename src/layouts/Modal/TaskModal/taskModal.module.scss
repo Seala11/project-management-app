@@ -1,13 +1,53 @@
 @use './app/styles/mixins.scss' as *;
 
 .title {
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-weight: 600;
   color: var(--black);
+  padding: 0.4rem 1.1rem;
+  outline-width: 0;
+}
+
+.titleDisabled {
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  cursor: horisontal-text;
+  border: none;
+  background-color: var(--white);
+}
+
+.titleAbled {
+  border: none;
+  border: 0.1rem solid var(--border);
+  box-shadow: 0 0.3rem 1.6rem 0.1rem var(--card);
+  border-radius: 0.8rem;
+  padding: 0.3rem 1rem;
+
+  &:focus,
+  &:focus-visible {
+    outline-width: 0;
+    border: 0.1rem solid var(--black);
+  }
+}
+
+.taskTitleWrapper {
+  width: 100%;
+  width: -moz-available;
+  width: -webkit-fill-available;
+  width: stretch;
+  padding: 1rem 0;
 }
 
 .subtitle {
   color: var(--gray);
+}
+
+.subtitleColumn {
+  color: var(--gray);
+  margin: 0;
+  font-size: 1.4rem;
+  padding: 0.6rem 0 0 1rem;
 }
 
 .heading {
@@ -31,7 +71,7 @@
   justify-content: center;
   align-items: flex-start;
   width: 50rem;
-  padding: 0 2rem 2rem;
+  padding: 0 2rem 2rem 1.5rem;
   overflow-y: auto;
 
   @include media-mobile {
@@ -113,4 +153,22 @@
   padding: 0.5rem 0.8rem;
   border-radius: 0.8rem;
   color: var(--black);
+}
+
+.changeWrapper {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.changeBtn {
+  background-color: transparent;
+  padding: 1rem;
+  border-radius: 50%;
+  border: none;
+
+  &:hover {
+    background-color: var(--primary-m);
+    cursor: pointer;
+  }
 }

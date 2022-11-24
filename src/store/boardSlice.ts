@@ -9,7 +9,12 @@ import {
   thunkGetAllColumns,
   thunkUpdateTitleColumn,
 } from './middleware/columns';
-import { thunkGetAllTasks, thunkCreateTask, thunkDeleteTasks } from './middleware/tasks';
+import {
+  thunkGetAllTasks,
+  thunkCreateTask,
+  thunkDeleteTasks,
+  thunkUpdateTask,
+} from './middleware/tasks';
 import { RootState } from 'store';
 import { fetchGetBoard } from 'api/apiBoard';
 
@@ -185,6 +190,23 @@ export const boardSlice = createSlice({
       })
       .addCase(thunkDeleteTasks.rejected, (state, action) => {
         state.pending = false;
+        console.log(action.payload);
+        if (typeof action.payload === 'string') {
+          toast.error(action.payload);
+        }
+      })
+      // .addCase(thunkUpdateTask.pending, (state) => {
+      //   state.pending = true;
+      //   console.log(state.pending);
+      // })
+      .addCase(thunkUpdateTask.fulfilled, (state, action) => {
+        const updatedTask = parseTaskObj(action.payload.task);
+        const newTaskState = state.tasks[action.payload.column].map((task) =>
+          task._id === action.payload.task._id ? (task = updatedTask) : task
+        );
+        state.tasks[action.payload.column] = newTaskState;
+      })
+      .addCase(thunkUpdateTask.rejected, (state, action) => {
         console.log(action.payload);
         if (typeof action.payload === 'string') {
           toast.error(action.payload);
