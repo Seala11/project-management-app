@@ -7,7 +7,7 @@ import {
   setModalAction,
   setModalClose,
   setTaskModalOpen,
-  taskIdSelector,
+  taskDeleteConfirmSelector,
 } from 'store/modalSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { useTranslation } from 'react-i18next';
@@ -34,8 +34,8 @@ const ConfirmationModal = ({ onClose }: Props) => {
   const DESCR_MAX_LENGTH = 150;
 
   const dispatch = useAppDispatch();
-  const taskId = useAppSelector(taskIdSelector);
   const modal = useAppSelector(modalSelector);
+  const taskDeleteConfirmMessage = useAppSelector(taskDeleteConfirmSelector);
   const { t } = useTranslation();
   const errMessage = useGetModalErrors();
 
@@ -154,11 +154,12 @@ const ConfirmationModal = ({ onClose }: Props) => {
         <button
           type="submit"
           className={`${modal?.color === BtnColor.BLUE ? styles.blue : styles.red}`}
+          onClick={handleSubmit(onSubmit)}
         >
           {modal?.btnText}
         </button>
 
-        {taskId ? (
+        {taskDeleteConfirmMessage ? (
           <button type="button" onClick={backToTaskModal} className={styles.gray}>
             {t('MODAL.CANCEL')}
           </button>
