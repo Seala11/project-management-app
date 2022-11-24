@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { ColumnType, TaskParsedType } from 'store/boardSlice';
+import { ColumnType } from 'store/boardSlice';
 import styles from './column.module.scss';
 import { useAppSelector, useAppDispatch } from 'store/hooks';
 import Icon from 'components/Icon/Icon';
@@ -9,16 +9,17 @@ import {
   ModalAction,
   setModalColumnId,
   setModalOpen,
-  setTaskId,
-  setTaskModalOpen,
+  setTaskOrder,
 } from 'store/modalSlice';
 import { useTranslation } from 'react-i18next';
 import { thunkGetAllTasks } from 'store/middleware/tasks';
 import { thunkUpdateTitleColumn } from 'store/middleware/columns';
-import { Draggable /*, Droppable*/ } from 'react-beautiful-dnd';
+import { Draggable, Droppable } from 'react-beautiful-dnd';
+import Task from '../task/Task';
 
 type Props = {
   columnData: ColumnType;
+  index: number;
 };
 
 interface IFormInputs {
@@ -28,6 +29,7 @@ interface IFormInputs {
 const Column = (props: Props) => {
   const { tasks } = useAppSelector((state) => state.board);
   const column = props.columnData;
+  const columnTasks = tasks[column._id];
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
@@ -90,6 +92,7 @@ const Column = (props: Props) => {
   };
 
   const createTask = () => {
+    const taskOrder = columnTasks.length ? columnTasks[columnTasks.length - 1].order + 1 : 0;
     dispatch(setModalColumnId(column._id));
     dispatch(
       setModalOpen({
@@ -101,16 +104,11 @@ const Column = (props: Props) => {
         action: ModalAction.TASK_CREATE,
       })
     );
-  };
-
-  const openTaskModal = (task: TaskParsedType, columnId: string) => {
-    dispatch(setTaskId(task));
-    dispatch(setModalColumnId(columnId));
-    dispatch(setTaskModalOpen());
+    dispatch(setTaskOrder(taskOrder));
   };
 
   return (
-    <Draggable draggableId={column._id} index={column.order}>
+    <Draggable draggableId={column._id} index={props.index}>
       {(provided) => (
         <li
           data-key={column._id}
@@ -152,7 +150,7 @@ const Column = (props: Props) => {
               </span>
             </form>
           ) : (
-            <div ref={columnTitle} className={styles.columnTitle}>
+            <div ref={columnTitle} className={styles.columnTitle} {...provided.dragHandleProps}>
               <div className={styles.titleName} onClick={() => setIsEditable(true)}>
                 {column.title}
               </div>
@@ -162,18 +160,21 @@ const Column = (props: Props) => {
             </div>
           )}
           <hr className={styles.columnLine}></hr>
-          <ul className={styles.tasksList}>
-            {tasks[column._id] &&
-              tasks[column._id].map((task) => (
-                <li
-                  className={styles.taskItem}
-                  key={task._id}
-                  onClick={() => openTaskModal(task, column._id)}
-                >
-                  <div className={styles.taskTitle}>{task.title}</div>
-                </li>
-              ))}
-          </ul>
+          <Droppable droppableId={column._id} direction={'vertical'} mode={'standard'} type="TASK">
+            {(providedColumn) => (
+              <ul
+                className={styles.tasksList}
+                {...providedColumn.droppableProps}
+                ref={providedColumn.innerRef}
+              >
+                {columnTasks &&
+                  columnTasks.map((task, i) => (
+                    <Task key={task._id} taskData={task} columnId={column._id} index={i} />
+                  ))}
+                {providedColumn.placeholder}
+              </ul>
+            )}
+          </Droppable>
           <div className={`${styles.taskButton} ${styles.addButton}`} onClick={createTask}>
             {t('BOARD.CREATE_TASK_BUTTON')}
             <Icon color="#0047FF" size={100} icon="add" className={styles.icon} />

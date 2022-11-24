@@ -9,7 +9,7 @@ import {
   thunkGetAllColumns,
   thunkUpdateTitleColumn,
 } from './middleware/columns';
-import { thunkGetAllTasks, thunkCreateTasks, thunkDeleteTasks } from './middleware/tasks';
+import { thunkGetAllTasks, thunkCreateTask, thunkDeleteTasks } from './middleware/tasks';
 import { RootState } from 'store';
 import { fetchGetBoard } from 'api/apiBoard';
 
@@ -143,13 +143,8 @@ export const boardSlice = createSlice({
       })
       .addCase(thunkDeleteColumn.fulfilled, (state, action) => {
         state.pending = false;
-        state.columns.splice(
-          state.columns.findIndex((elem) => {
-            console.log(elem._id);
-            return elem._id === action.payload;
-          }),
-          1
-        );
+        const newColumnState = state.columns.filter((col) => col._id !== action.payload);
+        state.columns = newColumnState;
       })
       .addCase(thunkDeleteColumn.pending, (state) => {
         state.pending = true;
@@ -164,14 +159,14 @@ export const boardSlice = createSlice({
         state.tasks[action.payload.column] = taskObj;
       })
 
-      .addCase(thunkCreateTasks.pending, (state) => {
+      .addCase(thunkCreateTask.pending, (state) => {
         state.pending = true;
       })
-      .addCase(thunkCreateTasks.fulfilled, (state, action) => {
+      .addCase(thunkCreateTask.fulfilled, (state, action) => {
         state.pending = false;
         state.tasks[action.payload.column].push(parseTaskObj(action.payload.task));
       })
-      .addCase(thunkCreateTasks.rejected, (state, action) => {
+      .addCase(thunkCreateTask.rejected, (state, action) => {
         state.pending = false;
         console.log(action.payload);
         if (typeof action.payload === 'string') {

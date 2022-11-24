@@ -5,6 +5,7 @@ import {
   ModalAction,
   modalColumnIdSelector,
   setModalOpen,
+  setTaskDeleteConfirm,
   setTaskModalClose,
   usersSelector,
 } from 'store/modalSlice';
@@ -38,6 +39,7 @@ const TaskModal = ({ onClose }: Props) => {
 
   const deleteModalOpen = () => {
     dispatch(setTaskModalClose());
+    dispatch(setTaskDeleteConfirm(true));
     dispatch(
       setModalOpen({
         message: `${t('MODAL.DELETE_MSG')} task ${selectedTask?.title}?`,

@@ -15,17 +15,13 @@ import Icon from 'components/Icon/Icon';
 import {
   BtnColor,
   ModalAction,
-  modalActionSelector,
   modalColumnIdSelector,
   resetModal,
   setModalOpen,
-  taskIdSelector,
-  userDescriptionSelector,
-  userTitleSelector,
 } from 'store/modalSlice';
 import { useTranslation } from 'react-i18next';
 import Column from './column/Column';
-import { thunkCreateTasks, thunkDeleteTasks } from 'store/middleware/tasks';
+import { thunkCreateTask, thunkDeleteTasks } from 'store/middleware/tasks';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 
 /* ToDo
@@ -37,18 +33,16 @@ import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 
 const Board = () => {
   const { title, error, columns } = useAppSelector((state) => state.board);
+  const { modalAction, userInputTitle, userInputDescr, taskId, taskOrder } = useAppSelector(
+    (state) => state.modal
+  );
   const dispatch = useAppDispatch();
   const { id } = useParams<'id'>();
   const navigate = useNavigate();
   const modalColumnId = useAppSelector(modalColumnIdSelector);
   const { t } = useTranslation();
 
-  // MODAL ACTIONS AND HANDLERS
-  const modalAction = useAppSelector(modalActionSelector);
-  const userInputTitle = useAppSelector(userTitleSelector);
-  const userInputDescr = useAppSelector(userDescriptionSelector);
   const user = useAppSelector(userSelector);
-  const selectedTask = useAppSelector(taskIdSelector);
 
   useEffect(() => {
     dispatch(thunkGetSingleBoard(`${id}`));
@@ -79,12 +73,12 @@ const Board = () => {
     if (modalAction === ModalAction.TASK_CREATE) {
       const newDescr = JSON.stringify({ description: userInputDescr, color: '' });
       dispatch(
-        thunkCreateTasks({
+        thunkCreateTask({
           boardId: `${id}`,
           columnId: modalColumnId,
           title: userInputTitle,
           description: newDescr,
-          order: 0,
+          order: taskOrder,
           userId: user._id,
         })
       );
@@ -102,12 +96,12 @@ const Board = () => {
       dispatch(resetModal());
     }
 
-    if (modalAction === ModalAction.TASK_DELETE && selectedTask) {
+    if (modalAction === ModalAction.TASK_DELETE && taskId) {
       dispatch(
         thunkDeleteTasks({
           boardId: `${id}`,
           columnId: modalColumnId,
-          taskId: selectedTask._id,
+          taskId: taskId._id,
         })
       );
       dispatch(resetModal());
@@ -121,7 +115,8 @@ const Board = () => {
     user,
     userInputDescr,
     modalColumnId,
-    selectedTask,
+    taskId,
+    taskOrder,
   ]);
 
   const createColumn = () => {
@@ -168,19 +163,6 @@ const Board = () => {
     [columns, dispatch, id]
   );
 
-  /* const onBeforeCapture = useCallback(() => {
-
-  }, []);
-  const onBeforeDragStart = useCallback(() => {
-
-  }, []);
-  const onDragStart = useCallback(() => {
-
-  }, []);
-  const onDragUpdate = useCallback(() => {
-
-  }, []);*/
-
   const onDragEnd = useCallback(
     (result: DropResult) => {
       const { destination, source } = result;
@@ -190,7 +172,12 @@ const Board = () => {
       ) {
         return;
       }
-      handleDragEndColumns(result);
+
+      if (destination.droppableId === 'boardId') {
+        handleDragEndColumns(result);
+      } else {
+        console.log(result);
+      }
     },
     [handleDragEndColumns]
   );
@@ -208,15 +195,20 @@ const Board = () => {
           <div className={styles.columnsWrapper}>
             {columns.length > 0 && (
               <DragDropContext onDragEnd={onDragEnd}>
-                <Droppable droppableId="board" direction={'horizontal'} mode={'standard'}>
+                <Droppable
+                  droppableId="boardId"
+                  direction={'horizontal'}
+                  mode={'standard'}
+                  type="COLUMN"
+                >
                   {(provided) => (
                     <ul
                       className={styles.columnsList}
                       ref={provided.innerRef}
                       {...provided.droppableProps}
                     >
-                      {[...columns].map((column) => (
-                        <Column key={column._id} columnData={column} />
+                      {[...columns].map((column, index) => (
+                        <Column key={column._id} columnData={column} index={index} />
                       ))}
                       {provided.placeholder}
                     </ul>
