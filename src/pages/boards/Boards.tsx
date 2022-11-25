@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import {
   boardsSelector,
-  boardsLoadingSelector,
   thunkGetUserBoards,
   thunkCreateBoards,
   BoardType,
@@ -32,7 +31,6 @@ const Boards = () => {
   const { t } = useTranslation();
 
   const dispatch = useAppDispatch();
-  const loading = useAppSelector(boardsLoadingSelector);
   const modalAction = useAppSelector(modalActionSelector);
   const userInputTitle = useAppSelector(userTitleSelector);
   const userInputDescr = useAppSelector(userDescriptionSelector);
@@ -104,23 +102,21 @@ const Boards = () => {
           <h3 className={`${styles.cardName} ${styles.cardCreateName}`}>{t('BOARDS.CREATE')}</h3>
           <img src={pencil} alt="yellow pencil" className={styles.image} />
         </li>
-        {loading && <p>Loading...</p>}
-        {!loading &&
-          boards.map((board) => (
-            <li
-              key={board._id}
-              className={styles.card}
-              onClick={() => navigateToBoardPage(board._id)}
-            >
-              <div className={styles.titleWrapper}>
-                <h3 className={styles.cardName}>{board.title.title}</h3>
-                <button className={styles.button} onClick={(e) => deleteBoardHandler(e, board)}>
-                  <Icon color="#CC0707" size={100} icon="trash" className={styles.icon} />
-                </button>
-              </div>
-              <p className={styles.description}>{board.title.descr}</p>
-            </li>
-          ))}
+        {boards.map((board) => (
+          <li
+            key={board._id}
+            className={styles.card}
+            onClick={() => navigateToBoardPage(board._id)}
+          >
+            <div className={styles.titleWrapper}>
+              <h3 className={styles.cardName}>{board.title.title}</h3>
+              <button className={styles.button} onClick={(e) => deleteBoardHandler(e, board)}>
+                <Icon color="#CC0707" size={100} icon="trash" className={styles.icon} />
+              </button>
+            </div>
+            <p className={styles.description}>{board.title.descr}</p>
+          </li>
+        ))}
       </ul>
     </section>
   );

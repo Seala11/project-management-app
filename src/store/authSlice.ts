@@ -13,6 +13,7 @@ import { setToastMessage } from './appSlice';
 type Auth = {
   isLogged: boolean;
   user: Omit<User, 'password'>;
+  pending: boolean;
 };
 // Это нужно перенести в enum
 const SIGNIN = 'SIGNIN';
@@ -30,6 +31,8 @@ const userInit: Omit<User, 'password'> = {
 const initialState: Auth = {
   isLogged: !!getTokenFromLS(),
   user: userInit,
+  pending: false,
+  // toastMessage: null,
 };
 
 export const thunkSignUp = createAsyncThunk(
@@ -170,10 +173,7 @@ export const authSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    builder.addCase(thunkGetUserById.fulfilled, (state, action) => {
-      state.user = action.payload;
-      state.isLogged = true;
-    });
+    // builder.addCase(thunkSignUp.fulfilled, () => {
 
     builder.addCase(thunkGetUserById.rejected, (state, action) => {
       removeTokenFromLS();
@@ -185,14 +185,63 @@ export const authSlice = createSlice({
       state.isLogged = false;
     });
 
-    builder.addCase(thunkDeleteUser.fulfilled, (state, action) => {
-      removeTokenFromLS();
-      state.isLogged = false;
-    });
+    // if (typeof action.payload === 'string') {
+    //   toast.error(action.payload);
+    // }
+    // });
+
+    // sign in
+
+    // builder.addCase(thunkSignIn.fulfilled, () => {
+    //   console.log('user is created');
+    // });
+
+    // builder.addCase(thunkSignIn.rejected, (state, action) => {
+    // console.log('rejected');
+    // if (typeof action.payload === 'string') {
+    //   toast.error(action.payload);
+    // }
+    // });
+
+    builder
+      .addCase(thunkGetUserById.fulfilled, (state, action) => {
+        state.user = action.payload;
+        // setUserToLS(action.payload);
+        state.isLogged = true;
+        // toast.success('User sign in successfully');
+        // state.toastMessage = '200';
+      })
+      .addCase(thunkGetUserById.rejected, (state, action) => {
+        // console.log('rejected');
+        // state.isLogged = false;
+        removeTokenFromLS();
+        // if (typeof action.payload === 'string') {
+        // state.toastMessage = action.payload;
+        // }
+      })
+      .addCase(thunkSignIn.fulfilled, (state) => {
+        state.pending = false;
+      })
+      .addCase(thunkSignIn.pending, (state) => {
+        state.pending = true;
+      })
+      .addCase(thunkSignIn.rejected, (state) => {
+        state.pending = false;
+      })
+      .addCase(thunkSignUp.fulfilled, (state) => {
+        state.pending = false;
+      })
+      .addCase(thunkSignUp.pending, (state) => {
+        state.pending = true;
+      })
+      .addCase(thunkSignUp.rejected, (state) => {
+        state.pending = false;
+      });
   },
 });
 
 export default authSlice.reducer;
 export const { setUser, setAuth } = authSlice.actions;
+export const authSelectorStatus = (state: RootState) => state.auth.pending;
 export const authSelector = (state: RootState) => state.auth;
 export const userSelector = (state: RootState) => state.auth.user;

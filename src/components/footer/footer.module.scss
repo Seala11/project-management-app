@@ -15,6 +15,7 @@
   font-size: 1.8rem;
   flex-wrap: wrap;
   padding: 4rem 1rem 4rem;
+  line-height: 4.6rem;
 
   @include media-tablet {
     flex-wrap: wrap;
@@ -24,6 +25,10 @@
   @include media-mobile {
     justify-content: center;
     font-size: 1.6rem;
+  }
+
+  @include media-mobile-s {
+    line-height: 3.5rem;
   }
 }
 
@@ -64,4 +69,26 @@
 .footerRss {
   text-decoration: none;
   transition: 0.3s;
+  max-height: 4.6rem;
+
+  @include media-mobile-s {
+    max-height: 3.5rem;
+  }
+}
+
+.rssLogo {
+  max-height: 4.6rem;
+
+  @include media-mobile-s {
+    max-height: 3.5rem;
+  }
+}
+
+.rssLogoPath {
+  fill: var(--black);
+  transition: 0.3s;
+}
+
+.footerRss:hover .rssLogoPath {
+  fill: var(--primary);
 }

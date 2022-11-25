@@ -6,11 +6,17 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import TOASTER from 'utils/constants/TOASTER';
 import { getTokenFromLS } from 'utils/func/localStorage';
-import { thunkGetUserById } from 'store/authSlice';
+import { authSelectorStatus, thunkGetUserById } from 'store/authSlice';
 import { parseJwt } from 'utils/func/parsejwt';
 import { useTranslation } from 'react-i18next';
 import { toastMessageSelector } from 'store/appSlice';
-import { modalStatusSelector, setModalClose, taskStatusSelector } from 'store/modalSlice';
+import {
+  modalStatusSelector,
+  setModalClose,
+  setTaskModalOpen,
+  taskDeleteConfirmSelector,
+  taskStatusSelector,
+} from 'store/modalSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import styles from './mainLayout.module.scss';
 import Modal from 'layouts/Modal/Modal';
@@ -33,7 +39,9 @@ const MainLayout = ({ children }: Props) => {
 
   const boardState = useAppSelector(singleBoardRequestStatus);
   const boardsState = useAppSelector(boardsLoadingSelector);
-  const pending = boardState || boardsState || loading;
+  const authState = useAppSelector(authSelectorStatus);
+  const taskDeleteConfirmMessage = useAppSelector(taskDeleteConfirmSelector);
+  const pending = boardState || boardsState || authState || loading;
 
   useEffect(() => {
     const arr = Object.keys(json.TOAST);
@@ -63,6 +71,10 @@ const MainLayout = ({ children }: Props) => {
   const closeModal = (event: React.MouseEvent) => {
     if (event.target === event.currentTarget) {
       dispatch(setModalClose());
+    }
+
+    if (taskDeleteConfirmMessage) {
+      dispatch(setTaskModalOpen());
     }
   };
 

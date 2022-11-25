@@ -1,6 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { BASE } from 'api/config';
-import { fetchCreateTask, fetchDeleteTask } from 'api/taskApi';
+import { fetchCreateTask, fetchDeleteTask, fetchGetTasks } from 'api/taskApi';
 import { getTokenFromLS } from 'utils/func/localStorage';
 import { TaskType } from '../boardSlice';
 
@@ -20,19 +19,14 @@ export const thunkGetAllTasks = createAsyncThunk<
   { rejectValue: string }
 >('task/getAllTasks', async ({ boardId, columnId }, { rejectWithValue }) => {
   const token = getTokenFromLS();
-  const response = await fetch(`${BASE}/boards/${boardId}/columns/${columnId}/tasks`, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await fetchGetTasks(boardId, columnId, token);
 
   if (!response.ok) {
     const resp = await response.json();
     return rejectWithValue(`${resp?.statusCode}/${resp.message}`);
   }
   const data: TaskType[] = await response.json();
-  return { column: columnId, tasks: data };
+  return { column: columnId, tasks: data.sort((a, b) => a.order - b.order) };
 });
 
 // create Task
@@ -51,7 +45,7 @@ type CreateTaskResponseType = {
   task: TaskType;
 };
 
-export const thunkCreateTasks = createAsyncThunk<
+export const thunkCreateTask = createAsyncThunk<
   CreateTaskResponseType,
   CreateTaskRequestType,
   { rejectValue: string }

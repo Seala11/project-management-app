@@ -17,7 +17,7 @@
   width: -moz-available;
   width: -webkit-fill-available;
   width: stretch;
-  padding: 2rem;
+  padding: 1rem 2rem;
   justify-content: flex-end;
 
   @include media-mobile {
@@ -48,15 +48,30 @@
 }
 
 .closeBtn {
+  position: relative;
   cursor: pointer;
   border: none;
   background-color: transparent;
-  width: 1.6rem;
-  height: 1.6rem;
-  background-image: url('../../../assets/images/close.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
+  padding: 1.8rem;
+  border-radius: 50%;
+  transition: all 0.15s ease-in-out;
+
+  &::after {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    content: '';
+    width: 1.6rem;
+    height: 1.6rem;
+    background-image: url('../../../assets/images/close.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  &:hover {
+    background-color: var(--primary-m);
+  }
 }
 
 .button {
