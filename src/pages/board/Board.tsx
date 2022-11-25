@@ -21,7 +21,7 @@ import {
 } from 'store/modalSlice';
 import { useTranslation } from 'react-i18next';
 import Column from './column/Column';
-import { thunkCreateTask, thunkDeleteTasks } from 'store/middleware/tasks';
+import { thunkCreateTask, thunkDeleteTasks, thunkUpdateTaskOrder } from 'store/middleware/tasks';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 
 /* ToDo
@@ -182,8 +182,11 @@ const Board = () => {
         return order;
       };
       const destOrder = getDestinationOrder();
-      console.log(destOrder);
       const dragSpanIndex = source.index - destination.index;
+      const draggableTask = {
+        ...tasks[source.droppableId].filter((task) => task._id === draggableId)[0],
+        order: destOrder,
+      };
       if (destination.droppableId === source.droppableId) {
         // if drug task in the same column
         newDestTasks = newDestTasks
@@ -219,16 +222,31 @@ const Board = () => {
       }
       dispatch(updateTasksState({ tasks: newSourceTasks, destColumnId: source.droppableId }));
       dispatch(updateTasksState({ tasks: newDestTasks, destColumnId: destination.droppableId }));
-      /*  newColumns.forEach((column) => {
+      dispatch(
+        thunkUpdateTaskOrder({
+          ...draggableTask,
+          columnId: destination.droppableId,
+          description: JSON.stringify(draggableTask.description),
+        })
+      );
+      newSourceTasks.forEach((task) => {
         dispatch(
-          thunkUpdateColumn({
-            boardId: `${id}`,
-            columnId: column._id,
-            title: column.title,
-            order: column.order,
+          thunkUpdateTaskOrder({
+            ...task,
+            columnId: source.droppableId,
+            description: JSON.stringify(task.description),
           })
         );
-      });*/
+      });
+      newDestTasks.forEach((task) => {
+        dispatch(
+          thunkUpdateTaskOrder({
+            ...task,
+            columnId: destination.droppableId,
+            description: JSON.stringify(task.description),
+          })
+        );
+      });
     },
     [tasks, dispatch]
   );

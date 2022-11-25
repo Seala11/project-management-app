@@ -112,7 +112,6 @@ export const boardSlice = createSlice({
       state.columns = payload;
     },
     updateTasksState(state, { payload }: PayloadAction<UpdateTasksData>) {
-      console.log(payload.destColumnId);
       state.tasks[payload.destColumnId] = payload.tasks;
     },
     clearErrors(state) {
