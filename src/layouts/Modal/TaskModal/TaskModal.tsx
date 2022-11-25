@@ -57,18 +57,17 @@ const TaskModal = ({ onClose }: Props) => {
   };
 
   const [titleCurrVal, setTitleCurrVal] = useState(selectedTask?.title);
-  const [titleVal, setTitleVal] = useState(selectedTask?.title);
+  const [titleUpdatedVal, setTitleUpdatedVal] = useState(selectedTask?.title);
   const titleInputRef = useRef<HTMLInputElement | null>(null);
 
   const changeTitleValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
-    setTitleVal(e.target.value);
+    setTitleUpdatedVal(e.target.value);
   };
 
   const updateTitleVal = () => {
-    if (titleVal && selectedTask && titleVal !== titleCurrVal) {
+    if (titleUpdatedVal && selectedTask && titleUpdatedVal !== titleCurrVal) {
       const taskUpdated = {
-        title: titleVal,
+        title: titleUpdatedVal,
         order: selectedTask.order,
         description: JSON.stringify({
           description: selectedTask.description.description,
@@ -91,29 +90,24 @@ const TaskModal = ({ onClose }: Props) => {
         .then((originalPromiseResult) => {
           console.log(originalPromiseResult);
           toast.success('task title updated');
-          setTitleCurrVal(titleVal);
+          setTitleCurrVal(titleUpdatedVal);
         })
         .catch((rejectedValue) => {
           console.log(rejectedValue);
           toast.error('update title error');
+          setTitleUpdatedVal(titleCurrVal);
         })
         .finally(() => {
           setTitleInputDisabled(true);
         });
     } else {
       setTitleInputDisabled(true);
+      setTitleUpdatedVal(titleCurrVal);
     }
   };
 
   const updateTitleValByEnter = (e: React.KeyboardEvent) => {
-    if (
-      titleVal &&
-      titleVal !== selectedTask?.title &&
-      e.key === 'Enter' &&
-      titleInputRef &&
-      titleInputRef.current
-    ) {
-      setTitleInputDisabled(true);
+    if (e.key === 'Enter' && titleInputRef && titleInputRef.current) {
       titleInputRef.current.blur();
     }
   };
@@ -132,15 +126,12 @@ const TaskModal = ({ onClose }: Props) => {
               className={`${styles.title} ${
                 titleInputDisabled ? styles.titleDisabled : styles.titleAbled
               }`}
-              value={titleInputDisabled ? titleCurrVal : titleVal}
+              value={titleInputDisabled ? titleCurrVal : titleUpdatedVal}
               onClick={() => setTitleInputDisabled(false)}
               onBlur={updateTitleVal}
               onChange={(e) => changeTitleValue(e)}
               onKeyDown={updateTitleValByEnter}
             />
-            {/* <button className={styles.changeBtn}>
-              <Icon color="#0047FF" size={18} icon="pen-change" className={styles.icon} />
-            </button> */}
           </div>
           <p className={styles.subtitleColumn}>
             {t('MODAL.IN_COLUMN')} {selectedColumn?.title}
