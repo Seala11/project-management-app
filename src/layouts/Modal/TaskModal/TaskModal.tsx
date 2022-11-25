@@ -140,7 +140,7 @@ const TaskModal = ({ onClose }: Props) => {
 
         <div className={styles.taskInfo}>
           <div className={styles.changeWrapper}>
-            <h3 className={styles.title}>{t('MODAL.DESCRIPTION')}</h3>
+            <h3 className={styles.description}>{t('MODAL.DESCRIPTION')}</h3>
             <button className={styles.changeBtn}>
               <Icon color="#0047FF" size={18} icon="pen-change" className={styles.icon} />
             </button>
@@ -149,7 +149,7 @@ const TaskModal = ({ onClose }: Props) => {
         </div>
 
         <div className={styles.taskInfo}>
-          <h3 className={styles.title}>{t('MODAL.MEMBERS')}</h3>
+          <h3 className={styles.members}>{t('MODAL.MEMBERS')}</h3>
           {selectedTask?.users.map((id) => {
             const userAssigned = allUsers.find((user) => user._id === id);
             return (
@@ -168,7 +168,7 @@ const TaskModal = ({ onClose }: Props) => {
         </div>
 
         <div className={styles.taskInfo}>
-          <h3 className={styles.title}>{t('MODAL.LABEL')}</h3>
+          <h3 className={styles.labelTitle}>{t('MODAL.LABEL')}</h3>
           <ul className={styles.list}>
             {COLORS.map((color) => (
               <li

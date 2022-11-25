@@ -41,6 +41,7 @@
 
 .subtitle {
   color: var(--gray);
+  cursor: default;
 }
 
 .subtitleColumn {
@@ -48,6 +49,15 @@
   margin: 0;
   font-size: 1.4rem;
   padding: 0.6rem 0 0 1rem;
+}
+
+.description,
+.members,
+.labelTitle {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--black);
+  cursor: default;
 }
 
 .heading {
@@ -71,7 +81,7 @@
   justify-content: center;
   align-items: flex-start;
   width: 50rem;
-  padding: 0 2rem 2rem 1.5rem;
+  padding: 0 2rem 2rem 1rem;
   overflow-y: auto;
 
   @include media-mobile {
@@ -85,6 +95,7 @@
   width: -webkit-fill-available;
   width: stretch;
   padding-bottom: 1rem;
+  padding-left: 1rem;
 }
 
 .closeBtn {
@@ -145,6 +156,7 @@
   width: -moz-available;
   width: -webkit-fill-available;
   width: stretch;
+  cursor: pointer;
 }
 
 .member {
@@ -153,6 +165,7 @@
   padding: 0.5rem 0.8rem;
   border-radius: 0.8rem;
   color: var(--black);
+  cursor: default;
 }
 
 .changeWrapper {
