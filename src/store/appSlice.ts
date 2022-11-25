@@ -12,7 +12,7 @@ type AppState = {
   toastMessage: {
     error: boolean;
     text: string;
-    arg: string;
+    arg?: string;
   } | null;
 };
 

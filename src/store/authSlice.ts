@@ -14,8 +14,12 @@ type Auth = {
   isLogged: boolean;
   user: Omit<User, 'password'>;
 };
-
-// export const errorArray = [400, 401, 403, 404, 409];
+// Это нужно перенести в enum
+const SIGNIN = 'SIGNIN';
+const SIGNUP = 'SIGNUP';
+const USER = 'USER';
+const USER_UPDATE = 'USER_UPDATE';
+const USER_DELETE = 'USER_DELETE';
 
 const userInit: Omit<User, 'password'> = {
   _id: '',
@@ -35,19 +39,22 @@ export const thunkSignUp = createAsyncThunk(
       const res = await fetchSignUp(options);
       if (!res.ok) {
         const err: { message: string; statusCode: number } = await res.json();
-        // if (errorArray.includes(err.statusCode)) {
-        //   dispatch(setToastMessage(err.message));
-        // }
-        throw new Error(err.message);
+
+        throw new Error(String(err.statusCode));
       }
       const response: Omit<User, 'password'> = await res.json();
       const login = options.login;
       const password = options.password;
-      dispatch(setToastMessage({ error: false, text: 'New user is created', arg: '' }));
+
+      dispatch(setToastMessage({ error: false, text: String(res.status) + SIGNUP, arg: '' }));
       dispatch(thunkSignIn({ login, password }));
       return response;
     } catch (error) {
-      return rejectWithValue(getErrorMessage(error));
+      const err = getErrorMessage(error);
+
+      dispatch(setToastMessage({ error: true, text: err + SIGNUP }));
+
+      return rejectWithValue(err);
     }
   }
 );
@@ -60,10 +67,8 @@ export const thunkSignIn = createAsyncThunk(
 
       if (!res.ok) {
         const err: { message: string; statusCode: number } = await res.json();
-        // if (errorArray.includes(err.statusCode)) {
-        //   dispatch(setToastMessage({ error: true, text: err.statusCode }));
-        // }
-        throw new Error(err.message);
+
+        throw new Error(String(err.statusCode));
       }
 
       const { token }: { token: string } = await res.json();
@@ -75,8 +80,8 @@ export const thunkSignIn = createAsyncThunk(
       return token;
     } catch (error) {
       const err = getErrorMessage(error);
-      dispatch(setToastMessage({ error: true, text: err }));
-      return rejectWithValue(getErrorMessage(error));
+      dispatch(setToastMessage({ error: true, text: err + SIGNIN }));
+      return rejectWithValue(err);
     }
   }
 );
@@ -89,19 +94,18 @@ export const thunkGetUserById = createAsyncThunk(
       if (!res.ok) {
         const err: { message: string; statusCode: number } = await res.json();
 
-        // if (errorArray.includes(err.statusCode)) {
-        // dispatch(setToastMessage(err.message));
-        // }
         dispatch(setAuth(false));
-        throw new Error(err.message);
+        throw new Error(String(err.statusCode));
       }
       const response: User = await res.json();
-      dispatch(setToastMessage({ error: false, text: `Welcome to`, arg: response.name }));
-      // dispatch(setToastMessage('Successeful login'));
+      dispatch(
+        setToastMessage({ error: false, text: String(res.status) + USER, arg: `${response.name}` })
+      );
+
       return response;
     } catch (error) {
       const err = getErrorMessage(error);
-      dispatch(setToastMessage({ error: true, text: err }));
+      dispatch(setToastMessage({ error: true, text: err + USER }));
       return rejectWithValue(err);
     }
   }
@@ -114,18 +118,19 @@ export const thunkUpdateUser = createAsyncThunk(
       const res = await updateUser(user, token);
       if (!res.ok) {
         const err: { message: string; statusCode: number } = await res.json();
-        // if (errorArray.includes(err.statusCode)) {
-        //   dispatch(setToastMessage(err.message));
-        // }
-        throw new Error(err.message);
+        throw new Error(String(err.statusCode));
       }
       const response: Omit<User, 'password'> = await res.json();
+
+      dispatch(setToastMessage({ error: false, text: String(res.status) + USER_UPDATE, arg: '' }));
       const login = user.login;
       const password = user.password;
       dispatch(thunkSignIn({ login, password }));
       return response;
     } catch (error) {
-      return rejectWithValue(getErrorMessage(error));
+      const err = getErrorMessage(error);
+      dispatch(setToastMessage({ error: true, text: err + SIGNUP }));
+      return rejectWithValue(err);
     }
   }
 );
@@ -137,15 +142,16 @@ export const thunkDeleteUser = createAsyncThunk(
       const res = await deleteUser(id, token);
       if (!res.ok) {
         const err: { message: string; statusCode: number } = await res.json();
-        // if (errorArray.includes(err.statusCode)) {
-        //   dispatch(setToastMessage(err.message));
-        // }
-        throw new Error(err.message);
+
+        throw new Error(String(err.statusCode));
       }
       const response: Omit<User, 'password'> = await res.json();
+      dispatch(setToastMessage({ error: false, text: String(res.status) + USER_DELETE, arg: '' }));
       return response;
     } catch (error) {
-      return rejectWithValue(getErrorMessage(error));
+      const err = getErrorMessage(error);
+      dispatch(setToastMessage({ error: true, text: err + SIGNUP }));
+      return rejectWithValue(err);
     }
   }
 );
@@ -171,10 +177,12 @@ export const authSlice = createSlice({
 
     builder.addCase(thunkGetUserById.rejected, (state, action) => {
       removeTokenFromLS();
+      state.isLogged = false;
     });
 
     builder.addCase(thunkUpdateUser.rejected, (state, action) => {
-      // removeTokenFromLS();
+      removeTokenFromLS();
+      state.isLogged = false;
     });
 
     builder.addCase(thunkDeleteUser.fulfilled, (state, action) => {

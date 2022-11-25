@@ -36,13 +36,12 @@ const MainLayout = ({ children }: Props) => {
   const pending = boardState || boardsState || loading;
 
   useEffect(() => {
-    console.log(toastMessage);
     const arr = Object.keys(json.TOAST);
     if (toastMessage) {
       if (toastMessage.error) {
         arr.includes(toastMessage.text)
           ? toast.error(t(`TOAST.${toastMessage.text}`))
-          : toast.error(t('TOAST.Server error'));
+          : toast.error(t('TOAST.500'));
       } else {
         toast.success(t(`TOAST.${toastMessage.text}`) + toastMessage.arg);
       }

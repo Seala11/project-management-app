@@ -99,7 +99,18 @@
     "User was not founded!": "User was not founded!",
     "Login already exist": "Login already exist",
     "New user is created": "New user is created",
-    "Server error": "Server error"
+    "Server error": "Server error",
+    "200SIGNUP": "New user is created",
+    "200USER": "Welcome to app,",
+    "200USER_UPDATE": "Your data has been updated",
+    "USER_DELETE": "User has been deleted",
+    "409SIGNUP": "Login already exist",
+    "400SIGNUP": "WRONG DATA",
+    "403SIGNUP": "Authorization is required",
+    "400SIGNIN": "Login or password is wrong",
+    "401SIGNIN": "Login or password is wrong",
+    "404": "User was not founded!",
+    "500": "Server error"
   },
   "SETTINGS": {
     "EDIT_MODAL_TEXT": "Would you like to edit your profile? You need to enter your password or create a new one",
