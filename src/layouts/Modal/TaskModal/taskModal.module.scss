@@ -1,36 +1,5 @@
 @use './app/styles/mixins.scss' as *;
 
-.title {
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: var(--black);
-  padding: 0.4rem 1.1rem;
-  outline-width: 0;
-}
-
-.titleDisabled {
-  user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  cursor: horisontal-text;
-  border: none;
-  background-color: var(--white);
-}
-
-.titleAbled {
-  border: none;
-  border: 0.1rem solid var(--border);
-  box-shadow: 0 0.3rem 1.6rem 0.1rem var(--card);
-  border-radius: 0.8rem;
-  padding: 0.3rem 1rem;
-
-  &:focus,
-  &:focus-visible {
-    outline-width: 0;
-    border: 0.1rem solid var(--black);
-  }
-}
-
 .taskTitleWrapper {
   width: 100%;
   width: -moz-available;

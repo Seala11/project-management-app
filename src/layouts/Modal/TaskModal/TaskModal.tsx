@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useAppDispatch } from 'store/hooks';
 import {
   BtnColor,
@@ -17,8 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { boardIdSelector, columnsSelector } from 'store/boardSlice';
 import { thunkGetAllUsers } from 'store/middleware/users';
 import Icon from 'components/Icon/Icon';
-import { thunkUpdateTask } from 'store/middleware/tasks';
-import { toast } from 'react-toastify';
+import TitleInput from './TitleInput/TitleInput';
 
 type Props = {
   onClose: (event: React.MouseEvent) => void;
@@ -34,8 +33,6 @@ const TaskModal = ({ onClose }: Props) => {
   const columnId = useAppSelector(modalColumnIdSelector);
   const columns = useAppSelector(columnsSelector);
   const selectedColumn = columns.find((column) => column._id === columnId);
-
-  const [titleInputDisabled, setTitleInputDisabled] = useState(true);
 
   useEffect(() => {
     if (allUsers.length === 0) {
@@ -56,57 +53,6 @@ const TaskModal = ({ onClose }: Props) => {
     );
   };
 
-  const [titleCurrVal, setTitleCurrVal] = useState(selectedTask?.title);
-  const [titleUpdatedVal, setTitleUpdatedVal] = useState(selectedTask?.title);
-  const titleInputRef = useRef<HTMLInputElement | null>(null);
-
-  const changeTitleValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitleUpdatedVal(e.target.value);
-  };
-
-  const updateTitleVal = () => {
-    if (titleUpdatedVal && selectedTask && titleUpdatedVal !== titleCurrVal) {
-      dispatch(
-        thunkUpdateTask({
-          taskId: selectedTask?._id,
-          boardId: boardId,
-          columnId: columnId,
-          userId: selectedTask.userId,
-          title: titleUpdatedVal,
-          description: JSON.stringify({
-            description: selectedTask.description.description,
-            color: selectedTask.description.color,
-          }),
-          order: selectedTask.order,
-          users: selectedTask.users,
-        })
-      )
-        .unwrap()
-        .then((originalPromiseResult) => {
-          console.log(originalPromiseResult);
-          toast.success('task title updated');
-          setTitleCurrVal(titleUpdatedVal);
-        })
-        .catch((rejectedValue) => {
-          console.log(rejectedValue);
-          toast.error('update title error');
-          setTitleUpdatedVal(titleCurrVal);
-        })
-        .finally(() => {
-          setTitleInputDisabled(true);
-        });
-    } else {
-      setTitleInputDisabled(true);
-      setTitleUpdatedVal(titleCurrVal);
-    }
-  };
-
-  const updateTitleValByEnter = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && titleInputRef && titleInputRef.current) {
-      titleInputRef.current.blur();
-    }
-  };
-
   return (
     <>
       <div className={styles.heading}>
@@ -114,20 +60,7 @@ const TaskModal = ({ onClose }: Props) => {
       </div>
       <div className={styles.taskWrapper}>
         <div className={styles.taskTitleWrapper}>
-          <div className={styles.changeWrapper}>
-            <input
-              maxLength={20}
-              ref={titleInputRef}
-              className={`${styles.title} ${
-                titleInputDisabled ? styles.titleDisabled : styles.titleAbled
-              }`}
-              value={titleInputDisabled ? titleCurrVal : titleUpdatedVal}
-              onClick={() => setTitleInputDisabled(false)}
-              onBlur={updateTitleVal}
-              onChange={(e) => changeTitleValue(e)}
-              onKeyDown={updateTitleValByEnter}
-            />
-          </div>
+          <TitleInput task={selectedTask} boardId={boardId} columnId={columnId} />
           <p className={styles.subtitleColumn}>
             {t('MODAL.IN_COLUMN')} {selectedColumn?.title}
           </p>
