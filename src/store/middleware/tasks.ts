@@ -104,7 +104,7 @@ export const thunkDeleteTasks = createAsyncThunk<
 //update task
 
 export type UpdateTaskRequestType = {
-  taskId: string;
+  _id: string;
   boardId: string;
   columnId: string;
   userId: string;
@@ -119,7 +119,7 @@ export type UpdateTaskResponseType = {
   task: TaskType;
 };
 
-export const thunkUpdateTask = createAsyncThunk<
+export const thunkUpdateTaskInfo = createAsyncThunk<
   UpdateTaskResponseType,
   UpdateTaskRequestType,
   { rejectValue: string }

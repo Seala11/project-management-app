@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { thunkUpdateTask } from 'store/middleware/tasks';
+import { thunkUpdateTaskInfo } from 'store/middleware/tasks';
 import { toast } from 'react-toastify';
 import { useAppDispatch } from 'store/hooks';
 import { TaskParsedType } from 'store/boardSlice';
@@ -25,8 +25,8 @@ const TitleInput = ({ task, boardId, columnId }: Props) => {
   const updateTitleVal = () => {
     if (titleUpdatedVal && task && titleUpdatedVal !== titleCurrVal) {
       dispatch(
-        thunkUpdateTask({
-          taskId: task?._id,
+        thunkUpdateTaskInfo({
+          _id: task?._id,
           boardId: boardId,
           columnId: columnId,
           userId: task.userId,
