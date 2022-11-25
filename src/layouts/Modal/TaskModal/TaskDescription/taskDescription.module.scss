@@ -5,8 +5,7 @@
   width: -moz-available;
   width: -webkit-fill-available;
   width: stretch;
-  padding-bottom: 1rem;
-  padding-left: 1rem;
+  padding: 1rem 0 1rem 1rem;
 }
 
 .changeWrapper {
@@ -34,19 +33,23 @@
   }
 }
 
-.textarea {
-  @extend %textarea;
-  border: none;
-  background-color: var(--background);
-  outline-width: 0;
+.changeBtnCancel {
+  &:hover {
+    background-color: var(--error-m);
+  }
 }
 
-.disabled {
+.textDescription {
+  word-break: break-all;
   user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
   cursor: horisontal-text;
   transition: all 0.15s ease-in-out;
+  padding: 1rem 0;
+  color: var(--black);
+  margin: 0;
+  border-radius: 0.8rem;
 
   &:hover {
     background-color: var(--gray-s);
@@ -54,7 +57,10 @@
   }
 }
 
-.abled {
+.textarea {
+  @extend %textarea;
+  border: none;
+  outline-width: 0;
   height: 13rem;
   border: 0.2rem solid var(--primary);
   background-color: var(--white);
@@ -63,4 +69,20 @@
   &:focus-visible {
     border: 0.2rem solid var(--primary);
   }
+}
+
+.textareaWrapper {
+  position: relative;
+}
+
+.counter {
+  position: absolute;
+  bottom: 1rem;
+  right: 1.4rem;
+  font-size: 1.4rem;
+  transition: color 0.3s ease-in;
+}
+
+.counterLim {
+  color: var(--error);
 }
