@@ -64,6 +64,7 @@ const TitleInput = ({ task, boardId, columnId }: Props) => {
       titleInputRef.current.blur();
     }
   };
+
   return (
     <input
       maxLength={20}

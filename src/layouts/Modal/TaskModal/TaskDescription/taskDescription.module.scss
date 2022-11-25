@@ -1,0 +1,66 @@
+@use './app/styles/mixins.scss' as *;
+
+.taskInfo {
+  width: 100%;
+  width: -moz-available;
+  width: -webkit-fill-available;
+  width: stretch;
+  padding-bottom: 1rem;
+  padding-left: 1rem;
+}
+
+.changeWrapper {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.description {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--black);
+  cursor: default;
+}
+
+.changeBtn {
+  background-color: transparent;
+  padding: 0.6rem;
+  border-radius: 50%;
+  border: none;
+
+  &:hover {
+    background-color: var(--primary-m);
+    cursor: pointer;
+  }
+}
+
+.textarea {
+  @extend %textarea;
+  border: none;
+  background-color: var(--background);
+  outline-width: 0;
+}
+
+.disabled {
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  cursor: horisontal-text;
+  transition: all 0.15s ease-in-out;
+
+  &:hover {
+    background-color: var(--gray-s);
+    cursor: pointer;
+  }
+}
+
+.abled {
+  height: 13rem;
+  border: 0.2rem solid var(--primary);
+  background-color: var(--white);
+
+  &:focus,
+  &:focus-visible {
+    border: 0.2rem solid var(--primary);
+  }
+}

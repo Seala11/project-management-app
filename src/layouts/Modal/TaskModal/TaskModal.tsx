@@ -16,8 +16,8 @@ import styles from './taskModal.module.scss';
 import { useTranslation } from 'react-i18next';
 import { boardIdSelector, columnsSelector } from 'store/boardSlice';
 import { thunkGetAllUsers } from 'store/middleware/users';
-import Icon from 'components/Icon/Icon';
 import TitleInput from './TitleInput/TitleInput';
+import TaskDescription from './TaskDescription/TaskDescription';
 
 type Props = {
   onClose: (event: React.MouseEvent) => void;
@@ -65,17 +65,7 @@ const TaskModal = ({ onClose }: Props) => {
             {t('MODAL.IN_COLUMN')} {selectedColumn?.title}
           </p>
         </div>
-
-        <div className={styles.taskInfo}>
-          <div className={styles.changeWrapper}>
-            <h3 className={styles.description}>{t('MODAL.DESCRIPTION')}</h3>
-            <button className={styles.changeBtn}>
-              <Icon color="#0047FF" size={18} icon="pen-change" className={styles.icon} />
-            </button>
-          </div>
-          <p className={styles.subtitle}>{selectedTask?.description.description}</p>
-        </div>
-
+        <TaskDescription task={selectedTask} boardId={boardId} columnId={columnId} />
         <div className={styles.taskInfo}>
           <h3 className={styles.members}>{t('MODAL.MEMBERS')}</h3>
           {selectedTask?.users.map((id) => {

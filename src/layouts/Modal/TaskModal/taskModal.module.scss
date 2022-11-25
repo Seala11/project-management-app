@@ -18,9 +18,9 @@
   margin: 0;
   font-size: 1.4rem;
   padding: 0.6rem 0 0 1rem;
+  cursor: default;
 }
 
-.description,
 .members,
 .labelTitle {
   font-size: 1.8rem;
@@ -50,7 +50,7 @@
   justify-content: center;
   align-items: flex-start;
   width: 50rem;
-  padding: 0 2rem 2rem 1rem;
+  padding: 0 2.5rem 2rem 1.5rem;
   overflow-y: auto;
 
   @include media-mobile {
@@ -135,22 +135,4 @@
   border-radius: 0.8rem;
   color: var(--black);
   cursor: default;
-}
-
-.changeWrapper {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
-.changeBtn {
-  background-color: transparent;
-  padding: 1rem;
-  border-radius: 50%;
-  border: none;
-
-  &:hover {
-    background-color: var(--primary-m);
-    cursor: pointer;
-  }
 }
