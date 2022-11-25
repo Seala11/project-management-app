@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAppDispatch } from 'store/hooks';
 import {
   BtnColor,
@@ -33,6 +33,9 @@ const TaskModal = ({ onClose }: Props) => {
   const columnId = useAppSelector(modalColumnIdSelector);
   const columns = useAppSelector(columnsSelector);
   const selectedColumn = columns.find((column) => column._id === columnId);
+  const [headerColor, setHeaderColor] = useState<string>(
+    selectedTask?.description.color || '#0047ff14'
+  );
 
   useEffect(() => {
     if (allUsers.length === 0) {
@@ -55,7 +58,7 @@ const TaskModal = ({ onClose }: Props) => {
 
   return (
     <>
-      <div className={styles.heading}>
+      <div className={styles.heading} style={{ backgroundColor: `${headerColor}` }}>
         <button type="button" className={styles.closeBtn} onClick={onClose} />
       </div>
 
@@ -88,7 +91,12 @@ const TaskModal = ({ onClose }: Props) => {
           </select>
         </div>
 
-        <TaskColor />
+        <TaskColor
+          task={selectedTask}
+          boardId={boardId}
+          columnId={columnId}
+          setHeaderColor={setHeaderColor}
+        />
 
         <button className={styles.button} type="button" onClick={deleteModalOpen}>
           {t('MODAL.DELETE_TASK')}
