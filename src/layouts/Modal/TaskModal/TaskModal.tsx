@@ -12,12 +12,12 @@ import {
 import { useAppSelector } from 'store/hooks';
 import { taskIdSelector } from 'store/modalSlice';
 import COLORS from 'utils/constants/COLORS';
-import styles from './taskModal.module.scss';
 import { useTranslation } from 'react-i18next';
 import { boardIdSelector, columnsSelector } from 'store/boardSlice';
 import { thunkGetAllUsers } from 'store/middleware/users';
-import TitleInput from './TitleInput/TitleInput';
+import TaskTitle from './TaskTitle/TaskTitle';
 import TaskDescription from './TaskDescription/TaskDescription';
+import styles from './taskModal.module.scss';
 
 type Props = {
   onClose: (event: React.MouseEvent) => void;
@@ -60,7 +60,7 @@ const TaskModal = ({ onClose }: Props) => {
       </div>
       <div className={styles.taskWrapper}>
         <div className={styles.taskTitleWrapper}>
-          <TitleInput task={selectedTask} boardId={boardId} columnId={columnId} />
+          <TaskTitle task={selectedTask} boardId={boardId} columnId={columnId} />
           <p className={styles.subtitleColumn}>
             {t('MODAL.IN_COLUMN')} {selectedColumn?.title}
           </p>

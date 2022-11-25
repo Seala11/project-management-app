@@ -3,7 +3,7 @@ import { thunkUpdateTaskInfo } from 'store/middleware/tasks';
 import { toast } from 'react-toastify';
 import { useAppDispatch } from 'store/hooks';
 import { TaskParsedType } from 'store/boardSlice';
-import styles from './titleInput.module.scss';
+import styles from './taskTitle.module.scss';
 
 type Props = {
   task: TaskParsedType | null;
@@ -11,7 +11,7 @@ type Props = {
   columnId: string;
 };
 
-const TitleInput = ({ task, boardId, columnId }: Props) => {
+const TaskTitle = ({ task, boardId, columnId }: Props) => {
   const dispatch = useAppDispatch();
   const [titleCurrVal, setTitleCurrVal] = useState(task?.title);
   const [titleUpdatedVal, setTitleUpdatedVal] = useState(task?.title);
@@ -79,4 +79,4 @@ const TitleInput = ({ task, boardId, columnId }: Props) => {
   );
 };
 
-export default TitleInput;
+export default TaskTitle;
