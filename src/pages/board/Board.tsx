@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { thunkGetSingleBoard, updateColumnsOrder } from 'store/boardSlice';
+import { thunkGetSingleBoard, updateColumnsOrder, updateTasksState } from 'store/boardSlice';
 import styles from './board.module.scss';
 import { useAppSelector, useAppDispatch } from 'store/hooks';
 import ROUTES from 'utils/constants/ROUTES';
@@ -21,7 +21,7 @@ import {
 } from 'store/modalSlice';
 import { useTranslation } from 'react-i18next';
 import Column from './column/Column';
-import { thunkCreateTask, thunkDeleteTasks } from 'store/middleware/tasks';
+import { thunkCreateTask, thunkDeleteTasks, thunkUpdateTaskOrder } from 'store/middleware/tasks';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 
 /* ToDo
@@ -32,7 +32,7 @@ import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 */
 
 const Board = () => {
-  const { title, error, columns } = useAppSelector((state) => state.board);
+  const { title, error, columns, tasks } = useAppSelector((state) => state.board);
   const { modalAction, userInputTitle, userInputDescr, taskId, taskOrder } = useAppSelector(
     (state) => state.modal
   );
@@ -163,6 +163,94 @@ const Board = () => {
     [columns, dispatch, id]
   );
 
+  const handleDragEndTasks = useCallback(
+    (result: DropResult) => {
+      const { destination, source, draggableId } = result;
+      if (!destination) return;
+      let newDestTasks = tasks[destination.droppableId];
+      let newSourceTasks = tasks[source.droppableId];
+      const getDestinationOrder = () => {
+        let order = 0;
+        if (newDestTasks.length !== 0) {
+          order = newDestTasks[destination.index]
+            ? newDestTasks[destination.index].order
+            : newDestTasks.at(-1)!.order + 1;
+          if (destination.droppableId !== source.droppableId) {
+            order - 1;
+          }
+        }
+        return order;
+      };
+      const destOrder = getDestinationOrder();
+      const dragSpanIndex = source.index - destination.index;
+      const draggableTask = {
+        ...tasks[source.droppableId].filter((task) => task._id === draggableId)[0],
+        order: destOrder,
+      };
+      if (destination.droppableId === source.droppableId) {
+        // if drug task in the same column
+        newDestTasks = newDestTasks
+          .map((item, i) => {
+            if (i === source.index) return { ...item, order: destOrder };
+            else if (dragSpanIndex > 0 && i >= destination.index && i < source.index)
+              return { ...item, order: item.order + 1 };
+            else if (dragSpanIndex < 0 && i <= destination.index && i > source.index)
+              return { ...item, order: item.order - 1 };
+            return item;
+          })
+          .sort((a, b) => a.order - b.order);
+      } else {
+        // if drug task in another column
+        // delete task in source and decrease order
+        newSourceTasks = tasks[source.droppableId]
+          .filter((task) => task._id !== draggableId)
+          .map((item, i) => {
+            if (i >= source.index) return { ...item, order: item.order - 1 };
+            return item;
+          });
+
+        // add source task to dest and increase order
+        newDestTasks = newDestTasks.map((item, i) => {
+          if (i >= destination.index) return { ...item, order: item.order + 1 };
+          return item;
+        });
+        newDestTasks.push({
+          ...tasks[source.droppableId].filter((task) => task._id === draggableId)[0],
+          order: destOrder,
+        });
+        newDestTasks.sort((a, b) => a.order - b.order);
+      }
+      dispatch(updateTasksState({ tasks: newSourceTasks, destColumnId: source.droppableId }));
+      dispatch(updateTasksState({ tasks: newDestTasks, destColumnId: destination.droppableId }));
+      dispatch(
+        thunkUpdateTaskOrder({
+          ...draggableTask,
+          columnId: destination.droppableId,
+          description: JSON.stringify(draggableTask.description),
+        })
+      );
+      newSourceTasks.forEach((task) => {
+        dispatch(
+          thunkUpdateTaskOrder({
+            ...task,
+            columnId: source.droppableId,
+            description: JSON.stringify(task.description),
+          })
+        );
+      });
+      newDestTasks.forEach((task) => {
+        dispatch(
+          thunkUpdateTaskOrder({
+            ...task,
+            columnId: destination.droppableId,
+            description: JSON.stringify(task.description),
+          })
+        );
+      });
+    },
+    [tasks, dispatch]
+  );
+
   const onDragEnd = useCallback(
     (result: DropResult) => {
       const { destination, source } = result;
@@ -176,10 +264,11 @@ const Board = () => {
       if (destination.droppableId === 'boardId') {
         handleDragEndColumns(result);
       } else {
+        handleDragEndTasks(result);
         console.log(result);
       }
     },
-    [handleDragEndColumns]
+    [handleDragEndColumns, handleDragEndTasks]
   );
   return (
     <>

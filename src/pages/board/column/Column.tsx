@@ -79,11 +79,11 @@ const Column = (props: Props) => {
     return () => document.removeEventListener('click', onClick);
   }, [isEditable, reset, handleSubmit]);*/
 
-  const deleteColumn = (title: string) => {
+  const deleteColumn = () => {
     dispatch(setModalColumnId(column._id));
     dispatch(
       setModalOpen({
-        message: `${t('MODAL.DELETE_MSG')} ${title}?`,
+        message: `${t('MODAL.DELETE_MSG')} ${column.title}?`,
         color: BtnColor.RED,
         btnText: `${t('MODAL.DELETE')}`,
         action: ModalAction.COLUMN_DELETE,
@@ -105,6 +105,11 @@ const Column = (props: Props) => {
       })
     );
     dispatch(setTaskOrder(taskOrder));
+  };
+
+  const CancelTitleEdit = () => {
+    reset();
+    setIsEditable(false);
   };
 
   return (
@@ -136,13 +141,7 @@ const Column = (props: Props) => {
               >
                 <Icon color="#0047FF" size={100} icon="done" className={styles.icon} />
               </button>
-              <button
-                className={styles.buttonEdit}
-                onClick={() => {
-                  reset();
-                  setIsEditable(false);
-                }}
-              >
+              <button className={styles.buttonEdit} onClick={CancelTitleEdit}>
                 <Icon color="#CC0707" size={100} icon="cancel" className={styles.icon} />
               </button>
               <span className={styles.formError}>
@@ -154,13 +153,13 @@ const Column = (props: Props) => {
               <div className={styles.titleName} onClick={() => setIsEditable(true)}>
                 {column.title}
               </div>
-              <button className={styles.button} onClick={() => deleteColumn(column.title)}>
+              <button className={styles.button} onClick={deleteColumn}>
                 <Icon color="#CC0707" size={100} icon="trash" className={styles.icon} />
               </button>
             </div>
           )}
           <hr className={styles.columnLine}></hr>
-          <Droppable droppableId={column._id} direction={'vertical'} mode={'standard'} type="TASK">
+          <Droppable droppableId={column._id} mode={'standard'} type="TASK">
             {(providedColumn) => (
               <ul
                 className={styles.tasksList}

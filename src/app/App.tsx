@@ -5,13 +5,16 @@ import MainLayout from 'layouts/MainLayout/MainLayout';
 import './app.module.scss';
 import { store } from 'store';
 import { Provider } from 'react-redux';
+import ErrorBoundary from 'layouts/Error/Error';
 
 const App = () => (
   <Provider store={store}>
     <BrowserRouter>
-      <MainLayout>
-        <Routing />
-      </MainLayout>
+      <ErrorBoundary>
+        <MainLayout>
+          <Routing />
+        </MainLayout>
+      </ErrorBoundary>
     </BrowserRouter>
   </Provider>
 );

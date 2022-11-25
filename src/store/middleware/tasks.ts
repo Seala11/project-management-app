@@ -135,3 +135,17 @@ export const thunkUpdateTaskInfo = createAsyncThunk<
   const updatedTask = await response.json();
   return { column: columnId, task: updatedTask };
 });
+
+export const thunkUpdateTaskOrder = createAsyncThunk<
+  undefined,
+  UpdateTaskRequestType,
+  { rejectValue: string }
+>('board/updateTaskOnServer', async (data, { rejectWithValue }) => {
+  const token = getTokenFromLS();
+  const response = await fetchUpdateTask(data, token);
+
+  if (!response.ok) {
+    const resp = await response.json();
+    return rejectWithValue(`${resp?.statusCode}/${resp.message}`);
+  }
+});
