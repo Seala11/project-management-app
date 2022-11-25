@@ -66,24 +66,19 @@ const TaskModal = ({ onClose }: Props) => {
 
   const updateTitleVal = () => {
     if (titleUpdatedVal && selectedTask && titleUpdatedVal !== titleCurrVal) {
-      const taskUpdated = {
-        title: titleUpdatedVal,
-        order: selectedTask.order,
-        description: JSON.stringify({
-          description: selectedTask.description.description,
-          color: selectedTask.description.color,
-        }),
-        columnId: columnId,
-        userId: selectedTask.userId,
-        users: selectedTask.users,
-      };
-
       dispatch(
         thunkUpdateTask({
+          taskId: selectedTask?._id,
           boardId: boardId,
           columnId: columnId,
-          taskId: selectedTask?._id,
-          taskUpdate: taskUpdated,
+          userId: selectedTask.userId,
+          title: titleUpdatedVal,
+          description: JSON.stringify({
+            description: selectedTask.description.description,
+            color: selectedTask.description.color,
+          }),
+          order: selectedTask.order,
+          users: selectedTask.users,
         })
       )
         .unwrap()

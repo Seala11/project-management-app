@@ -101,20 +101,17 @@ export const thunkDeleteTasks = createAsyncThunk<
   return { column: columnId, task: task };
 });
 
-// update Task
+//update task
 
-type UpdateTaskRequestType = {
+export type UpdateTaskRequestType = {
+  taskId: string;
   boardId: string;
   columnId: string;
-  taskId: string;
-  taskUpdate: {
-    title: string;
-    order: number;
-    columnId: string;
-    description: string;
-    userId: string;
-    users: string[];
-  };
+  userId: string;
+  title: string;
+  description: string;
+  order: number;
+  users: string[];
 };
 
 export type UpdateTaskResponseType = {
@@ -126,14 +123,15 @@ export const thunkUpdateTask = createAsyncThunk<
   UpdateTaskResponseType,
   UpdateTaskRequestType,
   { rejectValue: string }
->('task/updateTask', async ({ boardId, columnId, taskId, taskUpdate }, { rejectWithValue }) => {
+>('board/updateTask', async (data, { rejectWithValue }) => {
+  const { columnId } = data;
   const token = getTokenFromLS();
-  const response = await fetchUpdateTask(boardId, columnId, taskId, taskUpdate, token);
+  const response = await fetchUpdateTask(data, token);
 
   if (!response.ok) {
     const resp = await response.json();
     return rejectWithValue(`${resp?.statusCode}/${resp.message}`);
   }
-  const task: TaskType = await response.json();
-  return { column: columnId, task: task };
+  const updatedTask = await response.json();
+  return { column: columnId, task: updatedTask };
 });

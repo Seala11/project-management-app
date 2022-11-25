@@ -1,4 +1,5 @@
 import { BOARDS } from 'api/config';
+import { UpdateTaskRequestType } from 'store/middleware/tasks';
 
 export async function fetchGetTasks(boardId: string, columnId: string, token: string) {
   const response = await fetch(`${BOARDS}/${boardId}/columns/${columnId}/tasks`, {
@@ -49,20 +50,8 @@ export async function fetchDeleteTask(
   return response;
 }
 
-export async function fetchUpdateTask(
-  boardId: string,
-  columnId: string,
-  taskId: string,
-  taskUpdate: {
-    title: string;
-    order: number;
-    columnId: string;
-    description: string;
-    userId: string;
-    users: string[];
-  },
-  token: string
-) {
+export async function fetchUpdateTask(data: UpdateTaskRequestType, token: string) {
+  const { taskId, boardId, columnId, userId, title, description, order, users } = data;
   const response = await fetch(`${BOARDS}/${boardId}/columns/${columnId}/tasks/${taskId}`, {
     method: 'PUT',
     headers: {
@@ -70,7 +59,7 @@ export async function fetchUpdateTask(
       accept: 'application/json',
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(taskUpdate),
+    body: JSON.stringify({ title, order, description, columnId, userId, users }),
   });
   return response;
 }
