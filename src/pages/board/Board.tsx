@@ -165,22 +165,60 @@ const Board = () => {
 
   const handleDragEndTasks = useCallback(
     (result: DropResult) => {
-      const { destination, source } = result;
+      const { destination, source, draggableId } = result;
       if (!destination) return;
-      const destinationOrder = tasks[destination.droppableId][destination.index].order;
+      let newDestTasks = tasks[destination.droppableId];
+      let newSourceTasks = tasks[source.droppableId];
+      const getDestinationOrder = () => {
+        let order = 0;
+        if (newDestTasks.length !== 0) {
+          order = newDestTasks[destination.index]
+            ? newDestTasks[destination.index].order
+            : newDestTasks.at(-1)!.order + 1;
+          if (destination.droppableId !== source.droppableId) {
+            order - 1;
+          }
+        }
+        return order;
+      };
+      const destOrder = getDestinationOrder();
+      console.log(destOrder);
       const dragSpanIndex = source.index - destination.index;
-      const newTasks = tasks[destination.droppableId]
-        .map((item, i) => {
-          if (i === source.index) return { ...item, order: destinationOrder };
-          else if (dragSpanIndex > 0 && i >= destination.index && i < source.index)
-            return { ...item, order: item.order + 1 };
-          else if (dragSpanIndex < 0 && i <= destination.index && i > source.index)
-            return { ...item, order: item.order - 1 };
-          return item;
-        })
-        .sort((a, b) => a.order - b.order);
+      if (destination.droppableId === source.droppableId) {
+        // if drug task in the same column
+        newDestTasks = newDestTasks
+          .map((item, i) => {
+            if (i === source.index) return { ...item, order: destOrder };
+            else if (dragSpanIndex > 0 && i >= destination.index && i < source.index)
+              return { ...item, order: item.order + 1 };
+            else if (dragSpanIndex < 0 && i <= destination.index && i > source.index)
+              return { ...item, order: item.order - 1 };
+            return item;
+          })
+          .sort((a, b) => a.order - b.order);
+      } else {
+        // if drug task in another column
+        // delete task in source and decrease order
+        newSourceTasks = tasks[source.droppableId]
+          .filter((task) => task._id !== draggableId)
+          .map((item, i) => {
+            if (i >= source.index) return { ...item, order: item.order - 1 };
+            return item;
+          });
 
-      dispatch(updateTasksState({ tasks: newTasks, destColumnId: destination.droppableId }));
+        // add source task to dest and increase order
+        newDestTasks = newDestTasks.map((item, i) => {
+          if (i >= destination.index) return { ...item, order: item.order + 1 };
+          return item;
+        });
+        newDestTasks.push({
+          ...tasks[source.droppableId].filter((task) => task._id === draggableId)[0],
+          order: destOrder,
+        });
+        newDestTasks.sort((a, b) => a.order - b.order);
+      }
+      dispatch(updateTasksState({ tasks: newSourceTasks, destColumnId: source.droppableId }));
+      dispatch(updateTasksState({ tasks: newDestTasks, destColumnId: destination.droppableId }));
       /*  newColumns.forEach((column) => {
         dispatch(
           thunkUpdateColumn({

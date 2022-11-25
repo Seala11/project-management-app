@@ -51,8 +51,7 @@ export async function fetchDeleteTask(
 }
 
 export async function fetchUpdateTask(data: UpdateTaskRequestType, token: string) {
-  const { taskId, boardId, columnId, userId, title, description, order } = data;
-  const users = [userId];
+  const { taskId, boardId, columnId, userId, title, description, order, users } = data;
   const response = await fetch(`${BOARDS}/${boardId}/columns/${columnId}/tasks/${taskId}`, {
     method: 'PUT',
     headers: {

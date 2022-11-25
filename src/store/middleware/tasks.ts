@@ -111,6 +111,7 @@ export type UpdateTaskRequestType = {
   title: string;
   description: string;
   order: number;
+  users: string[];
 };
 
 export type UpdateTaskResponseType = {
@@ -118,7 +119,7 @@ export type UpdateTaskResponseType = {
   task: TaskType;
 };
 
-export const thunkUpdateTask = createAsyncThunk<
+export const thunkUpdateTaskInfo = createAsyncThunk<
   UpdateTaskResponseType,
   UpdateTaskRequestType,
   { rejectValue: string }
@@ -135,7 +136,7 @@ export const thunkUpdateTask = createAsyncThunk<
   return { column: columnId, task: updatedTask };
 });
 
-export const thunkUpdateTaskOnServer = createAsyncThunk<
+export const thunkUpdateTaskOrder = createAsyncThunk<
   undefined,
   UpdateTaskRequestType,
   { rejectValue: string }
