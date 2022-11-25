@@ -185,55 +185,36 @@ export const authSlice = createSlice({
       state.isLogged = false;
     });
 
-    // if (typeof action.payload === 'string') {
-    //   toast.error(action.payload);
-    // }
-    // });
-
-    // sign in
-
-    // builder.addCase(thunkSignIn.fulfilled, () => {
-    //   console.log('user is created');
-    // });
-
-    // builder.addCase(thunkSignIn.rejected, (state, action) => {
-    // console.log('rejected');
-    // if (typeof action.payload === 'string') {
-    //   toast.error(action.payload);
-    // }
-    // });
-
     builder
       .addCase(thunkGetUserById.fulfilled, (state, action) => {
         state.user = action.payload;
-        // setUserToLS(action.payload);
         state.isLogged = true;
-        // toast.success('User sign in successfully');
-        // state.toastMessage = '200';
       })
+
       .addCase(thunkGetUserById.rejected, (state, action) => {
-        // console.log('rejected');
-        // state.isLogged = false;
         removeTokenFromLS();
-        // if (typeof action.payload === 'string') {
-        // state.toastMessage = action.payload;
-        // }
       })
+
       .addCase(thunkSignIn.fulfilled, (state) => {
         state.pending = false;
       })
+
       .addCase(thunkSignIn.pending, (state) => {
         state.pending = true;
       })
+
       .addCase(thunkSignIn.rejected, (state) => {
         state.pending = false;
       })
+
       .addCase(thunkSignUp.fulfilled, (state) => {
         state.pending = false;
       })
+
       .addCase(thunkSignUp.pending, (state) => {
         state.pending = true;
       })
+
       .addCase(thunkSignUp.rejected, (state) => {
         state.pending = false;
       });
