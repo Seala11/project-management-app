@@ -15,8 +15,8 @@ const Task = (props: Props) => {
   const { taskData, columnId, index } = props;
   const dispatch = useAppDispatch();
 
-  const openTaskModal = (task: TaskParsedType, columnId: string) => {
-    dispatch(setTaskId(task));
+  const openTaskModal = () => {
+    dispatch(setTaskId(taskData));
     dispatch(setModalColumnId(columnId));
     dispatch(setTaskModalOpen());
   };
@@ -26,7 +26,7 @@ const Task = (props: Props) => {
       {(providedTask) => (
         <li
           className={styles.taskItem}
-          onClick={() => openTaskModal(taskData, columnId)}
+          onClick={openTaskModal}
           ref={providedTask.innerRef}
           {...providedTask.draggableProps}
         >

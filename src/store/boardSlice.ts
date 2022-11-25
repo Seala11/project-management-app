@@ -70,6 +70,12 @@ export type BoardResponseType = {
   users: string[];
 };
 
+export type UpdateTasksData = {
+  destColumnId: string;
+  sourceColumnId?: string;
+  tasks: TaskParsedType[];
+};
+
 const initialBoardState: BoardStateType = {
   id: '',
   title: {
@@ -105,7 +111,10 @@ export const boardSlice = createSlice({
     updateColumnsOrder(state, { payload }: PayloadAction<ColumnType[]>) {
       state.columns = payload;
     },
-    clearErrors: (state) => {
+    updateTasksState(state, { payload }: PayloadAction<UpdateTasksData>) {
+      state.tasks[payload.destColumnId] = payload.tasks;
+    },
+    clearErrors(state) {
       state.error = '';
     },
   },
@@ -193,7 +202,7 @@ export const boardSlice = createSlice({
   },
 });
 
-export const { clearErrors, updateColumnsOrder } = boardSlice.actions;
+export const { clearErrors, updateColumnsOrder, updateTasksState } = boardSlice.actions;
 
 export const singleBoardRequestStatus = (state: RootState) => state.board.pending;
 export const columnsSelector = (state: RootState) => state.board.columns;

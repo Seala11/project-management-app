@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchCreateTask, fetchDeleteTask, fetchGetTasks } from 'api/taskApi';
+import { fetchCreateTask, fetchDeleteTask, fetchGetTasks, fetchUpdateTask } from 'api/taskApi';
 import { getTokenFromLS } from 'utils/func/localStorage';
 import { TaskType } from '../boardSlice';
 
@@ -99,4 +99,53 @@ export const thunkDeleteTasks = createAsyncThunk<
   }
   const task: TaskType = await response.json();
   return { column: columnId, task: task };
+});
+
+//update task
+
+export type UpdateTaskRequestType = {
+  _id: string;
+  boardId: string;
+  columnId: string;
+  userId: string;
+  title: string;
+  description: string;
+  order: number;
+  users: string[];
+};
+
+export type UpdateTaskResponseType = {
+  column: string;
+  task: TaskType;
+};
+
+export const thunkUpdateTaskInfo = createAsyncThunk<
+  UpdateTaskResponseType,
+  UpdateTaskRequestType,
+  { rejectValue: string }
+>('board/updateTask', async (data, { rejectWithValue }) => {
+  const { columnId } = data;
+  const token = getTokenFromLS();
+  const response = await fetchUpdateTask(data, token);
+
+  if (!response.ok) {
+    const resp = await response.json();
+    return rejectWithValue(`${resp?.statusCode}/${resp.message}`);
+  }
+  const updatedTask = await response.json();
+  return { column: columnId, task: updatedTask };
+});
+
+export const thunkUpdateTaskOrder = createAsyncThunk<
+  undefined,
+  UpdateTaskRequestType,
+  { rejectValue: string }
+>('board/updateTaskOnServer', async (data, { rejectWithValue }) => {
+  const token = getTokenFromLS();
+  const response = await fetchUpdateTask(data, token);
+
+  if (!response.ok) {
+    const resp = await response.json();
+    return rejectWithValue(`${resp?.statusCode}/${resp.message}`);
+  }
 });
