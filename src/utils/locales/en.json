@@ -107,7 +107,7 @@
     "200SIGNUP": "New user is created",
     "200USER": "Welcome to app,",
     "200USER_UPDATE": "Your data has been updated",
-    "USER_DELETE": "User has been deleted",
+    "200USER_DELETE": "User has been deleted",
     "409SIGNUP": "Login already exist",
     "400SIGNUP": "WRONG DATA",
     "403SIGNUP": "Authorization is required",

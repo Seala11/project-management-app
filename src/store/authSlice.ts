@@ -32,7 +32,6 @@ const initialState: Auth = {
   isLogged: !!getTokenFromLS(),
   user: userInit,
   pending: false,
-  // toastMessage: null,
 };
 
 export const thunkSignUp = createAsyncThunk(
@@ -173,48 +172,64 @@ export const authSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    // builder.addCase(thunkSignUp.fulfilled, () => {
-
-    builder.addCase(thunkGetUserById.rejected, (state, action) => {
-      removeTokenFromLS();
-      state.isLogged = false;
-    });
-
-    builder.addCase(thunkUpdateUser.rejected, (state, action) => {
-      removeTokenFromLS();
-      state.isLogged = false;
-    });
+    builder
+      .addCase(thunkDeleteUser.fulfilled, (state, action) => {
+        removeTokenFromLS();
+        state.isLogged = false;
+        state.pending = false;
+      })
+      .addCase(thunkDeleteUser.pending, (state, action) => {
+        state.pending = true;
+      })
+      .addCase(thunkDeleteUser.rejected, (state, action) => {
+        state.pending = false;
+      });
 
     builder
+      .addCase(thunkUpdateUser.rejected, (state, action) => {
+        removeTokenFromLS();
+        state.isLogged = false;
+      })
+      .addCase(thunkUpdateUser.pending, (state, action) => {
+        state.pending = true;
+      })
+      .addCase(thunkUpdateUser.fulfilled, (state, action) => {
+        state.pending = false;
+      });
+
+    builder
+      .addCase(thunkGetUserById.pending, (state, action) => {
+        state.pending = true;
+      })
       .addCase(thunkGetUserById.fulfilled, (state, action) => {
         state.user = action.payload;
         state.isLogged = true;
+        state.pending = false;
       })
-
       .addCase(thunkGetUserById.rejected, (state, action) => {
         removeTokenFromLS();
-      })
+        state.isLogged = false;
+        state.pending = false;
+      });
 
+    builder
       .addCase(thunkSignIn.fulfilled, (state) => {
         state.pending = false;
       })
-
       .addCase(thunkSignIn.pending, (state) => {
         state.pending = true;
       })
-
       .addCase(thunkSignIn.rejected, (state) => {
         state.pending = false;
-      })
+      });
 
+    builder
       .addCase(thunkSignUp.fulfilled, (state) => {
         state.pending = false;
       })
-
       .addCase(thunkSignUp.pending, (state) => {
         state.pending = true;
       })
-
       .addCase(thunkSignUp.rejected, (state) => {
         state.pending = false;
       });
