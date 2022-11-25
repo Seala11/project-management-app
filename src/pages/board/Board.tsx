@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { thunkGetSingleBoard, updateColumnsOrder } from 'store/boardSlice';
+import { thunkGetSingleBoard, updateColumnsOrder, updateTasksState } from 'store/boardSlice';
 import styles from './board.module.scss';
 import { useAppSelector, useAppDispatch } from 'store/hooks';
 import ROUTES from 'utils/constants/ROUTES';
@@ -32,7 +32,7 @@ import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 */
 
 const Board = () => {
-  const { title, error, columns } = useAppSelector((state) => state.board);
+  const { title, error, columns, tasks } = useAppSelector((state) => state.board);
   const { modalAction, userInputTitle, userInputDescr, taskId, taskOrder } = useAppSelector(
     (state) => state.modal
   );
@@ -163,6 +163,38 @@ const Board = () => {
     [columns, dispatch, id]
   );
 
+  const handleDragEndTasks = useCallback(
+    (result: DropResult) => {
+      const { destination, source } = result;
+      if (!destination) return;
+      const destinationOrder = tasks[destination.droppableId][destination.index].order;
+      const dragSpanIndex = source.index - destination.index;
+      const newTasks = tasks[destination.droppableId]
+        .map((item, i) => {
+          if (i === source.index) return { ...item, order: destinationOrder };
+          else if (dragSpanIndex > 0 && i >= destination.index && i < source.index)
+            return { ...item, order: item.order + 1 };
+          else if (dragSpanIndex < 0 && i <= destination.index && i > source.index)
+            return { ...item, order: item.order - 1 };
+          return item;
+        })
+        .sort((a, b) => a.order - b.order);
+
+      dispatch(updateTasksState({ tasks: newTasks, destColumnId: destination.droppableId }));
+      /*  newColumns.forEach((column) => {
+        dispatch(
+          thunkUpdateColumn({
+            boardId: `${id}`,
+            columnId: column._id,
+            title: column.title,
+            order: column.order,
+          })
+        );
+      });*/
+    },
+    [tasks, dispatch]
+  );
+
   const onDragEnd = useCallback(
     (result: DropResult) => {
       const { destination, source } = result;
@@ -176,10 +208,11 @@ const Board = () => {
       if (destination.droppableId === 'boardId') {
         handleDragEndColumns(result);
       } else {
+        handleDragEndTasks(result);
         console.log(result);
       }
     },
-    [handleDragEndColumns]
+    [handleDragEndColumns, handleDragEndTasks]
   );
   return (
     <>
