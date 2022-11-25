@@ -21,8 +21,7 @@
   cursor: default;
 }
 
-.members,
-.labelTitle {
+.members {
   font-size: 1.8rem;
   font-weight: 600;
   color: var(--black);
@@ -97,26 +96,6 @@
 .button {
   @extend %btnRed;
   align-self: flex-end;
-}
-
-.list {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  list-style-type: none;
-  padding: 0;
-}
-
-.label {
-  width: min(15%, 7rem);
-  height: 3rem;
-  border-radius: 0.8rem;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-
-  &:hover {
-    box-shadow: inset 0 0 0 0.3rem var(--gray-l);
-  }
 }
 
 .select {

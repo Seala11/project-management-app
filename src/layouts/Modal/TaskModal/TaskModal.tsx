@@ -11,13 +11,13 @@ import {
 } from 'store/modalSlice';
 import { useAppSelector } from 'store/hooks';
 import { taskIdSelector } from 'store/modalSlice';
-import COLORS from 'utils/constants/COLORS';
 import { useTranslation } from 'react-i18next';
 import { boardIdSelector, columnsSelector } from 'store/boardSlice';
 import { thunkGetAllUsers } from 'store/middleware/users';
 import TaskTitle from './TaskTitle/TaskTitle';
 import TaskDescription from './TaskDescription/TaskDescription';
 import styles from './taskModal.module.scss';
+import TaskColor from './TaskColor/TaskColor';
 
 type Props = {
   onClose: (event: React.MouseEvent) => void;
@@ -58,6 +58,7 @@ const TaskModal = ({ onClose }: Props) => {
       <div className={styles.heading}>
         <button type="button" className={styles.closeBtn} onClick={onClose} />
       </div>
+
       <div className={styles.taskWrapper}>
         <div className={styles.taskTitleWrapper}>
           <TaskTitle task={selectedTask} boardId={boardId} columnId={columnId} />
@@ -65,7 +66,9 @@ const TaskModal = ({ onClose }: Props) => {
             {t('MODAL.IN_COLUMN')} {selectedColumn?.title}
           </p>
         </div>
+
         <TaskDescription task={selectedTask} boardId={boardId} columnId={columnId} />
+
         <div className={styles.taskInfo}>
           <h3 className={styles.members}>{t('MODAL.MEMBERS')}</h3>
           {selectedTask?.users.map((id) => {
@@ -85,18 +88,8 @@ const TaskModal = ({ onClose }: Props) => {
           </select>
         </div>
 
-        <div className={styles.taskInfo}>
-          <h3 className={styles.labelTitle}>{t('MODAL.LABEL')}</h3>
-          <ul className={styles.list}>
-            {COLORS.map((color) => (
-              <li
-                key={color.id}
-                style={{ backgroundColor: `${color.color}` }}
-                className={styles.label}
-              />
-            ))}
-          </ul>
-        </div>
+        <TaskColor />
+
         <button className={styles.button} type="button" onClick={deleteModalOpen}>
           {t('MODAL.DELETE_TASK')}
         </button>
