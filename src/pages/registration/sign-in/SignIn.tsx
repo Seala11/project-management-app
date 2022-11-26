@@ -42,12 +42,25 @@ const SignIn = () => {
         thunkGetUserById({ token: res.token, userId: 'jjjj' })
       ).unwrap();
       toast.success(t('AUTH.200_USER') + `${userData.name}`);
+      console.log('try');
     } catch (err) {
-      const { code, fetch } = JSON.parse(err as string);
-      console.log(code, fetch, err);
-      if (fetch === 'SIGN_IN') toast.error(t(getMsgErrorSignin(`${code}`)));
-      if (fetch === 'GET_USER') toast.error(t(getMsgErrorUserGet(`${code}`)));
+      // const error = JSON.parse(err as string);
+      const error = err as Error;
+      console.log(error, error.name, error.message);
+
+      switch (error.message) {
+        case 'SIGN_IN':
+          toast.error(t(getMsgErrorSignin(`${error.name}`)));
+          break;
+        case 'GET_USER':
+          toast.error(t(getMsgErrorUserGet(`${error.name}`)));
+          break;
+        default:
+          toast.error(error.message);
+      }
+      console.log('cathc');
     } finally {
+      console.log('finally');
       dispatch(setIsPending(false));
     }
   };

@@ -45,15 +45,14 @@ export const thunkSignUp = createAsyncThunk(
 export const thunkSignIn = createAsyncThunk<
   { token: string; userId: string },
   { login: string; password: string },
-  { rejectValue: string }
+  { rejectValue: Error }
 >('auth/fetchSignIn', async ({ login, password }, { rejectWithValue }) => {
   try {
     const res = await fetchSignIn({ login, password });
 
     if (!res.ok) {
       const err: { message: string; statusCode: number } = await res.json();
-      // throw new Error(String(JSON.stringify({ code: err.statusCode, fetch: 'SIGN_IN' })));
-      rejectWithValue(JSON.stringify({ code: err.statusCode, fetch: 'SIGN_IN' }));
+      throw createError(new Error('SIGN_IN'), `${err.statusCode}`);
     }
 
     const { token }: { token: string } = await res.json();
@@ -61,11 +60,18 @@ export const thunkSignIn = createAsyncThunk<
 
     const userId = parseJwt(token).id;
     return { token, userId };
-  } catch (error) {
+  } catch (err) {
+    const error = err as Error;
     console.log(error);
-    return rejectWithValue(getErrorMessage(error));
+    return rejectWithValue(error);
   }
 });
+
+const createError = (err: Error, errName: string) => {
+  const error = err;
+  error.name = errName;
+  return error;
+};
 
 export const thunkGetUserById = createAsyncThunk(
   'auth/thunkGetUserById',
@@ -76,12 +82,15 @@ export const thunkGetUserById = createAsyncThunk(
         const err: { message: string; statusCode: number } = await res.json();
         dispatch(setAuth(false));
         // rejectWithValue(JSON.stringify({ code: err.statusCode, fetch: 'SIGN_IN' }));
-        throw new Error(String(JSON.stringify({ code: err.statusCode, fetch: 'GET_USER' })));
+        // throw new Error(String(JSON.stringify({ code: err.statusCode, fetch: 'GET_USER' })));
+        throw createError(new Error('GET_USER'), `${err.statusCode}`);
       }
       const response: User = await res.json();
       return response;
-    } catch (error) {
-      return rejectWithValue(getErrorMessage(error));
+    } catch (err) {
+      const error = err as Error;
+      console.log(error);
+      return rejectWithValue(error);
     }
   }
 );
