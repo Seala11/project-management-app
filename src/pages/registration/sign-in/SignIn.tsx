@@ -32,26 +32,24 @@ const SignIn = () => {
     onChange: (e) => clearErrors(e.target.name),
   });
 
-  const onSubmit: SubmitHandler<Signin> = (data) => {
+  const onSubmit: SubmitHandler<Signin> = async (data) => {
     dispatch(setIsPending(true));
-    dispatch(thunkSignIn(data))
-      .unwrap()
-      .then((res) => {
-        dispatch(thunkGetUserById(res))
-          .unwrap()
-          .then((data) => {
-            dispatch(setIsPending(false));
-            toast.success(t('AUTH.200_USER') + `${data.name}`);
-          })
-          .catch((err) => {
-            dispatch(setIsPending(false));
-            toast.error(t(getMsgErrorUserGet(err)));
-          });
-      })
-      .catch((err) => {
-        dispatch(setIsPending(false));
-        toast.error(t(getMsgErrorSignin(err)));
-      });
+
+    try {
+      const res = await dispatch(thunkSignIn(data)).unwrap();
+      // const userData = await dispatch(thunkGetUserById(res)).unwrap();
+      const userData = await dispatch(
+        thunkGetUserById({ token: res.token, userId: 'jjjj' })
+      ).unwrap();
+      toast.success(t('AUTH.200_USER') + `${userData.name}`);
+    } catch (err) {
+      const { code, fetch } = JSON.parse(err as string);
+      console.log(code, fetch, err);
+      if (fetch === 'SIGN_IN') toast.error(t(getMsgErrorSignin(`${code}`)));
+      if (fetch === 'GET_USER') toast.error(t(getMsgErrorUserGet(`${code}`)));
+    } finally {
+      dispatch(setIsPending(false));
+    }
   };
 
   const showPassword: MouseEventHandler<HTMLButtonElement> = (e) => {

@@ -39,7 +39,6 @@ const MainLayout = ({ children }: Props) => {
       const token = getTokenFromLS();
       dispatch(thunkGetUserById({ userId: parseJwt(token).id, token: token }))
         .unwrap()
-        .then()
         .catch((err) => {
           toast.error(t(getMsgErrorUserGet(err)));
         })

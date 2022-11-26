@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchSignIn, fetchSignUp } from '../api/apiAuth';
-import { Signup, Signin, User } from '../api/types';
+import { Signup, User } from '../api/types';
 import { RootState } from 'store';
 import { getTokenFromLS, removeTokenFromLS, setTokenToLS } from 'utils/func/localStorage';
 import { deleteUser, getUserById, updateUser } from 'api/apiUsers';
@@ -42,27 +42,30 @@ export const thunkSignUp = createAsyncThunk(
   }
 );
 
-export const thunkSignIn = createAsyncThunk(
-  'auth/fetchSignIn',
-  async ({ login, password }: Signin, { rejectWithValue }) => {
-    try {
-      const res = await fetchSignIn({ login, password });
+export const thunkSignIn = createAsyncThunk<
+  { token: string; userId: string },
+  { login: string; password: string },
+  { rejectValue: string }
+>('auth/fetchSignIn', async ({ login, password }, { rejectWithValue }) => {
+  try {
+    const res = await fetchSignIn({ login, password });
 
-      if (!res.ok) {
-        const err: { message: string; statusCode: number } = await res.json();
-        throw new Error(String(err.statusCode));
-      }
-
-      const { token }: { token: string } = await res.json();
-      setTokenToLS(token);
-
-      const userId = parseJwt(token).id;
-      return { token, userId };
-    } catch (error) {
-      return rejectWithValue(getErrorMessage(error));
+    if (!res.ok) {
+      const err: { message: string; statusCode: number } = await res.json();
+      // throw new Error(String(JSON.stringify({ code: err.statusCode, fetch: 'SIGN_IN' })));
+      rejectWithValue(JSON.stringify({ code: err.statusCode, fetch: 'SIGN_IN' }));
     }
+
+    const { token }: { token: string } = await res.json();
+    setTokenToLS(token);
+
+    const userId = parseJwt(token).id;
+    return { token, userId };
+  } catch (error) {
+    console.log(error);
+    return rejectWithValue(getErrorMessage(error));
   }
-);
+});
 
 export const thunkGetUserById = createAsyncThunk(
   'auth/thunkGetUserById',
@@ -72,7 +75,8 @@ export const thunkGetUserById = createAsyncThunk(
       if (!res.ok) {
         const err: { message: string; statusCode: number } = await res.json();
         dispatch(setAuth(false));
-        throw new Error(String(err.statusCode));
+        // rejectWithValue(JSON.stringify({ code: err.statusCode, fetch: 'SIGN_IN' }));
+        throw new Error(String(JSON.stringify({ code: err.statusCode, fetch: 'GET_USER' })));
       }
       const response: User = await res.json();
       return response;
