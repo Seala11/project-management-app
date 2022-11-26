@@ -23,15 +23,20 @@ import TaskModal from 'layouts/Modal/TaskModal/TaskModal';
 import Loader from 'components/loader/Loader';
 import { getMsgErrorUserGet } from 'utils/func/getMsgErrorUserGet';
 import { appSelector, setIsPending } from 'store/appSlice';
+import { singleBoardRequestStatus } from 'store/boardSlice';
+import { boardsLoadingSelector } from 'store/boardsSlice';
 
 type Props = React.HTMLAttributes<HTMLDivElement>;
 
 const MainLayout = ({ children }: Props) => {
   const modalIsOpen = useAppSelector(modalStatusSelector);
   const taskIsOpen = useAppSelector(taskStatusSelector);
+  const boardState = useAppSelector(singleBoardRequestStatus);
+  const boardsState = useAppSelector(boardsLoadingSelector);
+  const { isPending } = useAppSelector(appSelector);
+  const pending = boardState || boardsState || isPending;
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
-  const { isPending } = useAppSelector(appSelector);
   const taskDeleteConfirmMessage = useAppSelector(taskDeleteConfirmSelector);
 
   useLayoutEffect(() => {
@@ -75,7 +80,7 @@ const MainLayout = ({ children }: Props) => {
       <ToastContainer autoClose={TOASTER.time} />
 
       <div className={styles.container}>
-        <Loader status={isPending} />
+        <Loader status={pending} />
         <Header />
         <main className={styles.main}>{children}</main>
         <Footer />
