@@ -1,6 +1,6 @@
 export function getMsgErrorUserGet(err: string) {
   const obj: { [key: string]: string } = {
-    '401': '401_USER',
+    '401': '401_SIGNIN',
     '403': '403',
     '404': '404_USER',
     DEFAULT: 'Server error',
