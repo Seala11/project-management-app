@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useAppDispatch } from 'store/hooks';
 import {
   BtnColor,
@@ -7,17 +7,16 @@ import {
   setModalOpen,
   setTaskDeleteConfirm,
   setTaskModalClose,
-  usersSelector,
 } from 'store/modalSlice';
 import { useAppSelector } from 'store/hooks';
 import { taskIdSelector } from 'store/modalSlice';
 import { useTranslation } from 'react-i18next';
 import { boardIdSelector, columnsSelector } from 'store/boardSlice';
-import { thunkGetAllUsers } from 'store/middleware/users';
 import TaskTitle from './TaskTitle/TaskTitle';
 import TaskDescription from './TaskDescription/TaskDescription';
 import styles from './taskModal.module.scss';
 import TaskColor from './TaskColor/TaskColor';
+import TaskMembers from './TaskMembers/TaskMembers';
 
 const DEFAULT_COLOR = '#0047ff14';
 
@@ -31,19 +30,12 @@ const TaskModal = ({ onClose }: Props) => {
 
   const selectedTask = useAppSelector(taskIdSelector);
   const boardId = useAppSelector(boardIdSelector);
-  const allUsers = useAppSelector(usersSelector);
   const columnId = useAppSelector(modalColumnIdSelector);
   const columns = useAppSelector(columnsSelector);
   const selectedColumn = columns.find((column) => column._id === columnId);
   const [headerColor, setHeaderColor] = useState<string>(
     selectedTask?.description.color || DEFAULT_COLOR
   );
-
-  useEffect(() => {
-    if (allUsers.length === 0) {
-      dispatch(thunkGetAllUsers());
-    }
-  }, [allUsers, dispatch]);
 
   const deleteModalOpen = () => {
     dispatch(setTaskModalClose());
@@ -74,24 +66,7 @@ const TaskModal = ({ onClose }: Props) => {
 
         <TaskDescription task={selectedTask} boardId={boardId} columnId={columnId} />
 
-        <div className={styles.taskInfo}>
-          <h3 className={styles.members}>{t('MODAL.MEMBERS')}</h3>
-          {selectedTask?.users.map((id) => {
-            const userAssigned = allUsers.find((user) => user._id === id);
-            return (
-              <p key={id} className={styles.member}>
-                {userAssigned?.login}
-              </p>
-            );
-          })}
-          <select className={styles.select}>
-            {allUsers.map((user) => (
-              <option key={user._id} value={user._id}>
-                {user.login}
-              </option>
-            ))}
-          </select>
-        </div>
+        <TaskMembers task={selectedTask} boardId={boardId} columnId={columnId} />
 
         <TaskColor
           task={selectedTask}

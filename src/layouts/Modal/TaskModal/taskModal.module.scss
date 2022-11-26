@@ -21,13 +21,6 @@
   cursor: default;
 }
 
-.members {
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: var(--black);
-  cursor: default;
-}
-
 .heading {
   display: flex;
   background-color: var(--primary-s);
@@ -55,15 +48,6 @@
   @include media-mobile {
     width: 90vw;
   }
-}
-
-.taskInfo {
-  width: 100%;
-  width: -moz-available;
-  width: -webkit-fill-available;
-  width: stretch;
-  padding-bottom: 1rem;
-  padding-left: 1rem;
 }
 
 .closeBtn {
@@ -96,22 +80,4 @@
 .button {
   @extend %btnRed;
   align-self: flex-end;
-}
-
-.select {
-  @extend %input;
-  width: 100%;
-  width: -moz-available;
-  width: -webkit-fill-available;
-  width: stretch;
-  cursor: pointer;
-}
-
-.member {
-  background-color: var(--gray-s);
-  width: fit-content;
-  padding: 0.5rem 0.8rem;
-  border-radius: 0.8rem;
-  color: var(--black);
-  cursor: default;
 }
