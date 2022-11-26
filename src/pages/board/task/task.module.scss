@@ -1,0 +1,17 @@
+@use './app/styles/mixins.scss' as *;
+
+.taskItem {
+  @extend %cardShadow;
+  width: 100%;
+  background: var(--white);
+  margin: 0.8rem 0;
+}
+
+.taskTitle {
+  font-weight: 400;
+  font-size: 1.6rem;
+  line-height: 1.9rem;
+  display: flex;
+  align-items: center;
+  padding: 1.6rem;
+}

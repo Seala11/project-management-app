@@ -39,8 +39,10 @@ type ModalState = {
   userInputTitle: string;
   userInputDescr: string;
   taskOpen: boolean;
+  taskDeleteConfirm: boolean;
   columnId: string;
   taskId: TaskParsedType | null;
+  taskOrder: number;
   users: UserType[];
   pending: boolean;
 };
@@ -52,8 +54,10 @@ export const initialState: ModalState = {
   userInputTitle: '',
   userInputDescr: '',
   taskOpen: false,
+  taskDeleteConfirm: false,
   columnId: '',
   taskId: null,
+  taskOrder: 0,
   users: [],
   pending: false,
 };
@@ -70,6 +74,7 @@ export const modalSlice = createSlice({
       state.modalOpen = false;
       state.modal = null;
       state.taskOpen = false;
+      state.taskDeleteConfirm = false;
     },
     setModalAction: (state, action: PayloadAction<ModalAction | undefined>) => {
       state.modalAction = action.payload;
@@ -88,6 +93,7 @@ export const modalSlice = createSlice({
     setTaskModalOpen: (state) => {
       state.taskOpen = true;
       state.modalOpen = true;
+      state.taskDeleteConfirm = false;
     },
     setTaskModalClose: (state) => {
       state.taskOpen = false;
@@ -95,8 +101,14 @@ export const modalSlice = createSlice({
     setTaskId: (state, action: PayloadAction<TaskParsedType | null>) => {
       state.taskId = action.payload;
     },
+    setTaskOrder: (state, action: PayloadAction<number>) => {
+      state.taskOrder = action.payload;
+    },
     setModalColumnId: (state, action: PayloadAction<string>) => {
       state.columnId = action.payload;
+    },
+    setTaskDeleteConfirm: (state, action: PayloadAction<boolean>) => {
+      state.taskDeleteConfirm = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -121,7 +133,9 @@ export const {
   setTaskModalOpen,
   setTaskModalClose,
   setTaskId,
+  setTaskOrder,
   setModalColumnId,
+  setTaskDeleteConfirm,
 } = modalSlice.actions;
 
 export const modalStatusSelector = (state: RootState) => state.modal.modalOpen;
@@ -134,5 +148,6 @@ export const taskIdSelector = (state: RootState) => state.modal.taskId;
 export const modalColumnIdSelector = (state: RootState) => state.modal.columnId;
 export const stateModalSelector = (state: RootState) => state.modal;
 export const usersSelector = (state: RootState) => state.modal.users;
+export const taskDeleteConfirmSelector = (state: RootState) => state.modal.taskDeleteConfirm;
 
 export default modalSlice.reducer;

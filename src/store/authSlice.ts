@@ -140,9 +140,6 @@ export const authSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(thunkGetUserById.pending, (state, action) => {
-        console.log('pending');
-      })
       .addCase(thunkGetUserById.fulfilled, (state, action) => {
         state.user = action.payload;
         state.isLogged = true;
@@ -175,5 +172,6 @@ export const authSlice = createSlice({
 
 export default authSlice.reducer;
 export const { setUser, setAuth } = authSlice.actions;
+// export const authSelectorStatus = (state: RootState) => state.auth.pending;
 export const authSelector = (state: RootState) => state.auth;
 export const userSelector = (state: RootState) => state.auth.user;
