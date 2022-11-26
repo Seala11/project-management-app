@@ -19,6 +19,8 @@ import TaskDescription from './TaskDescription/TaskDescription';
 import styles from './taskModal.module.scss';
 import TaskColor from './TaskColor/TaskColor';
 
+const DEFAULT_COLOR = '#0047ff14';
+
 type Props = {
   onClose: (event: React.MouseEvent) => void;
 };
@@ -34,7 +36,7 @@ const TaskModal = ({ onClose }: Props) => {
   const columns = useAppSelector(columnsSelector);
   const selectedColumn = columns.find((column) => column._id === columnId);
   const [headerColor, setHeaderColor] = useState<string>(
-    selectedTask?.description.color || '#0047ff14'
+    selectedTask?.description.color || DEFAULT_COLOR
   );
 
   useEffect(() => {

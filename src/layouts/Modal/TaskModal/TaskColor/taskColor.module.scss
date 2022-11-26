@@ -26,29 +26,6 @@
   }
 }
 
-.btnWrapper {
-  position: relative;
-}
-
-.tooltip {
-  visibility: hidden;
-  position: absolute;
-  bottom: 3.2rem;
-  left: 2rem;
-  width: 11rem;
-  font-size: 1.4rem;
-  background-color: var(--gray-s);
-  color: var(--black);
-  padding: 0.4rem;
-  border-radius: 0.5rem;
-  text-align: center;
-}
-
-.removeBtn:hover + .tooltip {
-  visibility: visible;
-  font-size: 1.4rem;
-}
-
 .labelTitle {
   font-size: 1.8rem;
   font-weight: 600;
