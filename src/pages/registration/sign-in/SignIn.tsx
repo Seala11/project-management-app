@@ -37,7 +37,6 @@ const SignIn = () => {
     dispatch(thunkSignIn(data))
       .unwrap()
       .then((res) => {
-        // toast.success(t(`TOAST.NEW_USER`));
         dispatch(thunkGetUserById(res))
           .unwrap()
           .then((data) => {

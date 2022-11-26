@@ -27,7 +27,7 @@
     "404_USER": "User not found!",
     "200_USER": "Welcome to app, ",
     "403": "Authorization is required",
-    "400_SIGNUP": "WRONG DATA",
+    "400_SIGNUP": "Your request resulted in an error",
     "409_SIGNUP": "Login already exist",
     "200_USER_UPDATE": "Your data has been updated",
     "200_USER_DELETE": "User has been deleted",

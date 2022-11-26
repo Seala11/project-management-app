@@ -39,13 +39,11 @@ const MainLayout = ({ children }: Props) => {
       const token = getTokenFromLS();
       dispatch(thunkGetUserById({ userId: parseJwt(token).id, token: token }))
         .unwrap()
-        .then(() => {
-          dispatch(setIsPending(false));
-        })
+        .then()
         .catch((err) => {
-          dispatch(setIsPending(false));
           toast.error(t(getMsgErrorUserGet(err)));
-        });
+        })
+        .finally(() => dispatch(setIsPending(false)));
     } else {
       dispatch(setIsPending(false));
     }
