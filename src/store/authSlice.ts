@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchSignIn, fetchSignUp } from '../api/apiAuth';
 import { Signup, Signin, User } from '../api/types';
@@ -6,7 +5,6 @@ import { RootState } from 'store';
 import { getTokenFromLS, removeTokenFromLS, setTokenToLS } from 'utils/func/localStorage';
 import { deleteUser, getUserById, updateUser } from 'api/apiUsers';
 import { parseJwt } from 'utils/func/parsejwt';
-import { toast } from 'react-toastify';
 import { getErrorMessage } from 'utils/func/handleError';
 
 type Auth = {
@@ -27,7 +25,7 @@ const initialState: Auth = {
 
 export const thunkSignUp = createAsyncThunk(
   'auth/fetchSignUp',
-  async (options: Signup, { rejectWithValue, dispatch }) => {
+  async (options: Signup, { rejectWithValue }) => {
     try {
       const res = await fetchSignUp(options);
       if (!res.ok) {
@@ -46,7 +44,7 @@ export const thunkSignUp = createAsyncThunk(
 
 export const thunkSignIn = createAsyncThunk(
   'auth/fetchSignIn',
-  async ({ login, password }: Signin, { rejectWithValue, dispatch }) => {
+  async ({ login, password }: Signin, { rejectWithValue }) => {
     try {
       const res = await fetchSignIn({ login, password });
 
@@ -86,7 +84,7 @@ export const thunkGetUserById = createAsyncThunk(
 
 export const thunkUpdateUser = createAsyncThunk(
   'users/thunkUpdateUser',
-  async ({ user, token }: { user: User; token: string }, { rejectWithValue, dispatch }) => {
+  async ({ user, token }: { user: User; token: string }, { rejectWithValue }) => {
     try {
       const res = await updateUser(user, token);
       if (!res.ok) {
@@ -104,7 +102,7 @@ export const thunkUpdateUser = createAsyncThunk(
 
 export const thunkDeleteUser = createAsyncThunk(
   'users/thunkDeleteUser',
-  async ({ id, token }: { id: string; token: string }, { rejectWithValue, dispatch }) => {
+  async ({ id, token }: { id: string; token: string }, { rejectWithValue }) => {
     try {
       const res = await deleteUser(id, token);
       if (!res.ok) {
@@ -153,11 +151,11 @@ export const authSlice = createSlice({
     });
 
     builder
-      .addCase(thunkDeleteUser.fulfilled, (state, action) => {
+      .addCase(thunkDeleteUser.fulfilled, (state) => {
         removeTokenFromLS();
         state.isLogged = false;
       })
-      .addCase(thunkDeleteUser.rejected, (state, action) => {
+      .addCase(thunkDeleteUser.rejected, (state) => {
         removeTokenFromLS();
         state.isLogged = false;
       });

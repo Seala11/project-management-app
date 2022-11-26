@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useLayoutEffect } from 'react';
 import Header from 'components/header/Header';
 import Footer from 'components/footer/Footer';
