@@ -3,6 +3,8 @@ import { fetchGetColumns } from 'api/apiBoard';
 import { BASE } from 'api/config';
 import { getTokenFromLS } from 'utils/func/localStorage';
 import { ColumnType } from '../boardSlice';
+import { updateColumnsOrder } from 'store/boardSlice';
+import { DropResult } from 'react-beautiful-dnd';
 
 export const thunkGetAllColumns = createAsyncThunk<ColumnType[], string, { rejectValue: string }>(
   'column/getAllColumns',
@@ -120,3 +122,42 @@ export const thunkUpdateTitleColumn = createAsyncThunk<
   const column: ColumnType = await response.json();
   return column;
 });
+
+type DragEndColumnsEntires = {
+  result: DropResult;
+  columns: ColumnType[];
+  id: string | undefined;
+};
+
+export const thunkDragEndColumns = createAsyncThunk<void, DragEndColumnsEntires>(
+  'column/handleDragEndColumns',
+  async (data: DragEndColumnsEntires, { dispatch }) => {
+    const { result, columns, id } = data;
+    const { destination, source } = result;
+    if (!destination) return;
+    const destinationOrder = columns[destination.index].order;
+    const dragSpanIndex = source.index - destination.index;
+    const newColumns = columns
+      .map((item, i) => {
+        if (i === source.index) return { ...item, order: destinationOrder };
+        else if (dragSpanIndex > 0 && i >= destination.index && i < source.index)
+          return { ...item, order: item.order + 1 };
+        else if (dragSpanIndex < 0 && i <= destination.index && i > source.index)
+          return { ...item, order: item.order - 1 };
+        return item;
+      })
+      .sort((a, b) => a.order - b.order);
+
+    dispatch(updateColumnsOrder(newColumns));
+    newColumns.forEach((column) => {
+      dispatch(
+        thunkUpdateColumn({
+          boardId: `${id}`,
+          columnId: column._id,
+          title: column.title,
+          order: column.order,
+        })
+      );
+    });
+  }
+);
