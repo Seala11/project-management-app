@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import COLORS from 'utils/constants/COLORS';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from 'store/hooks';
@@ -6,6 +6,7 @@ import { thunkUpdateTaskInfo } from 'store/middleware/tasks';
 import { toast } from 'react-toastify';
 import { TaskParsedType } from 'store/boardSlice';
 import styles from './taskColor.module.scss';
+import Icon from 'components/Icon/Icon';
 
 type Props = {
   task: TaskParsedType | null;
@@ -17,6 +18,10 @@ type Props = {
 const TaskColor = ({ task, boardId, columnId, setHeaderColor }: Props) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+
+  console.log(!!task?.description.color, task?.description.color);
+
+  const [showRemoveBtn, setDisplayRemoveBtn] = useState(!!task?.description.color);
 
   const updateTaskColor = (newColor: string) => {
     if (task) {
@@ -39,6 +44,12 @@ const TaskColor = ({ task, boardId, columnId, setHeaderColor }: Props) => {
         .then(() => {
           setHeaderColor(newColor);
           toast.success('task color updated');
+
+          if (!newColor) {
+            setDisplayRemoveBtn(false);
+          } else {
+            setDisplayRemoveBtn(true);
+          }
         })
         .catch(() => {
           toast.error('update color error');
@@ -48,7 +59,18 @@ const TaskColor = ({ task, boardId, columnId, setHeaderColor }: Props) => {
 
   return (
     <div className={styles.taskInfo}>
-      <h3 className={styles.labelTitle}>{t('MODAL.LABEL')}</h3>
+      <div className={styles.titleWrapper}>
+        <h3 className={styles.labelTitle}>{t('MODAL.LABEL')}</h3>
+        {showRemoveBtn && (
+          <div className={styles.btnWrapper}>
+            <button className={styles.removeBtn} onClick={() => updateTaskColor('')}>
+              <Icon color="#0047ff" size={20} icon="cancel" />
+            </button>
+            <div className={styles.tooltip}>remove cover</div>
+          </div>
+        )}
+      </div>
+
       <ul className={styles.list}>
         {COLORS.map((color) => (
           <li

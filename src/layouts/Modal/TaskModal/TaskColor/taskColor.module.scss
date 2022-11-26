@@ -5,8 +5,48 @@
   width: -moz-available;
   width: -webkit-fill-available;
   width: stretch;
-  padding-bottom: 1rem;
-  padding-left: 1rem;
+  padding: 2rem 0rem 2rem 1.5rem;
+}
+
+.titleWrapper {
+  gap: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.removeBtn {
+  background-color: transparent;
+  padding: 0.4rem;
+  border-radius: 50%;
+  border: none;
+
+  &:hover {
+    background-color: var(--primary-m);
+    cursor: pointer;
+  }
+}
+
+.btnWrapper {
+  position: relative;
+}
+
+.tooltip {
+  visibility: hidden;
+  position: absolute;
+  bottom: 3.2rem;
+  left: 2rem;
+  width: 11rem;
+  font-size: 1.4rem;
+  background-color: var(--gray-s);
+  color: var(--black);
+  padding: 0.4rem;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+.removeBtn:hover + .tooltip {
+  visibility: visible;
+  font-size: 1.4rem;
 }
 
 .labelTitle {
@@ -22,6 +62,7 @@
   gap: 1rem;
   list-style-type: none;
   padding: 0;
+  margin-top: 0.5rem;
 }
 
 .label {
