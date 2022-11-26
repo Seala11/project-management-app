@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { thunkGetSingleBoard } from 'store/boardSlice';
+import { clearState, thunkGetSingleBoard } from 'store/boardSlice';
 import styles from './board.module.scss';
 import { useAppSelector, useAppDispatch } from 'store/hooks';
 import ROUTES from 'utils/constants/ROUTES';
@@ -47,6 +47,10 @@ const Board = () => {
     dispatch(thunkGetSingleBoard(`${id}`));
     dispatch(thunkGetAllColumns(`${id}`));
     console.log('useEffect');
+    return () => {
+      console.log('clear');
+      dispatch(clearState());
+    };
   }, [id, dispatch]);
 
   useEffect(() => {
@@ -152,11 +156,10 @@ const Board = () => {
       <section className={styles.wrapper}>
         <div className={styles.mainContent}>
           <h2 className={styles.title}>
-            {title.title !== '' && (
-              <>
-                {title.title} <span className={styles.description}>({title.descr})</span>
-              </>
-            )}
+            <>
+              {title.title}
+              {title.descr !== '' && <span className={styles.description}>({title.descr})</span>}
+            </>
           </h2>
           <div className={styles.columnsWrapper}>
             {columns.length > 0 && (

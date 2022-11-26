@@ -11,6 +11,7 @@
 .title {
   @extend %title;
   padding: 3rem 0 0;
+  min-height: 5.4rem;
 }
 
 .description {
