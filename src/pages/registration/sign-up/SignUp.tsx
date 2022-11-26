@@ -1,6 +1,6 @@
 import React, { MouseEventHandler, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { thunkSignUp } from 'store/authSlice';
+import { thunkSignUp, thunkSignIn, thunkGetUserById } from 'store/authSlice';
 import { useAppDispatch } from 'store/hooks';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import signImage from 'assets/images/login.png';
@@ -8,6 +8,11 @@ import { Signup } from 'api/types';
 import { useTranslation } from 'react-i18next';
 import Icon from 'components/Icon/Icon';
 import styles from '../registration.module.scss';
+import { toast } from 'react-toastify';
+import { getMsgErrorUserGet } from 'utils/func/getMsgErrorUserGet';
+import { getMsgErrorSignin } from 'utils/func/getMsgErrorSignin';
+import { getMsgErrorSignup } from 'utils/func/getMsgErrorSignup';
+import { setIsPending } from 'store/appSlice';
 
 const SignUp = () => {
   const { t } = useTranslation();
@@ -29,7 +34,34 @@ const SignUp = () => {
   });
 
   const onSubmit: SubmitHandler<Signup> = (data) => {
-    dispatch(thunkSignUp(data));
+    dispatch(setIsPending(true));
+    dispatch(thunkSignUp(data))
+      .unwrap()
+      .then((res) => {
+        toast.success(t('AUTH.200_SIGNUP'));
+        dispatch(thunkSignIn(res))
+          .unwrap()
+          .then((res) => {
+            dispatch(thunkGetUserById(res))
+              .unwrap()
+              .then((data) => {
+                dispatch(setIsPending(false));
+                toast.success(t('AUTH.200_USER') + `${data.name}`);
+              })
+              .catch((err) => {
+                dispatch(setIsPending(false));
+                toast.error(t(getMsgErrorUserGet(err)));
+              });
+          })
+          .catch((err) => {
+            dispatch(setIsPending(false));
+            toast.error(t(getMsgErrorSignin(err)));
+          });
+      })
+      .catch((err) => {
+        dispatch(setIsPending(false));
+        toast.error(t(getMsgErrorSignup(err)));
+      });
   };
 
   const showPassword: MouseEventHandler<HTMLButtonElement> = (e) => {

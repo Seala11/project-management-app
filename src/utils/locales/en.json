@@ -21,7 +21,21 @@
     "LENGTH": "Minimal length 4 characters",
     "MAXLENGTH": "Maximal length 15 characters",
     "PATTERN": "Only letters, numbers or underscore",
-    "PASSWORD_LENGTH": "Password must be at least 6 characters"
+    "PASSWORD_LENGTH": "Password must be at least 6 characters",
+    "401_SIGNIN": "Invalid password or login",
+    "200_SIGNUP": "New user is created",
+    "404_USER": "User was not founded!",
+    "200_USER": "Welcome to app,",
+    "403": "Authorization is required",
+    "400_SIGNUP": "WRONG DATA",
+    "409_SIGNUP": "Login already exist",
+    "200_USER_UPDATE": "Your data has been updated",
+    "200_USER_DELETE": "User has been deleted",
+
+    "403SIGNUP": "Authorization is required",
+    "404": "User was not founded!",
+    "500": "Server error",
+    "DEFAULT": "Server error"
   },
   "NOTFOUND": {
     "TITLE": "Oops! The page you are looking for cannot be found.",
