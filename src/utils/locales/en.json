@@ -31,10 +31,6 @@
     "409_SIGNUP": "Login already exist",
     "200_USER_UPDATE": "Your data has been updated",
     "200_USER_DELETE": "User has been deleted",
-
-    "403SIGNUP": "Authorization is required",
-    "404": "User was not founded!",
-    "500": "Server error",
     "DEFAULT": "Server error"
   },
   "NOTFOUND": {
