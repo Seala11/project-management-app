@@ -24,14 +24,14 @@
     "PASSWORD_LENGTH": "Password must be at least 6 characters",
     "401_SIGNIN": "Invalid password or login",
     "200_SIGNUP": "New user is created",
-    "404_USER": "User was not founded!",
-    "200_USER": "Welcome to app,",
+    "404_USER": "User not found!",
+    "200_USER": "Welcome to app, ",
     "403": "Authorization is required",
     "400_SIGNUP": "WRONG DATA",
     "409_SIGNUP": "Login already exist",
     "200_USER_UPDATE": "Your data has been updated",
     "200_USER_DELETE": "User has been deleted",
-    "DEFAULT": "Server error"
+    "DEFAULT": "Oops! Something went wrong. Try again"
   },
   "NOTFOUND": {
     "TITLE": "Oops! The page you are looking for cannot be found.",
