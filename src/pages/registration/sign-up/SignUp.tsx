@@ -45,13 +45,12 @@ const SignUp = () => {
             dispatch(thunkGetUserById(res))
               .unwrap()
               .then((data) => {
-                dispatch(setIsPending(false));
                 toast.success(t('AUTH.200_USER') + `${data.name}`);
               })
               .catch((err) => {
-                dispatch(setIsPending(false));
                 toast.error(t(getMsgErrorUserGet(err)));
-              });
+              })
+              .finally(() => dispatch(setIsPending(false)));
           })
           .catch((err) => {
             dispatch(setIsPending(false));

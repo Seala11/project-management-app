@@ -9,7 +9,6 @@ import { getTokenFromLS } from 'utils/func/localStorage';
 import { thunkGetUserById } from 'store/authSlice';
 import { parseJwt } from 'utils/func/parsejwt';
 import { useTranslation } from 'react-i18next';
-// import { toastMessageSelector } from 'store/appSlice';
 import {
   modalStatusSelector,
   setModalClose,
@@ -22,9 +21,7 @@ import styles from './mainLayout.module.scss';
 import Modal from 'layouts/Modal/Modal';
 import ConfirmationModal from 'layouts/Modal/ConfirmationModal/ConfirmationModal';
 import TaskModal from 'layouts/Modal/TaskModal/TaskModal';
-// import { singleBoardRequestStatus } from 'store/boardSlice';
 import Loader from 'components/loader/Loader';
-// import { boardsLoadingSelector } from 'store/boardsSlice';
 import { getMsgErrorUserGet } from 'utils/func/getMsgErrorUserGet';
 import { appSelector, setIsPending } from 'store/appSlice';
 
@@ -36,29 +33,11 @@ const MainLayout = ({ children }: Props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const { isPending } = useAppSelector(appSelector);
-  // const toastMessage = useAppSelector(toastMessageSelector);
-  // const [loading, setLoading] = useState(true);
-
-  // const boardState = useAppSelector(singleBoardRequestStatus);
-  // const boardsState = useAppSelector(boardsLoadingSelector);
-  // const authState = useAppSelector(authSelectorStatus);
   const taskDeleteConfirmMessage = useAppSelector(taskDeleteConfirmSelector);
-  // const pending = boardState || boardsState;
-  // authState || loading;
-
-  // useEffect(() => {
-  //   if (toastMessage) {
-  //     console.log(toastMessage);
-
-  //     toast(t(`TOAST.${toastMessage}`));
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [toastMessage]);
 
   useLayoutEffect(() => {
     if (getTokenFromLS()) {
       const token = getTokenFromLS();
-      dispatch(setIsPending(true));
       dispatch(thunkGetUserById({ userId: parseJwt(token).id, token: token }))
         .unwrap()
         .then(() => {

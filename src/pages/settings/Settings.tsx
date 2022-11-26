@@ -103,13 +103,12 @@ const Settings = () => {
                 dispatch(thunkGetUserById(res))
                   .unwrap()
                   .then(() => {
-                    dispatch(setIsPending(false));
                     toast.success(t('AUTH.200_USER_UPDATE'));
                   })
                   .catch((err) => {
-                    dispatch(setIsPending(false));
                     toast.error(t(getMsgErrorUserGet(err)));
-                  });
+                  })
+                  .finally(() => dispatch(setIsPending(false)));
               })
               .catch((err) => {
                 dispatch(setIsPending(false));

@@ -8,7 +8,6 @@ import { deleteUser, getUserById, updateUser } from 'api/apiUsers';
 import { parseJwt } from 'utils/func/parsejwt';
 import { toast } from 'react-toastify';
 import { getErrorMessage } from 'utils/func/handleError';
-// import { setToastMessage } from './appSlice';
 
 type Auth = {
   isLogged: boolean;
@@ -37,9 +36,7 @@ export const thunkSignUp = createAsyncThunk(
         throw new Error(String(err.statusCode));
       }
       const { _id, name, login }: User = await res.json();
-      // const login = options.login;
       const password = options.password;
-      // dispatch(thunkSignIn({ login, password }));
       return { _id, name, login, password };
     } catch (error) {
       return rejectWithValue(getErrorMessage(error));
@@ -62,7 +59,6 @@ export const thunkSignIn = createAsyncThunk(
       setTokenToLS(token);
 
       const userId = parseJwt(token).id;
-      // dispatch(thunkGetUserById({ token, userId }));
       return { token, userId };
     } catch (error) {
       return rejectWithValue(getErrorMessage(error));
@@ -98,9 +94,7 @@ export const thunkUpdateUser = createAsyncThunk(
         throw new Error(String(err.statusCode));
       }
       const response: Omit<User, 'password'> = await res.json();
-      // const login = user.login;
       const password = user.password;
-      // dispatch(thunkSignIn({ login, password }));
       return Object.assign(response, { password });
     } catch (error) {
       return rejectWithValue(getErrorMessage(error));
@@ -172,6 +166,5 @@ export const authSlice = createSlice({
 
 export default authSlice.reducer;
 export const { setUser, setAuth } = authSlice.actions;
-// export const authSelectorStatus = (state: RootState) => state.auth.pending;
 export const authSelector = (state: RootState) => state.auth;
 export const userSelector = (state: RootState) => state.auth.user;
