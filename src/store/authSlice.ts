@@ -81,16 +81,12 @@ export const thunkGetUserById = createAsyncThunk(
       if (!res.ok) {
         const err: { message: string; statusCode: number } = await res.json();
         dispatch(setAuth(false));
-        // rejectWithValue(JSON.stringify({ code: err.statusCode, fetch: 'SIGN_IN' }));
-        // throw new Error(String(JSON.stringify({ code: err.statusCode, fetch: 'GET_USER' })));
-        throw createError(new Error('GET_USER'), `${err.statusCode}`);
+        throw new Error(String(`USER_${err.statusCode}`));
       }
       const response: User = await res.json();
       return response;
     } catch (err) {
-      const error = err as Error;
-      console.log(error);
-      return rejectWithValue(error);
+      return rejectWithValue(getErrorMessage(err));
     }
   }
 );

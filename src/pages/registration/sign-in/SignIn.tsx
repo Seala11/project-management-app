@@ -9,9 +9,10 @@ import { useTranslation } from 'react-i18next';
 import Icon from 'components/Icon/Icon';
 import styles from '../registration.module.scss';
 import { toast } from 'react-toastify';
-import { getMsgErrorSignin } from '../../../utils/func/getMsgErrorSignin';
-import { getMsgErrorUserGet } from 'utils/func/getMsgErrorUserGet';
+// import { getMsgErrorSignin } from '../../../utils/func/getMsgErrorSignin';
+// import { getMsgErrorUserGet } from 'utils/func/getMsgErrorUserGet';
 import { setIsPending } from 'store/appSlice';
+import { ErrosType, useGetAuthErrors } from 'utils/hooks/useGetAuthErrors';
 
 const SignIn = () => {
   const { t } = useTranslation();
@@ -32,6 +33,8 @@ const SignIn = () => {
     onChange: (e) => clearErrors(e.target.name),
   });
 
+  const messageErr = useGetAuthErrors();
+
   const onSubmit: SubmitHandler<Signin> = async (data) => {
     dispatch(setIsPending(true));
 
@@ -44,23 +47,10 @@ const SignIn = () => {
       toast.success(t('AUTH.200_USER') + `${userData.name}`);
       console.log('try');
     } catch (err) {
-      // const error = JSON.parse(err as string);
-      const error = err as Error;
-      console.log(error, error.name, error.message);
-
-      switch (error.message) {
-        case 'SIGN_IN':
-          toast.error(t(getMsgErrorSignin(`${error.name}`)));
-          break;
-        case 'GET_USER':
-          toast.error(t(getMsgErrorUserGet(`${error.name}`)));
-          break;
-        default:
-          toast.error(error.message);
-      }
-      console.log('cathc');
+      const error = err as keyof ErrosType;
+      const message = messageErr[error] ? messageErr[error] : messageErr.DEFAULT;
+      toast.error(message);
     } finally {
-      console.log('finally');
       dispatch(setIsPending(false));
     }
   };
