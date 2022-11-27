@@ -62,23 +62,6 @@ const Column = (props: Props) => {
     ).then(() => setIsEditable(false));
   };
 
-  /* useEffect(() => {
-    const onClick = (e: MouseEvent) => {
-      console.log(formEdit.current && formEdit.current.contains(e.target as HTMLElement));
-      if (
-        !isEditable ||
-        (formEdit.current && formEdit.current.contains(e.target as HTMLElement)) ||
-        (columnTitle.current && columnTitle.current.contains(e.target as HTMLElement))
-      ) {
-        return;
-      }
-      console.log('win');
-      handleSubmit(onSubmitEdit)();
-    };
-    document.addEventListener('click', onClick);
-    return () => document.removeEventListener('click', onClick);
-  }, [isEditable, reset, handleSubmit]);*/
-
   const deleteColumn = () => {
     dispatch(setModalColumnId(column._id));
     dispatch(
@@ -133,6 +116,7 @@ const Column = (props: Props) => {
                   maxLength: { value: 25, message: 'MAX_ER' },
                 })}
                 className={`${styles.input} ${errors.input ? styles.error : ''}`}
+                onBlur={handleSubmit(onSubmitEdit)}
               />
               <button
                 className={`${styles.buttonEdit} ${styles.submit}`}

@@ -1,7 +1,7 @@
 @use './app/styles/mixins.scss' as *;
 
 .loader {
-  position: absolute;
+  position: fixed;
   background-color: rgba(61, 61, 60, 0.3);
   top: 0%;
   left: 0%;

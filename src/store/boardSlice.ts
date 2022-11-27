@@ -114,6 +114,11 @@ export const boardSlice = createSlice({
     updateTasksState(state, { payload }: PayloadAction<UpdateTasksData>) {
       state.tasks[payload.destColumnId] = payload.tasks;
     },
+    clearState(state) {
+      state.columns = [];
+      state.tasks = {};
+      state.title = { title: '', descr: '' };
+    },
     clearErrors(state) {
       state.error = '';
     },
@@ -202,7 +207,7 @@ export const boardSlice = createSlice({
   },
 });
 
-export const { clearErrors, updateColumnsOrder, updateTasksState } = boardSlice.actions;
+export const { clearErrors, updateColumnsOrder, updateTasksState, clearState } = boardSlice.actions;
 
 export const singleBoardRequestStatus = (state: RootState) => state.board.pending;
 export const columnsSelector = (state: RootState) => state.board.columns;
