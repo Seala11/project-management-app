@@ -28,6 +28,7 @@ import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 - оттестировать ошибки errors
 - logOut() ??
 - colors for task
+- check mediaQuares for DnD
 */
 
 const Board = () => {
@@ -157,7 +158,7 @@ const Board = () => {
         <div className={styles.mainContent}>
           <h2 className={styles.title}>
             <>
-              {title.title}
+              {title.title}{' '}
               {title.descr !== '' && <span className={styles.description}>({title.descr})</span>}
             </>
           </h2>
