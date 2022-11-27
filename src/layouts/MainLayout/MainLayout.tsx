@@ -1,15 +1,13 @@
-/* eslint-disable no-unused-vars */
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect } from 'react';
 import Header from 'components/header/Header';
 import Footer from 'components/footer/Footer';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import TOASTER from 'utils/constants/TOASTER';
 import { getTokenFromLS } from 'utils/func/localStorage';
-import { authSelectorStatus, thunkGetUserById } from 'store/authSlice';
+import { thunkGetUserById } from 'store/authSlice';
 import { parseJwt } from 'utils/func/parsejwt';
 import { useTranslation } from 'react-i18next';
-import { toastMessageSelector } from 'store/appSlice';
 import {
   modalStatusSelector,
   setModalClose,
@@ -22,8 +20,10 @@ import styles from './mainLayout.module.scss';
 import Modal from 'layouts/Modal/Modal';
 import ConfirmationModal from 'layouts/Modal/ConfirmationModal/ConfirmationModal';
 import TaskModal from 'layouts/Modal/TaskModal/TaskModal';
-import { singleBoardRequestStatus } from 'store/boardSlice';
 import Loader from 'components/loader/Loader';
+import { getMsgErrorUserGet } from 'utils/func/getMsgErrorUserGet';
+import { appSelector, setIsPending } from 'store/appSlice';
+import { singleBoardRequestStatus } from 'store/boardSlice';
 import { boardsLoadingSelector } from 'store/boardsSlice';
 
 type Props = React.HTMLAttributes<HTMLDivElement>;
@@ -31,33 +31,27 @@ type Props = React.HTMLAttributes<HTMLDivElement>;
 const MainLayout = ({ children }: Props) => {
   const modalIsOpen = useAppSelector(modalStatusSelector);
   const taskIsOpen = useAppSelector(taskStatusSelector);
-  const dispatch = useAppDispatch();
-  const { t } = useTranslation();
-  const toastMessage = useAppSelector(toastMessageSelector);
-  const [loading, setLoading] = useState(true);
-
   const boardState = useAppSelector(singleBoardRequestStatus);
   const boardsState = useAppSelector(boardsLoadingSelector);
-  const authState = useAppSelector(authSelectorStatus);
+  const { isPending } = useAppSelector(appSelector);
+  const pending = boardState || boardsState || isPending;
+  const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const taskDeleteConfirmMessage = useAppSelector(taskDeleteConfirmSelector);
-  const pending = boardState || boardsState || authState || loading;
-
-  useEffect(() => {
-    if (toastMessage) {
-      console.log(toastMessage);
-
-      toast(t(`TOAST.${toastMessage}`));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [toastMessage]);
 
   useLayoutEffect(() => {
     if (getTokenFromLS()) {
       const token = getTokenFromLS();
-      dispatch(thunkGetUserById({ userId: parseJwt(token).id, token: token })).then(() => {
-        setLoading(false);
-      });
-    } else setLoading(false);
+      dispatch(thunkGetUserById({ userId: parseJwt(token).id, token: token }))
+        .unwrap()
+        .then()
+        .catch((err) => {
+          toast.error(t(getMsgErrorUserGet(err)));
+        })
+        .finally(() => dispatch(setIsPending(false)));
+    } else {
+      dispatch(setIsPending(false));
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

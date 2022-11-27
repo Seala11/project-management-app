@@ -1,5 +1,5 @@
 import React, { MouseEventHandler, useRef, useState } from 'react';
-import { thunkSignIn } from 'store/authSlice';
+import { thunkGetUserById, thunkSignIn } from 'store/authSlice';
 import { useAppDispatch } from 'store/hooks';
 import { NavLink } from 'react-router-dom';
 import { Signin } from 'api/types';
@@ -8,6 +8,10 @@ import signImage from 'assets/images/login.png';
 import { useTranslation } from 'react-i18next';
 import Icon from 'components/Icon/Icon';
 import styles from '../registration.module.scss';
+import { toast } from 'react-toastify';
+import { getMsgErrorSignin } from '../../../utils/func/getMsgErrorSignin';
+import { getMsgErrorUserGet } from 'utils/func/getMsgErrorUserGet';
+import { setIsPending } from 'store/appSlice';
 
 const SignIn = () => {
   const { t } = useTranslation();
@@ -29,7 +33,25 @@ const SignIn = () => {
   });
 
   const onSubmit: SubmitHandler<Signin> = (data) => {
-    dispatch(thunkSignIn(data));
+    dispatch(setIsPending(true));
+    dispatch(thunkSignIn(data))
+      .unwrap()
+      .then((res) => {
+        dispatch(thunkGetUserById(res))
+          .unwrap()
+          .then((data) => {
+            dispatch(setIsPending(false));
+            toast.success(t('AUTH.200_USER') + `${data.name}`);
+          })
+          .catch((err) => {
+            dispatch(setIsPending(false));
+            toast.error(t(getMsgErrorUserGet(err)));
+          });
+      })
+      .catch((err) => {
+        dispatch(setIsPending(false));
+        toast.error(t(getMsgErrorSignin(err)));
+      });
   };
 
   const showPassword: MouseEventHandler<HTMLButtonElement> = (e) => {
