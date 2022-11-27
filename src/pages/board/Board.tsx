@@ -136,14 +136,14 @@ const Board = () => {
 
   const onDragEnd = useCallback(
     (result: DropResult) => {
-      const { destination, source } = result;
+      const { destination, source, type } = result;
       if (
         !destination ||
         (destination.index === source.index && destination.droppableId === source.droppableId)
       ) {
         return;
       }
-      if (destination.droppableId === 'boardId') {
+      if (type === 'COLUMN') {
         dispatch(thunkDragEndColumns({ result, columns, id }));
       } else {
         dispatch(thunkDragEndTasks({ result, tasks }));
