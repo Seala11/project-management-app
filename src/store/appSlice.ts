@@ -10,11 +10,13 @@ export enum Lang {
 type AppState = {
   lang: Lang;
   toastMessage: string | null;
+  isPending: boolean;
 };
 
 export const initialState: AppState = {
   lang: Lang.EN,
   toastMessage: null,
+  isPending: true,
 };
 
 export const appSlice = createSlice({
@@ -28,12 +30,17 @@ export const appSlice = createSlice({
     setToastMessage: (state, action) => {
       state.toastMessage = action.payload;
     },
+
+    setIsPending: (state, action) => {
+      state.isPending = action.payload;
+    },
   },
 });
 
-export const { setLang, setToastMessage } = appSlice.actions;
+export const { setLang, setToastMessage, setIsPending } = appSlice.actions;
 
 export const languageSelector = (state: RootState) => state.app.lang;
 export const toastMessageSelector = (state: RootState) => state.app.toastMessage;
+export const appSelector = (state: RootState) => state.app;
 
 export default appSlice.reducer;
