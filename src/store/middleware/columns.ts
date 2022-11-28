@@ -8,23 +8,30 @@ import { DropResult } from 'react-beautiful-dnd';
 import { getErrorMessage } from 'utils/func/handleError';
 import { RootState } from 'store';
 
-export const thunkGetAllColumns = createAsyncThunk<ColumnType[], string, { rejectValue: string }>(
-  'column/getAllColumns',
-  async (boardId, { rejectWithValue }) => {
-    const token = getTokenFromLS();
-    try {
-      const response = await fetchGetColumns(boardId, token);
-      if (!response.ok) {
-        const resp = await response.json();
-        throw new Error(`${resp?.statusCode}/${resp.message}`);
-      }
-      const data: ColumnType[] = await response.json();
-      return data.sort((a, b) => a.order - b.order);
-    } catch (error) {
-      return rejectWithValue(getErrorMessage(error));
-    }
+export const thunkGetAllColumns = createAsyncThunk<
+  ColumnType[] | boolean,
+  string,
+  { rejectValue: string }
+>('column/getAllColumns', async (boardId, { getState, rejectWithValue }) => {
+  const state = getState() as RootState;
+  const error = state.board.error;
+  if (error) {
+    return false;
   }
-);
+  const token = getTokenFromLS();
+  try {
+    const response = await fetchGetColumns(boardId, token);
+    if (!response.ok) {
+      const resp = await response.json();
+      throw new Error(`${resp?.statusCode}/${resp.message}`);
+    }
+    const data: ColumnType[] = await response.json();
+    console.log(data);
+    return data.sort((a, b) => a.order - b.order);
+  } catch (error) {
+    return rejectWithValue(getErrorMessage(error));
+  }
+});
 
 type CreateColumnRequestType = {
   boardId: string;
@@ -96,13 +103,14 @@ type UpdateColumnRequestType = {
 export const thunkUpdateColumn = createAsyncThunk<
   undefined,
   UpdateColumnRequestType,
-  { rejectValue: string; state: RootState }
->('column/updateColumn', async (data, { getState, rejectWithValue }) => {
+  { rejectValue: string }
+>('column/updateColumn', async (data, { rejectWithValue }) => {
   const token = getTokenFromLS();
-  const error = getState().board.error;
+  /*  const state = getState() as RootState;
+  const error = state.board.error;
   if (error) {
     return;
-  }
+  }*/
   try {
     const response = await fetch(`${BASE}/boards/${data.boardId}/columns/${data.columnId}`, {
       method: 'PUT',
@@ -112,11 +120,11 @@ export const thunkUpdateColumn = createAsyncThunk<
       },
       body: JSON.stringify({ title: data.title, order: data.order }),
     });
-
     if (!response.ok) {
       const resp = await response.json();
       throw new Error(`${resp?.statusCode}/${resp.message}`);
     }
+    console.log(response);
   } catch (error) {
     return rejectWithValue(getErrorMessage(error));
   }
@@ -176,16 +184,18 @@ export const thunkDragEndColumns = createAsyncThunk<void, DragEndColumnsEntires>
     try {
       dispatch(updateColumnsOrder(newColumns));
       for (const column of newColumns) {
-        /*   await dispatch(
+        console.log(column);
+        await dispatch(
           thunkUpdateColumn({
             boardId: `${id}`,
             columnId: column._id,
             title: column.title,
             order: column.order,
           })
-        ).unwrap();*/
+        ).unwrap();
       }
     } catch (error) {
+      console.log(error);
       dispatch(clearBoardErrors());
     }
   }

@@ -140,6 +140,7 @@ export const boardSlice = createSlice({
       })
       // Columns
       .addCase(thunkGetAllColumns.fulfilled, (state, action) => {
+        if (typeof action.payload === 'boolean') return;
         state.columns = action.payload;
         state.pending = false;
       })
@@ -173,6 +174,8 @@ export const boardSlice = createSlice({
       })
       // Tasks
       .addCase(thunkGetAllTasks.fulfilled, (state, action) => {
+        if (typeof action.payload === 'boolean') return;
+
         const taskObj = action.payload.tasks.map((task) => parseTaskObj(task));
         state.tasks[action.payload.column] = taskObj;
       })
