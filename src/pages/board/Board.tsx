@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { clearState, thunkGetSingleBoard } from 'store/boardSlice';
+import { clearErrors, clearState, thunkGetSingleBoard } from 'store/boardSlice';
 import styles from './board.module.scss';
 import { useAppSelector, useAppDispatch } from 'store/hooks';
 import ROUTES from 'utils/constants/ROUTES';
@@ -23,6 +23,9 @@ import { useTranslation } from 'react-i18next';
 import Column from './column/Column';
 import { thunkCreateTask, thunkDeleteTasks, thunkDragEndTasks } from 'store/middleware/tasks';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { getMsgErrorUserGet } from 'utils/func/getMsgErrorUserGet';
 
 /* ToDo
 - оттестировать ошибки errors
@@ -47,9 +50,7 @@ const Board = () => {
   useEffect(() => {
     dispatch(thunkGetSingleBoard(`${id}`));
     dispatch(thunkGetAllColumns(`${id}`));
-    console.log('useEffect');
     return () => {
-      console.log('clear');
       dispatch(clearState());
     };
   }, [id, dispatch]);
@@ -57,16 +58,18 @@ const Board = () => {
   useEffect(() => {
     if (error) {
       const [code] = error.split('/');
+      console.log(error);
       if (code) {
-        if (+code === 401) {
+        if (+code === 403) {
           dispatch(setAuth(false));
-          navigate(ROUTES.signIn, { replace: true });
+          toast.error(t(getMsgErrorUserGet(code)));
         } else {
-          navigate(ROUTES.notFound, { replace: true });
+          navigate(ROUTES.boards, { replace: true });
         }
       }
+      dispatch(clearErrors());
     }
-  }, [error, dispatch, navigate]);
+  }, [error, dispatch, navigate, t]);
 
   useEffect(() => {
     if (modalAction === ModalAction.COLUMN_DELETE) {

@@ -103,7 +103,8 @@
     "CREATE_COLUMN_TITLE": "Создать новую колонку",
     "CREATE_TASK_TITLE": "Создать новую задачу",
     "CREATE_COLUMN_BUTTON": "Создать колонку",
-    "CREATE_TASK_BUTTON": "Создать задачу"
+    "CREATE_TASK_BUTTON": "Создать задачу",
+    "404_BOARD": "Доска не найдена!"
   },
   "TOAST": {
     "Authorization error": "Ошибка авторизации",

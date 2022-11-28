@@ -48,7 +48,6 @@ const Column = (props: Props) => {
 
   useEffect(() => {
     dispatch(thunkGetAllTasks({ boardId: column.boardId, columnId: column._id }));
-    console.log(column.order, column._id);
   }, [dispatch, column.boardId, column._id, column.order]);
 
   const onSubmitEdit: SubmitHandler<IFormInputs> = (data) => {

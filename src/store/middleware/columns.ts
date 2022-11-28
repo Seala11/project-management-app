@@ -5,6 +5,7 @@ import { getTokenFromLS } from 'utils/func/localStorage';
 import { ColumnType } from '../boardSlice';
 import { updateColumnsOrder } from 'store/boardSlice';
 import { DropResult } from 'react-beautiful-dnd';
+import { getErrorMessage } from 'utils/func/handleError';
 
 export const thunkGetAllColumns = createAsyncThunk<ColumnType[], string, { rejectValue: string }>(
   'column/getAllColumns',
@@ -85,18 +86,22 @@ export const thunkUpdateColumn = createAsyncThunk<
   { rejectValue: string }
 >('column/updateColumn', async (data, { rejectWithValue }) => {
   const token = getTokenFromLS();
-  const response = await fetch(`${BASE}/boards/${data.boardId}/columns/${data.columnId}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({ title: data.title, order: data.order }),
-  });
+  try {
+    const response = await fetch(`${BASE}/boards/${data.boardId}/columns/${data.columnId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ title: data.title, order: data.order }),
+    });
 
-  if (!response.ok) {
-    const resp = await response.json();
-    return rejectWithValue(`error code: ${resp?.statusCode} message: ${resp?.message}`);
+    if (!response.ok) {
+      const resp = await response.json();
+      throw new Error(`${resp?.statusCode}/${resp.message}`);
+    }
+  } catch (error) {
+    return rejectWithValue(getErrorMessage(error));
   }
 });
 
