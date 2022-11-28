@@ -44,6 +44,7 @@ type ModalState = {
   taskId: TaskParsedType | null;
   taskOrder: number;
   users: UserType[];
+  usersAssigned: (UserType | undefined)[];
   pending: boolean;
 };
 
@@ -59,6 +60,7 @@ export const initialState: ModalState = {
   taskId: null,
   taskOrder: 0,
   users: [],
+  usersAssigned: [],
   pending: false,
 };
 
@@ -110,16 +112,22 @@ export const modalSlice = createSlice({
     setTaskDeleteConfirm: (state, action: PayloadAction<boolean>) => {
       state.taskDeleteConfirm = action.payload;
     },
+    setUsersAssigned: (state, action: PayloadAction<(UserType | undefined)[]>) => {
+      state.usersAssigned = action.payload;
+    },
+    removeUserAssigned: (state, action: PayloadAction<string>) => {
+      const newState = state.usersAssigned.filter((member) => member?._id !== action.payload);
+      state.usersAssigned = newState;
+    },
+    addUserAssigned: (state, action: PayloadAction<string>) => {
+      const userToAdd = state.users.find((members) => members._id === action.payload);
+      state.usersAssigned = [...state.usersAssigned, userToAdd];
+    },
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(thunkGetAllUsers.fulfilled, (state, action) => {
-        state.users = action.payload;
-        state.pending = false;
-      })
-      .addCase(thunkGetAllUsers.pending, (state) => {
-        state.pending = true;
-      });
+    builder.addCase(thunkGetAllUsers.fulfilled, (state, action) => {
+      state.users = action.payload;
+    });
   },
 });
 
@@ -136,6 +144,9 @@ export const {
   setTaskOrder,
   setModalColumnId,
   setTaskDeleteConfirm,
+  setUsersAssigned,
+  removeUserAssigned,
+  addUserAssigned,
 } = modalSlice.actions;
 
 export const modalStatusSelector = (state: RootState) => state.modal.modalOpen;
@@ -149,5 +160,10 @@ export const modalColumnIdSelector = (state: RootState) => state.modal.columnId;
 export const stateModalSelector = (state: RootState) => state.modal;
 export const usersSelector = (state: RootState) => state.modal.users;
 export const taskDeleteConfirmSelector = (state: RootState) => state.modal.taskDeleteConfirm;
+export const selectAssignedUsers = (state: RootState) => state.modal.usersAssigned;
+export const selectModalPending = (state: RootState) => state.modal.pending;
+
+export const selectUserIsAssigned = (state: RootState, id: string) =>
+  state.modal.usersAssigned.find((user) => user?._id === id);
 
 export default modalSlice.reducer;

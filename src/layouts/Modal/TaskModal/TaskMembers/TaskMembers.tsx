@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { TaskParsedType } from 'store/boardSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { thunkGetAllUsers } from 'store/middleware/users';
-import { usersSelector } from 'store/modalSlice';
+import { selectAssignedUsers, setUsersAssigned, usersSelector } from 'store/modalSlice';
 import MemberListItem from './MemberListItem/MemberListItem';
+import MemberAssigned from './MembersAssigned.tsx/MemberAssigned';
 import styles from './taskMembers.module.scss';
 
 type Props = {
@@ -16,13 +17,22 @@ type Props = {
 const TaskMembers = ({ task, boardId, columnId }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const allUsers = useAppSelector(usersSelector);
+  const assignedMembers = useAppSelector(selectAssignedUsers);
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const listRef = useRef<HTMLUListElement | null>(null);
 
-  if (typeof window !== undefined && allUsers.length === 0) {
+  if (window !== undefined && allUsers.length === 0) {
     dispatch(thunkGetAllUsers());
   }
+
+  useEffect(() => {
+    if (allUsers.length === 0) return;
+    const getUserFullInfo = (id: string) => allUsers.find((user) => user._id === id);
+    const assignedUsers = task?.users.map((user) => getUserFullInfo(user));
+    console.log(assignedUsers);
+    dispatch(setUsersAssigned(assignedUsers ? assignedUsers : []));
+  }, [allUsers, dispatch, task?.users]);
 
   useEffect(() => {
     const list = listRef.current;
@@ -49,14 +59,10 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
   return (
     <div className={styles.taskInfo}>
       <h3 className={styles.members}>{t('MODAL.MEMBERS')}</h3>
-      {task?.users.map((id) => {
-        const userAssigned = allUsers.find((user) => user._id === id);
-        return (
-          <p key={id} className={styles.member}>
-            {userAssigned?.login}
-          </p>
-        );
-      })}
+      <div className={styles.membersWrapper}>
+        {assignedMembers.length > 0 &&
+          assignedMembers.map((member) => <MemberAssigned key={member?._id} member={member} />)}
+      </div>
       <ul
         ref={listRef}
         className={`${styles.list} ${isOpen ? styles.open : styles.close}`}
@@ -69,6 +75,7 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
             task={task}
             boardId={boardId}
             columnId={columnId}
+            isOpen={isOpen}
           />
         ))}
       </ul>

@@ -15,24 +15,13 @@
   font-weight: 600;
   color: var(--black);
   cursor: default;
+  margin-bottom: 0;
 }
 
-// .select {
-//   @extend %input;
-//   width: 100%;
-//   width: -moz-available;
-//   width: -webkit-fill-available;
-//   width: stretch;
-//   cursor: pointer;
-// }
-
-.member {
-  background-color: var(--gray-s);
-  width: fit-content;
-  padding: 0.5rem 0.8rem;
-  border-radius: 0.8rem;
-  color: var(--black);
-  cursor: default;
+.membersWrapper {
+  display: flex;
+  margin: 0;
+  gap: 1rem;
 }
 
 .list {
@@ -75,4 +64,10 @@
 
 .close {
   height: 6rem;
+}
+
+.disabled {
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
 }

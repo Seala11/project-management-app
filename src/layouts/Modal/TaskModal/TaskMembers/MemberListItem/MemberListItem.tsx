@@ -1,10 +1,13 @@
 import Icon from 'components/Icon/Icon';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { RootState } from 'store';
 import { TaskParsedType } from 'store/boardSlice';
 import { useAppDispatch } from 'store/hooks';
 import { thunkUpdateTaskInfo } from 'store/middleware/tasks';
 import { UserType } from 'store/middleware/users';
+import { addUserAssigned, removeUserAssigned, selectUserIsAssigned } from 'store/modalSlice';
 import styles from './memberListItem.module.scss';
 
 type Props1 = {
@@ -12,18 +15,23 @@ type Props1 = {
   task: TaskParsedType | null;
   boardId: string;
   columnId: string;
+  isOpen: boolean;
 };
 
 // TODO: do not dispatch when list is closed
 // add memo
 
-const MemberListItem = ({ user, task, boardId, columnId }: Props1) => {
+const MemberListItem = React.memo(({ user, task, boardId, columnId, isOpen }: Props1) => {
   const dispatch = useAppDispatch();
-  const userIsAssigned = task && task.users.find((id) => id === user._id);
-  const [userAssigned, setUserAssigned] = useState(!!userIsAssigned);
+  const userIsAssigned = useSelector((state: RootState) => selectUserIsAssigned(state, user._id));
+  const [disabled, setDisabled] = useState(false);
+
+  console.log(userIsAssigned);
 
   const memberHandler = () => {
-    if (!task) return;
+    if (!task || !isOpen || disabled) return;
+    console.log(disabled);
+    setDisabled(true);
 
     let newMembersList: string[];
     if (userIsAssigned) {
@@ -49,24 +57,33 @@ const MemberListItem = ({ user, task, boardId, columnId }: Props1) => {
     )
       .unwrap()
       .then(() => {
-        toast.success('task member updated');
+        if (userIsAssigned) {
+          dispatch(removeUserAssigned(user._id));
+        } else {
+          dispatch(addUserAssigned(user._id));
+        }
+        toast.success('update member');
       })
       .catch(() => {
         toast.error('update member error');
       })
       .finally(() => {
-        setUserAssigned(!userAssigned);
+        setDisabled(false);
       });
   };
 
   return (
-    <div key={user._id} className={styles.memberWrapper} onClick={memberHandler}>
+    <div
+      key={user._id}
+      className={`${styles.memberWrapper} ${disabled ? styles.disabled : ''}`}
+      onClick={memberHandler}
+    >
       <li key={user._id} value={user._id} className={styles.listItem}>
         {user.name} ({user.login})
       </li>
-      {userAssigned && <Icon color="#0047FF" size={20} icon="done" className={styles.icon} />}
+      {userIsAssigned && <Icon color="#0047FF" size={20} icon="done" className={styles.icon} />}
     </div>
   );
-};
+});
 
 export default MemberListItem;
