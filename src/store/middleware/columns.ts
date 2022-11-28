@@ -2,10 +2,11 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchGetColumns } from 'api/apiBoard';
 import { BASE } from 'api/config';
 import { getTokenFromLS } from 'utils/func/localStorage';
-import { ColumnType } from '../boardSlice';
+import { clearBoardErrors, ColumnType } from '../boardSlice';
 import { updateColumnsOrder } from 'store/boardSlice';
 import { DropResult } from 'react-beautiful-dnd';
 import { getErrorMessage } from 'utils/func/handleError';
+import { RootState } from 'store';
 
 export const thunkGetAllColumns = createAsyncThunk<ColumnType[], string, { rejectValue: string }>(
   'column/getAllColumns',
@@ -51,7 +52,8 @@ export const thunkCreateColumn = createAsyncThunk<
       const resp = await response.json();
       throw new Error(`${resp?.statusCode}/${resp.message}`);
     }
-    return await response.json();
+    const column: ColumnType = await response.json();
+    return column;
   } catch (error) {
     return rejectWithValue(getErrorMessage(error));
   }
@@ -94,9 +96,13 @@ type UpdateColumnRequestType = {
 export const thunkUpdateColumn = createAsyncThunk<
   undefined,
   UpdateColumnRequestType,
-  { rejectValue: string }
->('column/updateColumn', async (data, { rejectWithValue }) => {
+  { rejectValue: string; state: RootState }
+>('column/updateColumn', async (data, { getState, rejectWithValue }) => {
   const token = getTokenFromLS();
+  const error = getState().board.error;
+  if (error) {
+    return;
+  }
   try {
     const response = await fetch(`${BASE}/boards/${data.boardId}/columns/${data.columnId}`, {
       method: 'PUT',
@@ -167,24 +173,20 @@ export const thunkDragEndColumns = createAsyncThunk<void, DragEndColumnsEntires>
         return item;
       })
       .sort((a, b) => a.order - b.order);
-
-    dispatch(updateColumnsOrder(newColumns));
-
-    for (const column of newColumns) {
-      let err = null;
-      await dispatch(
-        thunkUpdateColumn({
-          boardId: `${id}`,
-          columnId: column._id,
-          title: column.title,
-          order: column.order,
-        })
-      )
-        .unwrap()
-        .catch((error) => {
-          err = error;
-        });
-      if (err) break;
+    try {
+      dispatch(updateColumnsOrder(newColumns));
+      for (const column of newColumns) {
+        /*   await dispatch(
+          thunkUpdateColumn({
+            boardId: `${id}`,
+            columnId: column._id,
+            title: column.title,
+            order: column.order,
+          })
+        ).unwrap();*/
+      }
+    } catch (error) {
+      dispatch(clearBoardErrors());
     }
   }
 );

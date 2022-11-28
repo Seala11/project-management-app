@@ -47,6 +47,11 @@ const Board = () => {
 
   const user = useAppSelector(userSelector);
 
+  /* useLayoutEffect(() => {
+    dispatch(clearBoardErrors());
+    console.log('clear');
+  });*/
+
   useEffect(() => {
     dispatch(thunkGetSingleBoard(`${id}`));
     dispatch(thunkGetAllColumns(`${id}`));
