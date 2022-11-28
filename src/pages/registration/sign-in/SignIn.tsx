@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 import { getMsgErrorSignin } from '../../../utils/func/getMsgErrorSignin';
 import { getMsgErrorUserGet } from 'utils/func/getMsgErrorUserGet';
 import { setIsPending } from 'store/appSlice';
+import { clearBoardErrors } from 'store/boardSlice';
 
 const SignIn = () => {
   const { t } = useTranslation();
@@ -42,6 +43,8 @@ const SignIn = () => {
           .then((data) => {
             dispatch(setIsPending(false));
             toast.success(t('AUTH.200_USER') + `${data.name}`);
+            dispatch(clearBoardErrors());
+            console.log('clear');
           })
           .catch((err) => {
             dispatch(setIsPending(false));

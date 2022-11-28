@@ -11,14 +11,17 @@ export const thunkGetAllColumns = createAsyncThunk<ColumnType[], string, { rejec
   'column/getAllColumns',
   async (boardId, { rejectWithValue }) => {
     const token = getTokenFromLS();
-    const response = await fetchGetColumns(boardId, token);
-
-    if (!response.ok) {
-      const resp = await response.json();
-      return rejectWithValue(`error code: ${resp?.statusCode} message: ${resp?.message}`);
+    try {
+      const response = await fetchGetColumns(boardId, token);
+      if (!response.ok) {
+        const resp = await response.json();
+        throw new Error(`${resp?.statusCode}/${resp.message}`);
+      }
+      const data: ColumnType[] = await response.json();
+      return data.sort((a, b) => a.order - b.order);
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error));
     }
-    const data: ColumnType[] = await response.json();
-    return data.sort((a, b) => a.order - b.order);
   }
 );
 
@@ -34,20 +37,24 @@ export const thunkCreateColumn = createAsyncThunk<
   { rejectValue: string }
 >('column/createColumn', async (data, { rejectWithValue }) => {
   const token = getTokenFromLS();
-  const response = await fetch(`${BASE}/boards/${data.boardId}/columns`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      accept: 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({ title: data.title, order: data.order }),
-  });
-  if (!response.ok) {
-    const resp = await response.json();
-    return rejectWithValue(`error code: ${resp?.statusCode} message: ${resp?.message}`);
+  try {
+    const response = await fetch(`${BASE}/boards/${data.boardId}/columns`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ title: data.title, order: data.order }),
+    });
+    if (!response.ok) {
+      const resp = await response.json();
+      throw new Error(`${resp?.statusCode}/${resp.message}`);
+    }
+    return await response.json();
+  } catch (error) {
+    return rejectWithValue(getErrorMessage(error));
   }
-  return await response.json();
 });
 
 type deleteColumn = {
@@ -59,17 +66,21 @@ export const thunkDeleteColumn = createAsyncThunk<string, deleteColumn, { reject
   'column/deleteColumn',
   async (data, { rejectWithValue }) => {
     const token = getTokenFromLS();
-    const response = await fetch(`${BASE}/boards/${data.boardId}/columns/${data.columnId}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (!response.ok) {
-      const resp = await response.json();
-      return rejectWithValue(`error code: ${resp?.statusCode} message: ${resp?.message}`);
+    try {
+      const response = await fetch(`${BASE}/boards/${data.boardId}/columns/${data.columnId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) {
+        const resp = await response.json();
+        throw new Error(`${resp?.statusCode}/${resp.message}`);
+      }
+      return data.columnId;
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error));
     }
-    return data.columnId;
   }
 );
 
@@ -111,21 +122,25 @@ export const thunkUpdateTitleColumn = createAsyncThunk<
   { rejectValue: string }
 >('column/updateTitleColumn', async (data, { rejectWithValue }) => {
   const token = getTokenFromLS();
-  const response = await fetch(`${BASE}/boards/${data.boardId}/columns/${data.columnId}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({ title: data.title, order: data.order }),
-  });
+  try {
+    const response = await fetch(`${BASE}/boards/${data.boardId}/columns/${data.columnId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ title: data.title, order: data.order }),
+    });
 
-  if (!response.ok) {
-    const resp = await response.json();
-    return rejectWithValue(`error code: ${resp?.statusCode} message: ${resp?.message}`);
+    if (!response.ok) {
+      const resp = await response.json();
+      throw new Error(`${resp?.statusCode}/${resp.message}`);
+    }
+    const column: ColumnType = await response.json();
+    return column;
+  } catch (error) {
+    return rejectWithValue(getErrorMessage(error));
   }
-  const column: ColumnType = await response.json();
-  return column;
 });
 
 type DragEndColumnsEntires = {
@@ -154,15 +169,22 @@ export const thunkDragEndColumns = createAsyncThunk<void, DragEndColumnsEntires>
       .sort((a, b) => a.order - b.order);
 
     dispatch(updateColumnsOrder(newColumns));
-    newColumns.forEach((column) => {
-      dispatch(
+
+    for (const column of newColumns) {
+      let err = null;
+      await dispatch(
         thunkUpdateColumn({
           boardId: `${id}`,
           columnId: column._id,
           title: column.title,
           order: column.order,
         })
-      );
-    });
+      )
+        .unwrap()
+        .catch((error) => {
+          err = error;
+        });
+      if (err) break;
+    }
   }
 );

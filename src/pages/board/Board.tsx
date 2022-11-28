@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { clearErrors, clearState, thunkGetSingleBoard } from 'store/boardSlice';
+import { clearBoardErrors, clearState, thunkGetSingleBoard } from 'store/boardSlice';
 import styles from './board.module.scss';
 import { useAppSelector, useAppDispatch } from 'store/hooks';
 import ROUTES from 'utils/constants/ROUTES';
@@ -58,7 +58,7 @@ const Board = () => {
   useEffect(() => {
     if (error) {
       const [code] = error.split('/');
-      console.log(error);
+      // console.log(error);
       if (code) {
         if (+code === 403) {
           dispatch(setAuth(false));
@@ -67,8 +67,10 @@ const Board = () => {
           navigate(ROUTES.boards, { replace: true });
         }
       }
-      dispatch(clearErrors());
     }
+    return () => {
+      dispatch(clearBoardErrors());
+    };
   }, [error, dispatch, navigate, t]);
 
   useEffect(() => {

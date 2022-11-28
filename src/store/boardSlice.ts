@@ -123,7 +123,7 @@ export const boardSlice = createSlice({
       state.tasks = {};
       state.title = { title: '', descr: '' };
     },
-    clearErrors(state) {
+    clearBoardErrors(state) {
       state.error = '';
     },
   },
@@ -214,7 +214,8 @@ export const boardSlice = createSlice({
   },
 });
 
-export const { clearErrors, updateColumnsOrder, updateTasksState, clearState } = boardSlice.actions;
+export const { clearBoardErrors, updateColumnsOrder, updateTasksState, clearState } =
+  boardSlice.actions;
 
 export const singleBoardRequestStatus = (state: RootState) => state.board.pending;
 export const columnsSelector = (state: RootState) => state.board.columns;
