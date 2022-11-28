@@ -67,22 +67,6 @@
   }
 }
 
-.listItem {
-  color: var(--gray);
-  text-decoration: none;
-  display: flex;
-  line-height: normal;
-  font-weight: 400;
-  font-size: 1.6rem;
-  line-height: 1.9rem;
-  padding: 1rem;
-  cursor: pointer;
-
-  &:hover {
-    background-color: var(--gray-s);
-  }
-}
-
 .open {
   height: 25rem;
   overflow-y: scroll;

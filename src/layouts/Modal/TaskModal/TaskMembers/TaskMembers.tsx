@@ -4,6 +4,7 @@ import { TaskParsedType } from 'store/boardSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { thunkGetAllUsers } from 'store/middleware/users';
 import { usersSelector } from 'store/modalSlice';
+import MemberListItem from './MemberListItem/MemberListItem';
 import styles from './taskMembers.module.scss';
 
 type Props = {
@@ -12,20 +13,16 @@ type Props = {
   columnId: string;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const TaskMembers = ({ task, boardId, columnId }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const allUsers = useAppSelector(usersSelector);
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
-
-  useEffect(() => {
-    if (allUsers.length === 0) {
-      dispatch(thunkGetAllUsers());
-    }
-  }, [allUsers, dispatch]);
-
   const listRef = useRef<HTMLUListElement | null>(null);
+
+  if (typeof window !== undefined && allUsers.length === 0) {
+    dispatch(thunkGetAllUsers());
+  }
 
   useEffect(() => {
     const list = listRef.current;
@@ -66,9 +63,13 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
         onClick={() => setIsOpen(true)}
       >
         {allUsers.map((user) => (
-          <li key={user._id} value={user._id} className={styles.listItem}>
-            {user.name} ({user.login})
-          </li>
+          <MemberListItem
+            user={user}
+            key={user._id}
+            task={task}
+            boardId={boardId}
+            columnId={columnId}
+          />
         ))}
       </ul>
     </div>
