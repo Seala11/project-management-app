@@ -23,10 +23,9 @@ import {
   stateModalSelector,
 } from 'store/modalSlice';
 import { toast } from 'react-toastify';
-import { getMsgErrorSignin } from 'utils/func/getMsgErrorSignin';
-import { getMsgErrorUserGet } from 'utils/func/getMsgErrorUserGet';
-import { getMsgErrorSignup } from 'utils/func/getMsgErrorSignup';
 import { setIsPending } from 'store/appSlice';
+import { getErrorMessage } from 'utils/func/handleError';
+import { getMsgError } from 'utils/func/getMsgError';
 
 const Settings = () => {
   const { t } = useTranslation();
@@ -94,45 +93,38 @@ const Settings = () => {
         const userData = getValues();
         const user = Object.assign(userData, { _id: id });
         dispatch(setIsPending(true));
-        dispatch(thunkUpdateUser({ user, token }))
-          .unwrap()
-          .then((res) => {
-            dispatch(thunkSignIn(res))
-              .unwrap()
-              .then((res) => {
-                dispatch(thunkGetUserById(res))
-                  .unwrap()
-                  .then(() => {
-                    toast.success(t('AUTH.200_USER_UPDATE'));
-                  })
-                  .catch((err) => {
-                    toast.error(t(getMsgErrorUserGet(err)));
-                  })
-                  .finally(() => dispatch(setIsPending(false)));
-              })
-              .catch((err) => {
-                dispatch(setIsPending(false));
-                toast.error(t(getMsgErrorSignin(err)));
-              });
+        async function update() {
+          try {
+            const res = await dispatch(thunkUpdateUser({ user, token })).unwrap();
             setUserEdit(false);
-          })
-          .catch((err) => {
+            const data = await dispatch(thunkSignIn(res)).unwrap();
+            await dispatch(thunkGetUserById(data)).unwrap();
+            toast.success(t('AUTH.200_USER_UPDATE'));
+          } catch (err) {
+            const error = getErrorMessage(err);
+            toast.error(t(getMsgError(error)));
+          } finally {
             dispatch(setIsPending(false));
-            toast.error(t(getMsgErrorSignup(err)));
-          });
+          }
+        }
+        update();
         break;
 
       case ModalAction.DELETE_USER_PROFILE:
         setUserEdit(false);
         dispatch(resetModal());
-        dispatch(thunkDeleteUser({ id, token }))
-          .unwrap()
-          .then(() => {
+        async function deleteUser() {
+          try {
+            await dispatch(thunkDeleteUser({ id, token })).unwrap();
             toast.success(t('AUTH.200_USER_DELETE'));
-          })
-          .catch((err) => {
-            toast.error(t(getMsgErrorUserGet(err)));
-          });
+          } catch (err) {
+            const error = getErrorMessage(err);
+            toast.error(t(getMsgError(error)));
+          } finally {
+            dispatch(setIsPending(false));
+          }
+        }
+        deleteUser();
         break;
 
       default:

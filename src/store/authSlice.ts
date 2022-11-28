@@ -31,7 +31,7 @@ export const thunkSignUp = createAsyncThunk(
       if (!res.ok) {
         const err: { message: string; statusCode: number } = await res.json();
 
-        throw new Error(String(err.statusCode));
+        throw new Error(`${err.statusCode}_SIGNUP`);
       }
       const { _id, name, login }: User = await res.json();
       const password = options.password;
@@ -50,7 +50,7 @@ export const thunkSignIn = createAsyncThunk(
 
       if (!res.ok) {
         const err: { message: string; statusCode: number } = await res.json();
-        throw new Error(String(err.statusCode));
+        throw new Error(`${err.statusCode}_SIGNIN`);
       }
 
       const { token }: { token: string } = await res.json();
@@ -72,7 +72,7 @@ export const thunkGetUserById = createAsyncThunk(
       if (!res.ok) {
         const err: { message: string; statusCode: number } = await res.json();
         dispatch(setAuth(false));
-        throw new Error(String(err.statusCode));
+        throw new Error(`${err.statusCode}_USER`);
       }
       const response: User = await res.json();
       return response;
@@ -89,7 +89,7 @@ export const thunkUpdateUser = createAsyncThunk(
       const res = await updateUser(user, token);
       if (!res.ok) {
         const err: { message: string; statusCode: number } = await res.json();
-        throw new Error(String(err.statusCode));
+        throw new Error(`${err.statusCode}_USER_UPDATE`);
       }
       const response: Omit<User, 'password'> = await res.json();
       const password = user.password;
@@ -107,7 +107,7 @@ export const thunkDeleteUser = createAsyncThunk(
       const res = await deleteUser(id, token);
       if (!res.ok) {
         const err: { message: string; statusCode: number } = await res.json();
-        throw new Error(String(err.statusCode));
+        throw new Error(`${err.statusCode}_USER_DELETE`);
       }
       const response: Omit<User, 'password'> = await res.json();
       return response;
@@ -136,15 +136,13 @@ export const authSlice = createSlice({
         state.user = action.payload;
         state.isLogged = true;
       })
-      .addCase(thunkGetUserById.rejected, (state, action) => {
-        if (action.payload !== '409') {
-          removeTokenFromLS();
-          state.isLogged = false;
-        }
+      .addCase(thunkGetUserById.rejected, (state) => {
+        removeTokenFromLS();
+        state.isLogged = false;
       });
 
     builder.addCase(thunkUpdateUser.rejected, (state, action) => {
-      if (action.payload !== '409') {
+      if (action.payload !== '409_USER_UPDATE') {
         removeTokenFromLS();
         state.isLogged = false;
       }

@@ -21,10 +21,11 @@ import Modal from 'layouts/Modal/Modal';
 import ConfirmationModal from 'layouts/Modal/ConfirmationModal/ConfirmationModal';
 import TaskModal from 'layouts/Modal/TaskModal/TaskModal';
 import Loader from 'components/loader/Loader';
-import { getMsgErrorUserGet } from 'utils/func/getMsgErrorUserGet';
 import { appSelector, setIsPending } from 'store/appSlice';
 import { singleBoardRequestStatus } from 'store/boardSlice';
 import { boardsLoadingSelector } from 'store/boardsSlice';
+import { getErrorMessage } from 'utils/func/handleError';
+import { getMsgError } from 'utils/func/getMsgError';
 
 type Props = React.HTMLAttributes<HTMLDivElement>;
 
@@ -46,7 +47,8 @@ const MainLayout = ({ children }: Props) => {
         .unwrap()
         .then()
         .catch((err) => {
-          toast.error(t(getMsgErrorUserGet(err)));
+          const error = getErrorMessage(err);
+          toast.error(t(getMsgError(error)));
         })
         .finally(() => dispatch(setIsPending(false)));
     } else {
