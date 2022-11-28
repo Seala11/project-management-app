@@ -121,11 +121,11 @@ const SignUp = () => {
                   placeholder="Must be at least 6 chars"
                 />
                 {isShowText ? (
-                  <button className={styles.button} onClick={(e) => showPassword(e)}>
+                  <button type="button" className={styles.button} onClick={(e) => showPassword(e)}>
                     <Icon icon="eye-slashed" size="24" color="#9a9a9a" />
                   </button>
                 ) : (
-                  <button className={styles.button} onClick={(e) => showPassword(e)}>
+                  <button type="button" className={styles.button} onClick={(e) => showPassword(e)}>
                     <Icon icon="eye-open" size="24" color="#9a9a9a" />
                   </button>
                 )}
