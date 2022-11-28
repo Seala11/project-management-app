@@ -1,9 +1,8 @@
 import React, { useLayoutEffect } from 'react';
 import Header from 'components/header/Header';
 import Footer from 'components/footer/Footer';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import TOASTER from 'utils/constants/TOASTER';
 import { getTokenFromLS } from 'utils/func/localStorage';
 import { thunkGetUserById } from 'store/authSlice';
 import { parseJwt } from 'utils/func/parsejwt';
@@ -79,7 +78,6 @@ const MainLayout = ({ children }: Props) => {
           )}
         </Modal>
       )}
-      <ToastContainer autoClose={TOASTER.time} />
 
       <div className={styles.container}>
         <Loader status={pending} />
