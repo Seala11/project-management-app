@@ -43,11 +43,7 @@ const TaskColor = ({ task, boardId, columnId, setHeaderColor }: Props) => {
           setHeaderColor(newColor);
           toast.success('task color updated');
 
-          if (!newColor) {
-            setDisplayRemoveBtn(false);
-          } else {
-            setDisplayRemoveBtn(true);
-          }
+          !newColor ? setDisplayRemoveBtn(false) : setDisplayRemoveBtn(true);
         })
         .catch(() => {
           toast.error('update color error');
