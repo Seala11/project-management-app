@@ -116,7 +116,7 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
         {assignedMembers.length > 0 ? (
           <MembersAssigned members={assignedMembers} />
         ) : (
-          <p className={styles.err}>No users assigned</p>
+          <p className={styles.err}>{t('MODAL.MEMBERS_ERR')}</p>
         )}
       </div>
       <div

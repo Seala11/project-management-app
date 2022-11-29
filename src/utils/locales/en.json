@@ -97,6 +97,7 @@
     "DESCRIPTION_LIM": "No more than 150 characters",
     "IN_COLUMN": "In column",
     "MEMBERS": "Members",
+    "MEMBERS_ERR": "No users assigned",
     "LABEL": "Cover",
     "DELETE_TASK": "Delete task",
     "PROFILE": "your profile?"
