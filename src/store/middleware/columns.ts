@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchGetColumns } from 'api/apiBoard';
-import { BASE } from 'api/config';
+import { fetchGetColumn, fetchGetColumns } from 'api/apiBoard';
+import { BASE, COLUMN_SET } from 'api/config';
 import { getTokenFromLS } from 'utils/func/localStorage';
-import { clearBoardErrors, ColumnType } from '../boardSlice';
+import { ColumnType } from '../boardSlice';
 import { updateColumnsOrder } from 'store/boardSlice';
 import { DropResult } from 'react-beautiful-dnd';
 import { getErrorMessage } from 'utils/func/handleError';
@@ -28,6 +28,23 @@ export const thunkGetAllColumns = createAsyncThunk<
     const data: ColumnType[] = await response.json();
     console.log(data);
     return data.sort((a, b) => a.order - b.order);
+  } catch (error) {
+    return rejectWithValue(getErrorMessage(error));
+  }
+});
+
+export const thunkGetColumn = createAsyncThunk<
+  boolean,
+  { boardId: string; columnId: string },
+  { rejectValue: string }
+>('column/getColumn', async ({ boardId, columnId }, { rejectWithValue }) => {
+  const token = getTokenFromLS();
+  try {
+    const response = await fetchGetColumn(boardId, columnId, token);
+    if (response.status === 204) {
+      throw new Error(`${response?.status}/${response.statusText}`);
+    }
+    return true;
   } catch (error) {
     return rejectWithValue(getErrorMessage(error));
   }
@@ -93,6 +110,11 @@ export const thunkDeleteColumn = createAsyncThunk<string, deleteColumn, { reject
   }
 );
 
+type ColumnSetType = {
+  _id: string;
+  order: number;
+};
+
 type UpdateColumnRequestType = {
   boardId: string;
   columnId: string;
@@ -100,32 +122,25 @@ type UpdateColumnRequestType = {
   order: number;
 };
 
-export const thunkUpdateColumn = createAsyncThunk<
+export const thunkUpdateColumns = createAsyncThunk<
   undefined,
-  UpdateColumnRequestType,
+  ColumnSetType[],
   { rejectValue: string }
 >('column/updateColumn', async (data, { rejectWithValue }) => {
   const token = getTokenFromLS();
-  /*  const state = getState() as RootState;
-  const error = state.board.error;
-  if (error) {
-    return;
-  }*/
   try {
-    console.log(`UpdateColumn ${data.title}`);
-    const response = await fetch(`${BASE}/boards/${data.boardId}/columns/${data.columnId}`, {
-      method: 'PUT',
+    const response = await fetch(`${COLUMN_SET}`, {
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ title: data.title, order: data.order }),
+      body: JSON.stringify(data),
     });
     if (!response.ok) {
       const resp = await response.json();
       throw new Error(`${resp?.statusCode}/${resp.message}`);
     }
-    console.log(response);
   } catch (error) {
     return rejectWithValue(getErrorMessage(error));
   }
@@ -167,7 +182,7 @@ type DragEndColumnsEntires = {
 export const thunkDragEndColumns = createAsyncThunk<void, DragEndColumnsEntires>(
   'column/handleDragEndColumns',
   async (data: DragEndColumnsEntires, { dispatch }) => {
-    const { result, columns, id } = data;
+    const { result, columns } = data;
     const { destination, source } = result;
     if (!destination) return;
     const destinationOrder = columns[destination.index].order;
@@ -184,20 +199,14 @@ export const thunkDragEndColumns = createAsyncThunk<void, DragEndColumnsEntires>
       .sort((a, b) => a.order - b.order);
     try {
       dispatch(updateColumnsOrder(newColumns));
-      for (const column of newColumns) {
-        console.log(column);
-        dispatch(
-          thunkUpdateColumn({
-            boardId: `${id}`,
-            columnId: column._id,
-            title: column.title,
-            order: column.order,
-          })
-        ).unwrap();
-      }
+      const setOfColumns = newColumns.map((item) => {
+        return { _id: item._id, order: item.order };
+      });
+      await dispatch(thunkUpdateColumns(setOfColumns)).unwrap();
     } catch (error) {
-      console.log(error);
-      dispatch(clearBoardErrors());
+      dispatch(updateColumnsOrder(columns)); //return old state
+      console.error(`Error: ${error}, return state!`);
+      // dispatch(clearBoardErrors());
     }
   }
 );

@@ -1,10 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { TASK_SET } from 'api/config';
 import { fetchCreateTask, fetchDeleteTask, fetchGetTasks, fetchUpdateTask } from 'api/taskApi';
 import { DropResult } from 'react-beautiful-dnd';
 import { RootState } from 'store';
 import { getErrorMessage } from 'utils/func/handleError';
 import { getTokenFromLS } from 'utils/func/localStorage';
-import { TaskObjectType, TaskType, updateTasksState } from '../boardSlice';
+import { TaskObjectType, TaskParsedType, TaskType, updateTasksState } from '../boardSlice';
 
 export type TaskResponseType = {
   column: string;
@@ -153,19 +154,27 @@ export const thunkUpdateTaskInfo = createAsyncThunk<
   return { column: columnId, task: updatedTask };
 });
 
+type TaskSetType = {
+  _id: string;
+  order: number;
+  columnId: string;
+};
+
 export const thunkUpdateTaskOrder = createAsyncThunk<
   undefined | boolean,
-  UpdateTaskRequestType,
+  TaskSetType[],
   { rejectValue: string }
->('board/updateTaskOnServer', async (data, { getState, rejectWithValue }) => {
-  const state = getState() as RootState;
-  const error = state.board.error;
-  if (error) {
-    return false;
-  }
+>('board/updateTaskOnServer', async (data, { rejectWithValue }) => {
   const token = getTokenFromLS();
   try {
-    const response = await fetchUpdateTask(data, token);
+    const response = await fetch(`${TASK_SET}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
     if (!response.ok) {
       const resp = await response.json();
       throw new Error(`${resp?.statusCode}/${resp.message}`);
@@ -174,6 +183,12 @@ export const thunkUpdateTaskOrder = createAsyncThunk<
     return rejectWithValue(getErrorMessage(error));
   }
 });
+
+const getSetOfTasks = (tasks: TaskParsedType[], columnId: string) => {
+  return tasks.map((task) => {
+    return { _id: task._id, order: task.order, columnId: columnId };
+  });
+};
 
 type DragEndTasksEntires = {
   result: DropResult;
@@ -241,40 +256,34 @@ export const thunkDragEndTasks = createAsyncThunk<void, DragEndTasksEntires>(
     }
     dispatch(updateTasksState({ tasks: newSourceTasks, destColumnId: source.droppableId }));
     dispatch(updateTasksState({ tasks: newDestTasks, destColumnId: destination.droppableId }));
-    dispatch(
-      thunkUpdateTaskOrder({
-        ...draggableTask,
-        columnId: destination.droppableId,
-        description: JSON.stringify(draggableTask.description),
-      })
-    )
-      .unwrap()
-      .then(() => {
-        try {
-          for (const task of newSourceTasks) {
-            dispatch(
-              thunkUpdateTaskOrder({
-                ...task,
-                columnId: source.droppableId,
-                description: JSON.stringify(task.description),
-              })
-            );
-          }
-          for (const task of newDestTasks) {
-            dispatch(
-              thunkUpdateTaskOrder({
-                ...task,
-                columnId: destination.droppableId,
-                description: JSON.stringify(task.description),
-              })
-            );
-          }
-        } catch (error) {
-          console.log(`Error: ${error}, stop requests!`);
-        }
-      })
-      .catch((error) => {
-        console.log(`Error: ${error}, stop requests!`);
-      });
+
+    try {
+      await dispatch(
+        thunkUpdateTaskOrder([
+          {
+            _id: draggableTask._id,
+            order: draggableTask.order,
+            columnId: destination.droppableId,
+          },
+        ])
+      ).unwrap();
+      await dispatch(
+        thunkUpdateTaskOrder(getSetOfTasks(newSourceTasks, source.droppableId))
+      ).unwrap();
+      await dispatch(
+        thunkUpdateTaskOrder(getSetOfTasks(newDestTasks, destination.droppableId))
+      ).unwrap();
+    } catch (error) {
+      dispatch(
+        updateTasksState({ tasks: tasks[source.droppableId], destColumnId: source.droppableId })
+      );
+      dispatch(
+        updateTasksState({
+          tasks: tasks[destination.droppableId],
+          destColumnId: destination.droppableId,
+        })
+      );
+      console.error(`Error: ${error}, return state!`);
+    }
   }
 );

@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { clearBoardErrors, clearState, thunkGetSingleBoard } from 'store/boardSlice';
 import styles from './board.module.scss';
 import { useAppSelector, useAppDispatch } from 'store/hooks';
-import ROUTES from 'utils/constants/ROUTES';
 import {
   thunkGetAllColumns,
   thunkCreateColumn,
@@ -25,7 +24,8 @@ import { thunkCreateTask, thunkDeleteTasks, thunkDragEndTasks } from 'store/midd
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getMsgErrorUserGet } from 'utils/func/getMsgErrorUserGet';
+import { getMsgErrorBoard } from 'utils/func/getMsgErrorBoard';
+import ROUTES from 'utils/constants/ROUTES';
 
 /* ToDo
 - оттестировать ошибки errors
@@ -46,12 +46,6 @@ const Board = () => {
   const { t } = useTranslation();
 
   const user = useAppSelector(userSelector);
-
-  /* useLayoutEffect(() => {
-    dispatch(clearBoardErrors());
-    console.log('clear');
-  });*/
-
   useEffect(() => {
     dispatch(thunkGetSingleBoard(`${id}`));
     dispatch(thunkGetAllColumns(`${id}`));
@@ -67,9 +61,13 @@ const Board = () => {
       if (code) {
         if (+code === 403) {
           dispatch(setAuth(false));
-          toast.error(t(getMsgErrorUserGet(code)));
-        } else {
+          toast.error(t(getMsgErrorBoard(code)));
+        }
+        if (code === '404_BOARD') {
           navigate(ROUTES.boards, { replace: true });
+          toast.error(t(getMsgErrorBoard(code)));
+        } else {
+          toast.error(t(getMsgErrorBoard(code)));
         }
       }
     }

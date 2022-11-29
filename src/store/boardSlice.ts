@@ -99,7 +99,7 @@ export const thunkGetSingleBoard = createAsyncThunk<
     const response = await fetchGetBoard(id, token);
     if (!response.ok) {
       const resp = await response.json();
-      throw new Error(`${resp?.statusCode}/${resp.message}`);
+      throw new Error(`${resp?.statusCode}_BOARD/${resp.message}`);
     }
     const data: BoardResponseType = await response.json();
     return data;
