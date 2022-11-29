@@ -12,7 +12,6 @@ import { Signup } from 'api/types';
 import { useTranslation } from 'react-i18next';
 import Icon from 'components/Icon/Icon';
 import settingsImage from 'assets/images/settings.png';
-import styles from './settings.module.scss';
 import { parseJwt } from 'utils/func/parsejwt';
 import { getTokenFromLS } from 'utils/func/localStorage';
 import {
@@ -26,6 +25,7 @@ import { toast } from 'react-toastify';
 import { setIsPending } from 'store/appSlice';
 import { getErrorMessage } from 'utils/func/handleError';
 import { getMsgError } from 'utils/func/getMsgError';
+import styles from './settings.module.scss';
 
 const Settings = () => {
   const { t } = useTranslation();

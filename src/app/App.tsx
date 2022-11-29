@@ -1,6 +1,6 @@
-import React, { lazy, Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-const Routing = lazy(() => import('../pages/Routing'));
+import Routing from 'pages/Routing';
 import MainLayout from 'layouts/MainLayout/MainLayout';
 import './app.module.scss';
 import { store } from 'store';

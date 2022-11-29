@@ -7,11 +7,11 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import signImage from 'assets/images/login.png';
 import { useTranslation } from 'react-i18next';
 import Icon from 'components/Icon/Icon';
-import styles from '../registration.module.scss';
 import { toast } from 'react-toastify';
 import { setIsPending } from 'store/appSlice';
 import { getErrorMessage } from 'utils/func/handleError';
 import { getMsgError } from 'utils/func/getMsgError';
+import styles from '../registration.module.scss';
 
 const SignIn = () => {
   const { t } = useTranslation();
