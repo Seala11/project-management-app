@@ -1,42 +1,32 @@
-.listItem {
-  position: relative;
+.input {
   color: var(--gray);
-  text-decoration: none;
-  display: flex;
-  line-height: normal;
   font-weight: 400;
   font-size: 1.6rem;
   line-height: 1.9rem;
   padding: 1rem;
   padding-left: 3rem;
   cursor: pointer;
-
-  &:hover {
-    background-color: var(--gray-s);
-  }
-}
-
-.checked {
-  &::after {
-    position: absolute;
-    content: '';
-    width: 2rem;
-    height: 2rem;
-    background-image: url('../../../../../assets/images/done.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    left: 0;
-  }
 }
 
 .wrapper {
   display: flex;
+  padding: 1rem 0.4rem;
+  gap: 1rem;
 }
 
-// .disabled {
-//   user-select: none;
-//   -moz-user-select: none;
-//   -webkit-user-select: none;
-//   pointer-events: none;
-//   opacity: 0.6;
-// }
+.label {
+  &:hover {
+    cursor: pointer;
+    color: var(--primary);
+  }
+}
+
+.close {
+  &[type='checkbox'] {
+    display: none;
+  }
+
+  &:hover {
+    color: var(--gray);
+  }
+}

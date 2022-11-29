@@ -27,16 +27,14 @@
 .list {
   position: absolute;
   display: flex;
-  gap: 1rem;
   flex-direction: column;
   width: 98%;
-  top: 9rem;
+  top: 10rem;
   left: 1rem;
   margin: 0;
   padding: 1rem;
   animation: show 0.3s forwards;
   overflow-y: hidden;
-  cursor: pointer;
 
   @extend %boxShadow;
 
@@ -64,15 +62,15 @@
 
 .close {
   height: 6rem;
+
+  &:hover {
+    cursor: pointer;
+    background-color: var(--gray-s);
+  }
 }
 
-.disabled {
-  user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  background-color: aquamarine;
-
-  .li {
-    opacity: 0.6rem;
-  }
+.err {
+  font-size: 1.6rem;
+  color: var(--gray);
+  margin: 2rem 0 2.6rem;
 }

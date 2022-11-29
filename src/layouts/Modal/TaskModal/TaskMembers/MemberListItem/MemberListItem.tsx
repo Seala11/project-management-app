@@ -36,14 +36,18 @@ const MemberListItem = React.memo(({ user, assignedMembers, userHandler, isOpen 
   return (
     <div className={styles.wrapper} data-member="true">
       <input
-        onClick={clickHandler}
-        className={`${styles.listItem}`}
+        className={`${styles.input} ${isOpen ? styles.open : styles.close}`}
         type="checkbox"
         id={user._id}
         checked={assigned}
         data-member="true"
+        onClick={clickHandler}
       />
-      <label htmlFor={user._id} data-member="true">
+      <label
+        htmlFor={user._id}
+        data-member="true"
+        className={`${styles.label} ${isOpen ? styles.open : styles.close}`}
+      >
         {user.name} ({user.login})
       </label>
     </div>

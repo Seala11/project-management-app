@@ -62,6 +62,8 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
   useEffect(() => {
     if (!taskRef.current || !menuOpen.current) return;
     const task = taskRef.current;
+    console.log(debouncedValue);
+    console.log('here');
 
     dispatch(
       thunkUpdateTaskInfo({
@@ -88,6 +90,7 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
   }, [boardId, columnId, dispatch, debouncedValue]);
 
   const addMembers = useCallback(() => {
+    console.log('click');
     if (!menuOpen.current) return;
     const items = listRef.current?.children;
     const userChecked = [];
@@ -112,8 +115,11 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
     <div className={styles.taskInfo}>
       <h3 className={styles.members}>{t('MODAL.MEMBERS')}</h3>
       <div className={styles.membersWrapper}>
-        {assignedMembers.length > 0 &&
-          assignedMembers.map((member) => <MemberAssigned key={member?._id} member={member} />)}
+        {assignedMembers.length > 0 ? (
+          assignedMembers.map((member) => <MemberAssigned key={member?._id} member={member} />)
+        ) : (
+          <p className={styles.err}>No members assigned</p>
+        )}
       </div>
       <div
         className={`${styles.list} ${isOpen ? styles.open : styles.close}`}
