@@ -112,6 +112,7 @@ export const thunkUpdateColumn = createAsyncThunk<
     return;
   }*/
   try {
+    console.log(`UpdateColumn ${data.title}`);
     const response = await fetch(`${BASE}/boards/${data.boardId}/columns/${data.columnId}`, {
       method: 'PUT',
       headers: {
@@ -185,7 +186,7 @@ export const thunkDragEndColumns = createAsyncThunk<void, DragEndColumnsEntires>
       dispatch(updateColumnsOrder(newColumns));
       for (const column of newColumns) {
         console.log(column);
-        await dispatch(
+        dispatch(
           thunkUpdateColumn({
             boardId: `${id}`,
             columnId: column._id,
