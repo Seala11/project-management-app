@@ -6,11 +6,14 @@ import './app.module.scss';
 import { store } from 'store';
 import { Provider } from 'react-redux';
 import ErrorBoundary from 'layouts/Error/Error';
+import { ToastContainer } from 'react-toastify';
+import TOASTER from 'utils/constants/TOASTER';
 
 const App = () => (
   <Provider store={store}>
     <BrowserRouter>
       <ErrorBoundary>
+        <ToastContainer autoClose={TOASTER.time} />
         <MainLayout>
           <Routing />
         </MainLayout>

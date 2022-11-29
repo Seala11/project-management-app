@@ -9,10 +9,9 @@ import { useTranslation } from 'react-i18next';
 import Icon from 'components/Icon/Icon';
 import styles from '../registration.module.scss';
 import { toast } from 'react-toastify';
-import { getMsgErrorSignin } from '../../../utils/func/getMsgErrorSignin';
-import { getMsgErrorUserGet } from 'utils/func/getMsgErrorUserGet';
 import { setIsPending } from 'store/appSlice';
-import { clearBoardErrors } from 'store/boardSlice';
+import { getErrorMessage } from 'utils/func/handleError';
+import { getMsgError } from 'utils/func/getMsgError';
 
 const SignIn = () => {
   const { t } = useTranslation();
@@ -33,28 +32,18 @@ const SignIn = () => {
     onChange: (e) => clearErrors(e.target.name),
   });
 
-  const onSubmit: SubmitHandler<Signin> = (data) => {
+  const onSubmit: SubmitHandler<Signin> = async (data) => {
     dispatch(setIsPending(true));
-    dispatch(thunkSignIn(data))
-      .unwrap()
-      .then((res) => {
-        dispatch(thunkGetUserById(res))
-          .unwrap()
-          .then((data) => {
-            dispatch(setIsPending(false));
-            toast.success(t('AUTH.200_USER') + `${data.name}`);
-            dispatch(clearBoardErrors());
-            console.log('clear');
-          })
-          .catch((err) => {
-            dispatch(setIsPending(false));
-            toast.error(t(getMsgErrorUserGet(err)));
-          });
-      })
-      .catch((err) => {
-        dispatch(setIsPending(false));
-        toast.error(t(getMsgErrorSignin(err)));
-      });
+    try {
+      const res = await dispatch(thunkSignIn(data)).unwrap();
+      const userData = await dispatch(thunkGetUserById(res)).unwrap();
+      toast.success(t('AUTH.200_USER') + `${userData.name}`);
+    } catch (err) {
+      const error = getErrorMessage(err);
+      toast.error(t(getMsgError(error)));
+    } finally {
+      dispatch(setIsPending(false));
+    }
   };
 
   const showPassword: MouseEventHandler<HTMLButtonElement> = (e) => {

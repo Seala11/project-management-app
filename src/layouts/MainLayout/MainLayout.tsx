@@ -1,9 +1,8 @@
 import React, { useLayoutEffect } from 'react';
 import Header from 'components/header/Header';
 import Footer from 'components/footer/Footer';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import TOASTER from 'utils/constants/TOASTER';
 import { getTokenFromLS } from 'utils/func/localStorage';
 import { thunkGetUserById } from 'store/authSlice';
 import { parseJwt } from 'utils/func/parsejwt';
@@ -21,10 +20,11 @@ import Modal from 'layouts/Modal/Modal';
 import ConfirmationModal from 'layouts/Modal/ConfirmationModal/ConfirmationModal';
 import TaskModal from 'layouts/Modal/TaskModal/TaskModal';
 import Loader from 'components/loader/Loader';
-import { getMsgErrorUserGet } from 'utils/func/getMsgErrorUserGet';
 import { appSelector, setIsPending } from 'store/appSlice';
 import { singleBoardRequestStatus } from 'store/boardSlice';
 import { boardsLoadingSelector } from 'store/boardsSlice';
+import { getErrorMessage } from 'utils/func/handleError';
+import { getMsgError } from 'utils/func/getMsgError';
 
 type Props = React.HTMLAttributes<HTMLDivElement>;
 
@@ -46,7 +46,8 @@ const MainLayout = ({ children }: Props) => {
         .unwrap()
         .then()
         .catch((err) => {
-          toast.error(t(getMsgErrorUserGet(err)));
+          const error = getErrorMessage(err);
+          toast.error(t(getMsgError(error)));
         })
         .finally(() => dispatch(setIsPending(false)));
     } else {
@@ -77,7 +78,6 @@ const MainLayout = ({ children }: Props) => {
           )}
         </Modal>
       )}
-      <ToastContainer autoClose={TOASTER.time} />
 
       <div className={styles.container}>
         <Loader status={pending} />
