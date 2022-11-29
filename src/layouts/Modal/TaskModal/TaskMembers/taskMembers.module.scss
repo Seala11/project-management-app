@@ -41,7 +41,7 @@
   @extend %boxShadow;
 
   &::-webkit-scrollbar {
-    width: 1rem;
+    width: 0.6rem;
     height: 1rem;
   }
 
@@ -70,4 +70,9 @@
   user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
+  background-color: aquamarine;
+
+  .li {
+    opacity: 0.6rem;
+  }
 }

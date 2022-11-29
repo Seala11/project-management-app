@@ -163,7 +163,4 @@ export const taskDeleteConfirmSelector = (state: RootState) => state.modal.taskD
 export const selectAssignedUsers = (state: RootState) => state.modal.usersAssigned;
 export const selectModalPending = (state: RootState) => state.modal.pending;
 
-export const selectUserIsAssigned = (state: RootState, id: string) =>
-  state.modal.usersAssigned.find((user) => user?._id === id);
-
 export default modalSlice.reducer;

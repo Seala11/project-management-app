@@ -1,7 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { TaskParsedType } from 'store/boardSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { thunkUpdateTaskInfo } from 'store/middleware/tasks';
 import { thunkGetAllUsers } from 'store/middleware/users';
 import { selectAssignedUsers, setUsersAssigned, usersSelector } from 'store/modalSlice';
 import MemberListItem from './MemberListItem/MemberListItem';
@@ -20,7 +22,7 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
   const assignedMembers = useAppSelector(selectAssignedUsers);
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
-  const listRef = useRef<HTMLUListElement | null>(null);
+  const listRef = useRef<HTMLDivElement | null>(null);
 
   if (window !== undefined && allUsers.length === 0) {
     dispatch(thunkGetAllUsers());
@@ -30,23 +32,20 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
     if (allUsers.length === 0) return;
     const getUserFullInfo = (id: string) => allUsers.find((user) => user._id === id);
     const assignedUsers = task?.users.map((user) => getUserFullInfo(user));
-    console.log(assignedUsers);
     dispatch(setUsersAssigned(assignedUsers ? assignedUsers : []));
   }, [allUsers, dispatch, task?.users]);
 
+  const disableRef = useRef(false);
+
   useEffect(() => {
     const list = listRef.current;
-    const listItems = listRef.current?.children;
+    const disabledFetch = disableRef.current;
 
     const clickHandler = ({ target }: MouseEvent) => {
-      let close = true;
-      if (listItems) {
-        for (const child of listItems) {
-          if (child === target) close = false;
-        }
-      }
+      if (disabledFetch) return;
 
-      if ((target === list && !close) || (target !== list && close)) {
+      const listEl = !!(target as HTMLElement).getAttribute('data-member');
+      if (!listEl) {
         setIsOpen(false);
         list?.scrollTo(0, 0);
       }
@@ -56,6 +55,55 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
     return () => document.removeEventListener('click', clickHandler);
   }, []);
 
+  const memberHandler = useCallback(
+    (users: string[]) => {
+      if (!task || !isOpen || disableRef.current) return;
+      disableRef.current = true;
+
+      dispatch(
+        thunkUpdateTaskInfo({
+          _id: task?._id,
+          boardId: boardId,
+          columnId: columnId,
+          userId: task.userId,
+          title: task.title,
+          description: JSON.stringify({
+            description: task.description.description,
+            color: task.description.color,
+          }),
+          order: task.order,
+          users: users,
+        })
+      )
+        .unwrap()
+        .then(() => {
+          toast.success('update member');
+        })
+        .catch(() => {
+          toast.error('update member error');
+        })
+        .finally(() => {
+          disableRef.current = false;
+        });
+    },
+    [boardId, columnId, dispatch, isOpen, task]
+  );
+
+  const setSelected = useCallback(() => {
+    const options = listRef.current?.children;
+    const userChecked = [];
+
+    if (options) {
+      for (let i = 0; i < options?.length; i++) {
+        if ((options[i].children[0] as HTMLInputElement).checked) {
+          userChecked.push(options[i].children[0].id);
+        }
+      }
+    }
+
+    memberHandler(userChecked);
+  }, [memberHandler]);
+
   return (
     <div className={styles.taskInfo}>
       <h3 className={styles.members}>{t('MODAL.MEMBERS')}</h3>
@@ -63,22 +111,23 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
         {assignedMembers.length > 0 &&
           assignedMembers.map((member) => <MemberAssigned key={member?._id} member={member} />)}
       </div>
-      <ul
-        ref={listRef}
+      <div
         className={`${styles.list} ${isOpen ? styles.open : styles.close}`}
         onClick={() => setIsOpen(true)}
+        ref={listRef}
+        data-member="true"
       >
-        {allUsers.map((user) => (
-          <MemberListItem
-            user={user}
-            key={user._id}
-            task={task}
-            boardId={boardId}
-            columnId={columnId}
-            isOpen={isOpen}
-          />
-        ))}
-      </ul>
+        {allUsers.length > 0 &&
+          allUsers.map((user) => (
+            <MemberListItem
+              user={user}
+              key={user._id}
+              userHandler={setSelected}
+              assignedMembers={assignedMembers}
+              isOpen={isOpen}
+            />
+          ))}
+      </div>
     </div>
   );
 };

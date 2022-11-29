@@ -7,11 +7,10 @@ type Props = {
 };
 
 const MemberAssigned = React.memo(({ member }: Props) => {
-  // const userName = member?.login.slice(0, 1).toUpperCase();
+  const userName = member?.login.slice(0, 1).toUpperCase();
 
-  console.log('ASSIGNED', member);
-  // return <p className={styles.member}>{userName}</p>;
-  return <p className={styles.member}>{member?.login}</p>;
+  return <p className={styles.member}>{userName}</p>;
+  // return <p className={styles.member}>{member?.login}</p>;
 });
 
 export default MemberAssigned;
