@@ -63,6 +63,19 @@
 .close {
   height: 6rem;
 
+  &:after {
+    position: absolute;
+    width: 1.4rem;
+    height: 2rem;
+    content: '';
+    bottom: 2rem;
+    right: 2.4rem;
+    background-image: url('../../../../assets/images/arrow-down.svg');
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
   &:hover {
     cursor: pointer;
     background-color: var(--gray-s);

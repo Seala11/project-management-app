@@ -3,13 +3,26 @@ import { UserType } from 'store/middleware/users';
 import styles from './memberAssigned.module.scss';
 
 type Props = {
-  member: UserType | undefined;
+  members: (UserType | undefined)[];
 };
 
-const MemberAssigned = React.memo(({ member }: Props) => {
-  const userName = member?.login.slice(0, 1).toUpperCase();
+const MembersAssigned = ({ members }: Props) => {
+  const AVATARS_DISPLAY = 8;
+  const avatars = members.slice(0, AVATARS_DISPLAY);
+  const total = members.length;
 
-  return <p className={styles.member}>{userName}</p>;
-});
+  return (
+    <>
+      {avatars.map((member) => (
+        <p key={member?._id} className={styles.member}>
+          {member?.name.slice(0, 1).toUpperCase()}
+        </p>
+      ))}
+      {total > AVATARS_DISPLAY && (
+        <p className={`${styles.member} ${styles.total}`}>+{total - AVATARS_DISPLAY}</p>
+      )}
+    </>
+  );
+};
 
-export default MemberAssigned;
+export default MembersAssigned;

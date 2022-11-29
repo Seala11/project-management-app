@@ -8,7 +8,7 @@ import { thunkGetAllUsers } from 'store/middleware/users';
 import { selectAssignedUsers, setUsersAssigned, usersSelector } from 'store/modalSlice';
 import useDebounce from 'utils/hooks/useDebounce';
 import MemberListItem from './MemberListItem/MemberListItem';
-import MemberAssigned from './MembersAssigned.tsx/MemberAssigned';
+import MembersAssigned from './MembersAssigned.tsx/MemberAssigned';
 import styles from './taskMembers.module.scss';
 
 type Props = {
@@ -63,7 +63,6 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
     if (!taskRef.current || !menuOpen.current) return;
     const task = taskRef.current;
     console.log(debouncedValue);
-    console.log('here');
 
     dispatch(
       thunkUpdateTaskInfo({
@@ -90,7 +89,6 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
   }, [boardId, columnId, dispatch, debouncedValue]);
 
   const addMembers = useCallback(() => {
-    console.log('click');
     if (!menuOpen.current) return;
     const items = listRef.current?.children;
     const userChecked = [];
@@ -116,9 +114,9 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
       <h3 className={styles.members}>{t('MODAL.MEMBERS')}</h3>
       <div className={styles.membersWrapper}>
         {assignedMembers.length > 0 ? (
-          assignedMembers.map((member) => <MemberAssigned key={member?._id} member={member} />)
+          <MembersAssigned members={assignedMembers} />
         ) : (
-          <p className={styles.err}>No members assigned</p>
+          <p className={styles.err}>No users assigned</p>
         )}
       </div>
       <div
