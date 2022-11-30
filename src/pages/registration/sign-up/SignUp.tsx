@@ -36,7 +36,6 @@ const SignUp = () => {
     dispatch(setIsPending(true));
     try {
       const res = await dispatch(thunkSignUp(data)).unwrap();
-      toast.success(t('AUTH.200_SIGNUP'));
       const dataForUser = await dispatch(thunkSignIn(res)).unwrap();
       const user = await dispatch(thunkGetUserById(dataForUser)).unwrap();
       toast.success(t('AUTH.200_USER') + `${user.name}`);

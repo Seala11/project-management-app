@@ -174,7 +174,7 @@ const Settings = () => {
     <section className={styles.wrapper}>
       <div className={styles.settings}>
         <div className={styles.leftBlock}>
-          <h1>User Settings</h1>
+          <h1>{t('AUTH.USER_SETTINGS')}</h1>
           <form className={styles.formSettings}>
             <div className={styles.formItem}>
               <label htmlFor="name">{t('AUTH.NAME')}</label>
