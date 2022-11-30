@@ -1,0 +1,88 @@
+@use './app/styles/mixins.scss' as *;
+
+.taskInfo {
+  width: 100%;
+  width: -moz-available;
+  width: -webkit-fill-available;
+  width: stretch;
+  padding: 1rem 0 1rem 1rem;
+}
+
+.changeWrapper {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.description {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--black);
+  cursor: default;
+}
+
+.changeBtn {
+  background-color: transparent;
+  padding: 0.6rem;
+  border-radius: 50%;
+  border: none;
+
+  &:hover {
+    background-color: var(--primary-m);
+    cursor: pointer;
+  }
+}
+
+.changeBtnCancel {
+  &:hover {
+    background-color: var(--error-m);
+  }
+}
+
+.textDescription {
+  word-break: break-word;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  cursor: horisontal-text;
+  transition: all 0.15s ease-in-out;
+  padding: 1rem 0;
+  color: var(--black);
+  margin: 0;
+  border-radius: 0.8rem;
+
+  &:hover {
+    background-color: var(--gray-s);
+    cursor: pointer;
+  }
+}
+
+.textarea {
+  @extend %textarea;
+  border: none;
+  outline-width: 0;
+  height: 10rem;
+  border: 0.2rem solid var(--primary);
+  background-color: var(--white);
+
+  &:focus,
+  &:focus-visible {
+    border: 0.2rem solid var(--primary);
+  }
+}
+
+.textareaWrapper {
+  position: relative;
+}
+
+.counter {
+  position: absolute;
+  bottom: 1rem;
+  right: 1.4rem;
+  font-size: 1.4rem;
+  transition: color 0.3s ease-in;
+}
+
+.counterLim {
+  color: var(--error);
+}
