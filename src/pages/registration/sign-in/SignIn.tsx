@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { thunkGetUserById, thunkSignIn } from 'store/authSlice';
 import { useAppDispatch } from 'store/hooks';
 import { NavLink } from 'react-router-dom';
@@ -46,7 +46,7 @@ const SignIn = () => {
     }
   };
 
-  const showPassword: MouseEventHandler<HTMLButtonElement> = (e) => {
+  function showPassword(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.preventDefault();
     if (passwordField?.current) {
       if (passwordField?.current.getAttribute('type') === 'text') {
@@ -57,7 +57,7 @@ const SignIn = () => {
         (passwordField?.current as HTMLInputElement).setAttribute('type', 'text');
       }
     }
-  };
+  }
 
   return (
     <section className={styles.wrapper}>
