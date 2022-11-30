@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
 import { thunkUpdateTaskInfo } from 'store/middleware/tasks';
-import { toast } from 'react-toastify';
 import { useAppDispatch } from 'store/hooks';
 import { TaskParsedType } from 'store/boardSlice';
 import styles from './taskTitle.module.scss';
@@ -40,14 +39,10 @@ const TaskTitle = ({ task, boardId, columnId }: Props) => {
         })
       )
         .unwrap()
-        .then((originalPromiseResult) => {
-          console.log(originalPromiseResult);
-          toast.success('task title updated');
+        .then(() => {
           setTitleCurrVal(titleUpdatedVal);
         })
-        .catch((rejectedValue) => {
-          console.log(rejectedValue);
-          toast.error('update title error');
+        .catch(() => {
           setTitleUpdatedVal(titleCurrVal);
         })
         .finally(() => {
