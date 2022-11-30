@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from 'store';
-import { fetchCreateBoards, fetchDeleteBoard, fetchGetBoards } from 'api/apiBoards';
+import { fetchCreateBoard, fetchDeleteBoard, fetchGetBoards } from 'api/apiBoards';
 import { getErrorMessage } from 'utils/func/handleError';
 import { parseBoardObj } from 'utils/func/boardHandler';
 import { setAuth } from './authSlice';
@@ -44,18 +44,19 @@ export const thunkGetUserBoards = createAsyncThunk(
   }
 );
 
-export const thunkCreateBoards = createAsyncThunk(
-  'boards/fetchCreateBoards',
+export const thunkCreateBoard = createAsyncThunk(
+  'boards/fetchCreateBoard',
   async ({ owner, title, users, token }: CreateBoardProps, { rejectWithValue, dispatch }) => {
     try {
-      const response = await fetchCreateBoards({ title, owner, users }, token);
+      const response = await fetchCreateBoard({ title, owner, users }, token);
 
+      console.log(response);
       if (!response.ok) {
         const err: { message: string; statusCode: number } = await response.json();
         if (err.statusCode === 403) {
           dispatch(setAuth(false));
         }
-        throw new Error(err.message);
+        throw new Error(String(`${ERR_PREFIX}${err.statusCode}`));
       }
 
       const data: BoardResponseType = await response.json();
@@ -68,13 +69,16 @@ export const thunkCreateBoards = createAsyncThunk(
 
 export const thunkDeleteBoard = createAsyncThunk(
   'boards/fetchDeleteBoard',
-  async ({ boardId, token }: { boardId: string; token: string }, { rejectWithValue }) => {
+  async ({ boardId, token }: { boardId: string; token: string }, { rejectWithValue, dispatch }) => {
     try {
       const response = await fetchDeleteBoard(boardId, token);
 
       if (!response.ok) {
         const err: { message: string; statusCode: number } = await response.json();
-        throw new Error(err.message);
+        if (err.statusCode === 403) {
+          dispatch(setAuth(false));
+        }
+        throw new Error(String(`${ERR_PREFIX}${err.statusCode}`));
       }
 
       const data: BoardResponseType = await response.json();
@@ -112,38 +116,21 @@ export const boardsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers(builder) {
-    // get all boards
     builder.addCase(thunkGetUserBoards.fulfilled, (state, action) => {
       state.loading = false;
       const boards = action.payload.map((board) => parseBoardObj(board));
       state.boards = boards;
     });
-
-    // create board
-    builder.addCase(thunkCreateBoards.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(thunkCreateBoards.fulfilled, (state, action) => {
+    builder.addCase(thunkCreateBoard.fulfilled, (state, action) => {
       state.loading = false;
       const board = action.payload;
       const newBoard = parseBoardObj(board);
       state.boards = [...state.boards, newBoard];
     });
-    builder.addCase(thunkCreateBoards.rejected, (state) => {
-      state.loading = false;
-    });
-
-    // delete board
-    builder.addCase(thunkDeleteBoard.pending, (state) => {
-      state.loading = true;
-    });
     builder.addCase(thunkDeleteBoard.fulfilled, (state, action) => {
       state.loading = false;
       const newState = state.boards.filter((board) => board._id !== action.payload._id);
       state.boards = newState;
-    });
-    builder.addCase(thunkDeleteBoard.rejected, (state) => {
-      state.loading = false;
     });
   },
 });

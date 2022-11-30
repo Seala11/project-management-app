@@ -79,7 +79,8 @@
   },
   "BOARDS": {
     "TITLE": "My Boards",
-    "CREATE": "Create new board"
+    "CREATE": "Create new board",
+    "404_BOARDS": "Element not found. Reload the page"
   },
   "MODAL": {
     "DELETE_MSG": "Are you sure you want to delete",

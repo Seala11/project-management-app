@@ -51,7 +51,8 @@ const MainLayout = ({ children }: Props) => {
     } else {
       dispatch(setIsPending(false));
     }
-  }, [dispatch, t]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const closeModal = (event: React.MouseEvent) => {
     if (event.target === event.currentTarget) {

@@ -23,7 +23,7 @@ export async function fetchGetBoardsByUserId(userId: string, token: string): Pro
   return response;
 }
 
-export async function fetchCreateBoards(options: newBoard, token: string): Promise<Response> {
+export async function fetchCreateBoard(options: newBoard, token: string): Promise<Response> {
   const response = await fetch(`${BOARDS}`, {
     method: 'POST',
     headers: {
