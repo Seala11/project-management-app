@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useEffect } from 'react';
 import Header from 'components/header/Header';
 import Footer from 'components/footer/Footer';
 import { toast } from 'react-toastify';
@@ -39,7 +39,7 @@ const MainLayout = ({ children }: Props) => {
   const { t } = useTranslation();
   const taskDeleteConfirmMessage = useAppSelector(taskDeleteConfirmSelector);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (getTokenFromLS()) {
       const token = getTokenFromLS();
       dispatch(thunkGetUserById({ userId: parseJwt(token).id, token: token }))

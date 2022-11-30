@@ -3,6 +3,11 @@
 .wrapper {
   @extend %wrapper;
   width: 100%;
+  margin: 7rem auto;
+
+  @include media-mobile-s {
+    margin: 3rem auto;
+  }
 }
 
 .sign {

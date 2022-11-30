@@ -3,15 +3,27 @@
 .wrapper {
   @extend %wrapper;
   width: 100%;
+  flex: 1 1 auto;
+  margin: 7rem auto;
+
+  @include media-tablet {
+    margin: 3rem auto;
+  }
 }
 
 .settings {
   display: flex;
   justify-content: space-around;
+  column-gap: 5rem;
   .leftBlock {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  @include media-tablet {
+    flex-direction: column;
+    align-items: center;
   }
 }
 
@@ -26,7 +38,7 @@
       @extend %input;
 
       @include media-mobile-s {
-        width: 25rem;
+        width: 29rem;
       }
     }
 
@@ -73,20 +85,39 @@ h1 {
   row-gap: 8rem;
 
   & .buttonBlockRight {
-    // display: flex;
-    // column-gap: 2rem;
-
-    // .btnSave {
-    //   @extend %btnBlue;
-    // }
-
     .btnDelete {
       @extend %btnRed;
+
+      @include media-tablet {
+        width: 30rem;
+      }
+
+      @include media-mobile-s {
+        width: 29rem;
+      }
     }
   }
 
   & .imageBlock {
-    flex: 1 1 auto;
+    @include media-big-tablet {
+      max-width: 100%;
+    }
+
+    & img {
+      height: auto;
+      width: max-content;
+
+      @include media-big-tablet {
+        max-width: 100%;
+      }
+    }
+  }
+
+  @include media-tablet {
+    margin-top: 3rem;
+    align-items: center;
+    row-gap: 3rem;
+    align-self: center;
   }
 }
 
@@ -103,4 +134,13 @@ h1 {
   display: flex;
   column-gap: 2rem;
   width: 100%;
+
+  // @include media-mobile-s {
+  //   flex-direction: column;
+  //   row-gap: 3rem;
+  // }
+}
+
+.testWrapper {
+  flex: 1 1 auto;
 }
