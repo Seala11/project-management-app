@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAppDispatch } from 'store/hooks';
 import {
   BtnColor,
@@ -7,15 +7,18 @@ import {
   setModalOpen,
   setTaskDeleteConfirm,
   setTaskModalClose,
-  usersSelector,
 } from 'store/modalSlice';
 import { useAppSelector } from 'store/hooks';
 import { taskIdSelector } from 'store/modalSlice';
-import COLORS from 'utils/constants/COLORS';
-import styles from './taskModal.module.scss';
 import { useTranslation } from 'react-i18next';
-import { columnsSelector } from 'store/boardSlice';
-import { thunkGetAllUsers } from 'store/middleware/users';
+import { boardIdSelector, columnsSelector } from 'store/boardSlice';
+import TaskTitle from './TaskTitle/TaskTitle';
+import TaskDescription from './TaskDescription/TaskDescription';
+import styles from './taskModal.module.scss';
+import TaskColor from './TaskColor/TaskColor';
+import TaskMembers from './TaskMembers/TaskMembers';
+
+const DEFAULT_COLOR = '#0047ff14';
 
 type Props = {
   onClose: (event: React.MouseEvent) => void;
@@ -26,16 +29,13 @@ const TaskModal = ({ onClose }: Props) => {
   const { t } = useTranslation();
 
   const selectedTask = useAppSelector(taskIdSelector);
-  const allUsers = useAppSelector(usersSelector);
+  const boardId = useAppSelector(boardIdSelector);
   const columnId = useAppSelector(modalColumnIdSelector);
   const columns = useAppSelector(columnsSelector);
   const selectedColumn = columns.find((column) => column._id === columnId);
-
-  useEffect(() => {
-    if (allUsers.length === 0) {
-      dispatch(thunkGetAllUsers());
-    }
-  }, [allUsers, dispatch]);
+  const [headerColor, setHeaderColor] = useState<string>(
+    selectedTask?.description.color || DEFAULT_COLOR
+  );
 
   const deleteModalOpen = () => {
     dispatch(setTaskModalClose());
@@ -52,53 +52,29 @@ const TaskModal = ({ onClose }: Props) => {
 
   return (
     <>
-      <div className={styles.heading}>
+      <div className={styles.heading} style={{ backgroundColor: `${headerColor}` }}>
         <button type="button" className={styles.closeBtn} onClick={onClose} />
       </div>
+
       <div className={styles.taskWrapper}>
-        <div className={styles.taskInfo}>
-          <h3 className={styles.title}>{selectedTask?.title}</h3>
-          <p className={styles.subtitle}>
+        <div className={styles.taskTitleWrapper}>
+          <TaskTitle task={selectedTask} boardId={boardId} columnId={columnId} />
+          <p className={styles.subtitleColumn}>
             {t('MODAL.IN_COLUMN')} {selectedColumn?.title}
           </p>
         </div>
 
-        <div className={styles.taskInfo}>
-          <h3 className={styles.title}>{t('MODAL.DESCRIPTION')}</h3>
-          <p className={styles.subtitle}>{selectedTask?.description.description}</p>
-        </div>
+        <TaskDescription task={selectedTask} boardId={boardId} columnId={columnId} />
 
-        <div className={styles.taskInfo}>
-          <h3 className={styles.title}>{t('MODAL.MEMBERS')}</h3>
-          {selectedTask?.users.map((id) => {
-            const userAssigned = allUsers.find((user) => user._id === id);
-            return (
-              <p key={id} className={styles.member}>
-                {userAssigned?.login}
-              </p>
-            );
-          })}
-          <select className={styles.select}>
-            {allUsers.map((user) => (
-              <option key={user._id} value={user._id}>
-                {user.login}
-              </option>
-            ))}
-          </select>
-        </div>
+        <TaskMembers task={selectedTask} boardId={boardId} columnId={columnId} />
 
-        <div className={styles.taskInfo}>
-          <h3 className={styles.title}>{t('MODAL.LABEL')}</h3>
-          <ul className={styles.list}>
-            {COLORS.map((color) => (
-              <li
-                key={color.id}
-                style={{ backgroundColor: `${color.color}` }}
-                className={styles.label}
-              />
-            ))}
-          </ul>
-        </div>
+        <TaskColor
+          task={selectedTask}
+          boardId={boardId}
+          columnId={columnId}
+          setHeaderColor={setHeaderColor}
+        />
+
         <button className={styles.button} type="button" onClick={deleteModalOpen}>
           {t('MODAL.DELETE_TASK')}
         </button>
