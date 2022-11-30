@@ -3,7 +3,6 @@ import COLORS from 'utils/constants/COLORS';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from 'store/hooks';
 import { thunkUpdateTaskInfo } from 'store/middleware/tasks';
-import { toast } from 'react-toastify';
 import { TaskParsedType } from 'store/boardSlice';
 import styles from './taskColor.module.scss';
 import Icon from 'components/Icon/Icon';
@@ -22,6 +21,7 @@ const TaskColor = ({ task, boardId, columnId, setHeaderColor }: Props) => {
   const [showRemoveBtn, setDisplayRemoveBtn] = useState(!!task?.description.color);
 
   const updateTaskColor = (newColor: string) => {
+    const prevColor = task?.description.color;
     if (task) {
       dispatch(
         thunkUpdateTaskInfo({
@@ -41,12 +41,12 @@ const TaskColor = ({ task, boardId, columnId, setHeaderColor }: Props) => {
         .unwrap()
         .then(() => {
           setHeaderColor(newColor);
-          toast.success('task color updated');
-
           !newColor ? setDisplayRemoveBtn(false) : setDisplayRemoveBtn(true);
         })
         .catch(() => {
-          toast.error('update color error');
+          if (prevColor) {
+            setHeaderColor(prevColor);
+          }
         });
     }
   };
