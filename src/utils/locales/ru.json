@@ -11,6 +11,7 @@
   "AUTH": {
     "SIGN_IN": "Войти",
     "SIGN_UP": "Регистрация",
+    "USER_SETTINGS": "Настройки",
     "NAME": "Имя",
     "LOGIN": "Логин",
     "PASSWORD": "Пароль",
