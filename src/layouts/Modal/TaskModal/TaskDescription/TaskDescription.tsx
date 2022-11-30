@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { thunkUpdateTaskInfo } from 'store/middleware/tasks';
-import { toast } from 'react-toastify';
 import Icon from 'components/Icon/Icon';
 import { useAppDispatch } from 'store/hooks';
 import { useTranslation } from 'react-i18next';
@@ -56,11 +55,9 @@ const TaskDescription = ({ task, boardId, columnId }: Props) => {
       )
         .unwrap()
         .then(() => {
-          toast.success('task descr updated');
           setDescrCurrVal(descrUpdatedVal);
         })
         .catch(() => {
-          toast.error('update descr error');
           setDescrUpdatedVal(descrCurrVal);
         })
         .finally(() => {
