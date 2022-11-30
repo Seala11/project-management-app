@@ -267,9 +267,11 @@ export const thunkDragEndTasks = createAsyncThunk<void, DragEndTasksEntires>(
           },
         ])
       ).unwrap();
-      await dispatch(
-        thunkUpdateTaskOrder(getSetOfTasks(newSourceTasks, source.droppableId))
-      ).unwrap();
+      if (newSourceTasks.length) {
+        await dispatch(
+          thunkUpdateTaskOrder(getSetOfTasks(newSourceTasks, source.droppableId))
+        ).unwrap();
+      }
       await dispatch(
         thunkUpdateTaskOrder(getSetOfTasks(newDestTasks, destination.droppableId))
       ).unwrap();

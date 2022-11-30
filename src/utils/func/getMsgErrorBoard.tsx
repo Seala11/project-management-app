@@ -1,5 +1,6 @@
 export function getMsgErrorBoard(err: string) {
   const obj: { [key: string]: string } = {
+    '400': '400_SIGNUP',
     '403': '403_USER',
     '404': '404_BOARD',
     '404_BOARD': '404_BOARD_ERROR',

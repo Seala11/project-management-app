@@ -37,7 +37,7 @@
     "403_USER_UPDATE": "Authorization is required",
     "200_USER_DELETE": "User has been deleted",
     "403_USER_DELETE": "Authorization is required",
-    "404_BOARD": "Element not found! Reload page",
+    "404_BOARD": "Element not found! \nPlease reload page",
     "404_BOARD_ERROR": "Element not found!",
     "DEFAULT": "Oops! Something went wrong. Try again"
   },
