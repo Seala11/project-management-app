@@ -23,6 +23,9 @@ import pencil from 'assets/images/pencil.png';
 import styles from './boards.module.scss';
 import { userSelector } from 'store/authSlice';
 import { getTokenFromLS } from 'utils/func/localStorage';
+import { setIsPending } from 'store/appSlice';
+import { ErrosType, useGetBoardsErrors } from 'utils/hooks/useGetBoardsErrors';
+import { toast } from 'react-toastify';
 
 const Boards = () => {
   const [selectedBoard, setSelectedBoard] = useState<string>();
@@ -36,13 +39,27 @@ const Boards = () => {
   const userInputDescr = useAppSelector(userDescriptionSelector);
   const user = useAppSelector(userSelector);
   const boards = useAppSelector(boardsSelector);
+  const messageErr = useGetBoardsErrors();
   const initialRenderBoards = useRef(boards.length);
 
   useEffect(() => {
-    if (initialRenderBoards.current === 0) {
-      dispatch(thunkGetUserBoards(getTokenFromLS()));
-    }
-  }, [dispatch]);
+    const getBoards = async () => {
+      if (initialRenderBoards.current === 0) {
+        dispatch(setIsPending(true));
+        try {
+          await dispatch(thunkGetUserBoards(getTokenFromLS())).unwrap();
+        } catch (err) {
+          const error = err as keyof ErrosType;
+          const message = messageErr[error] ? messageErr[error] : messageErr.DEFAULT;
+          toast.error(message);
+        } finally {
+          dispatch(setIsPending(false));
+        }
+      }
+    };
+
+    getBoards();
+  }, [dispatch, messageErr]);
 
   const navigateToBoardPage = (id: string) => {
     navigate(`/boards/${id}`);

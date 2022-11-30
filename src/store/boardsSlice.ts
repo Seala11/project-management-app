@@ -2,10 +2,8 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from 'store';
 import { fetchCreateBoards, fetchDeleteBoard, fetchGetBoards } from 'api/apiBoards';
 import { getErrorMessage } from 'utils/func/handleError';
-import { toast } from 'react-toastify';
 import { parseBoardObj } from 'utils/func/boardHandler';
 import { setAuth } from './authSlice';
-import { setToastMessage } from './appSlice';
 
 export type BoardResponseType = {
   _id: string;
@@ -21,15 +19,21 @@ type CreateBoardProps = {
   token: string;
 };
 
+const ERR_PREFIX = 'BOARDS_';
+
 export const thunkGetUserBoards = createAsyncThunk(
   'boardsSet/fetchGetBoards',
-  async (token: string, { rejectWithValue }) => {
+  async (token: string, { rejectWithValue, dispatch }) => {
     try {
       const response = await fetchGetBoards(token);
 
       if (!response.ok) {
         const err: { message: string; statusCode: number } = await response.json();
-        throw new Error(err.message);
+
+        if (err.statusCode === 403) {
+          dispatch(setAuth(false));
+        }
+        throw new Error(String(`${ERR_PREFIX}${err.statusCode}`));
       }
 
       const data: BoardResponseType[] = await response.json();
@@ -50,7 +54,6 @@ export const thunkCreateBoards = createAsyncThunk(
         const err: { message: string; statusCode: number } = await response.json();
         if (err.statusCode === 403) {
           dispatch(setAuth(false));
-          dispatch(setToastMessage(String(err.statusCode)));
         }
         throw new Error(err.message);
       }
@@ -109,20 +112,11 @@ export const boardsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers(builder) {
-    // getBoards
-    builder.addCase(thunkGetUserBoards.pending, (state) => {
-      state.loading = true;
-    });
+    // get all boards
     builder.addCase(thunkGetUserBoards.fulfilled, (state, action) => {
       state.loading = false;
       const boards = action.payload.map((board) => parseBoardObj(board));
       state.boards = boards;
-    });
-    builder.addCase(thunkGetUserBoards.rejected, (state, action) => {
-      state.loading = false;
-      if (typeof action.payload === 'string') {
-        // toast.error(action.payload);
-      }
     });
 
     // create board
@@ -135,11 +129,8 @@ export const boardsSlice = createSlice({
       const newBoard = parseBoardObj(board);
       state.boards = [...state.boards, newBoard];
     });
-    builder.addCase(thunkCreateBoards.rejected, (state, action) => {
+    builder.addCase(thunkCreateBoards.rejected, (state) => {
       state.loading = false;
-      if (typeof action.payload === 'string') {
-        // toast.error(action.payload);
-      }
     });
 
     // delete board
@@ -151,11 +142,8 @@ export const boardsSlice = createSlice({
       const newState = state.boards.filter((board) => board._id !== action.payload._id);
       state.boards = newState;
     });
-    builder.addCase(thunkDeleteBoard.rejected, (state, action) => {
+    builder.addCase(thunkDeleteBoard.rejected, (state) => {
       state.loading = false;
-      if (typeof action.payload === 'string') {
-        toast.error(action.payload);
-      }
     });
   },
 });
