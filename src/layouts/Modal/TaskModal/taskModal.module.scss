@@ -1,13 +1,24 @@
 @use './app/styles/mixins.scss' as *;
 
-.title {
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: var(--black);
+.taskTitleWrapper {
+  width: 100%;
+  width: -moz-available;
+  width: -webkit-fill-available;
+  width: stretch;
+  padding: 1.5rem 0;
 }
 
 .subtitle {
   color: var(--gray);
+  cursor: default;
+}
+
+.subtitleColumn {
+  color: var(--gray);
+  margin: 0;
+  font-size: 1.4rem;
+  padding: 0.2rem 0 0 1rem;
+  cursor: default;
 }
 
 .heading {
@@ -31,20 +42,12 @@
   justify-content: center;
   align-items: flex-start;
   width: 50rem;
-  padding: 0 2rem 2rem;
+  padding: 0 2.5rem 2rem 1.5rem;
   overflow-y: auto;
 
   @include media-mobile {
     width: 90vw;
   }
-}
-
-.taskInfo {
-  width: 100%;
-  width: -moz-available;
-  width: -webkit-fill-available;
-  width: stretch;
-  padding-bottom: 1rem;
 }
 
 .closeBtn {
@@ -77,40 +80,4 @@
 .button {
   @extend %btnRed;
   align-self: flex-end;
-}
-
-.list {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  list-style-type: none;
-  padding: 0;
-}
-
-.label {
-  width: min(15%, 7rem);
-  height: 3rem;
-  border-radius: 0.8rem;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-
-  &:hover {
-    box-shadow: inset 0 0 0 0.3rem var(--gray-l);
-  }
-}
-
-.select {
-  @extend %input;
-  width: 100%;
-  width: -moz-available;
-  width: -webkit-fill-available;
-  width: stretch;
-}
-
-.member {
-  background-color: var(--gray-s);
-  width: fit-content;
-  padding: 0.5rem 0.8rem;
-  border-radius: 0.8rem;
-  color: var(--black);
 }

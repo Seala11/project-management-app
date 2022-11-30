@@ -20,7 +20,7 @@ export async function fetchCreateTask(
   order: number,
   token: string
 ) {
-  const users = [userId];
+  const users: string[] = [];
   const response = await fetch(`${BOARDS}/${boardId}/columns/${columnId}/tasks`, {
     method: 'POST',
     headers: {
