@@ -50,7 +50,6 @@ export const thunkCreateBoard = createAsyncThunk(
     try {
       const response = await fetchCreateBoard({ title, owner, users }, token);
 
-      console.log(response);
       if (!response.ok) {
         const err: { message: string; statusCode: number } = await response.json();
         if (err.statusCode === 403) {

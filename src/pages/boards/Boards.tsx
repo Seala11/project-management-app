@@ -105,7 +105,6 @@ const Boards = () => {
       .catch((err) => {
         const error = err as keyof ErrosType;
         const message = messageErr[error] ? messageErr[error] : messageErr.DEFAULT;
-        console.log(message, err);
         toast.error(message);
       })
       .finally(() => {
