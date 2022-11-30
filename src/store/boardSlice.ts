@@ -17,6 +17,7 @@ import {
 } from './middleware/tasks';
 import { RootState } from 'store';
 import { fetchGetBoard } from 'api/apiBoard';
+import { getErrorMessage } from 'utils/func/handleError';
 
 export type FileType = {
   filename: string;
@@ -62,7 +63,7 @@ export type ColumnType = {
 export type BoardStateType = {
   id: string;
   title: BoardInfo;
-  error: string;
+  error: string | null;
   pending: boolean | string;
   columns: ColumnType[];
   tasks: TaskObjectType;
@@ -87,7 +88,7 @@ const initialBoardState: BoardStateType = {
     title: '',
     descr: '',
   },
-  error: '',
+  error: null,
   pending: false,
   columns: [],
   tasks: {},
@@ -99,14 +100,17 @@ export const thunkGetSingleBoard = createAsyncThunk<
   { rejectValue: string }
 >('board/getSingleBoard', async (id, { rejectWithValue }) => {
   const token = getTokenFromLS();
-  const response = await fetchGetBoard(id, token);
-
-  if (!response.ok) {
-    const resp = await response.json();
-    return rejectWithValue(`error code: ${resp?.statusCode} message: ${resp?.message}`);
+  try {
+    const response = await fetchGetBoard(id, token);
+    if (!response.ok) {
+      const resp = await response.json();
+      throw new Error(`${resp?.statusCode}_BOARD/${resp.message}`);
+    }
+    const data: BoardResponseType = await response.json();
+    return data;
+  } catch (error) {
+    return rejectWithValue(getErrorMessage(error));
   }
-  const data: BoardResponseType = await response.json();
-  return data;
 });
 
 export const boardSlice = createSlice({
@@ -124,8 +128,8 @@ export const boardSlice = createSlice({
       state.tasks = {};
       state.title = { title: '', descr: '' };
     },
-    clearErrors(state) {
-      state.error = '';
+    clearBoardErrors(state) {
+      state.error = null;
     },
   },
   extraReducers: (builder) => {
@@ -141,6 +145,7 @@ export const boardSlice = createSlice({
       })
       // Columns
       .addCase(thunkGetAllColumns.fulfilled, (state, action) => {
+        if (typeof action.payload === 'boolean') return;
         state.columns = action.payload;
         state.pending = false;
       })
@@ -174,6 +179,8 @@ export const boardSlice = createSlice({
       })
       // Tasks
       .addCase(thunkGetAllTasks.fulfilled, (state, action) => {
+        if (typeof action.payload === 'boolean') return;
+
         const taskObj = action.payload.tasks.map((task) => parseTaskObj(task));
         state.tasks[action.payload.column] = taskObj;
       })
@@ -187,7 +194,6 @@ export const boardSlice = createSlice({
       })
       .addCase(thunkCreateTask.rejected, (state, action) => {
         state.pending = false;
-        console.log(action.payload);
         if (typeof action.payload === 'string') {
           toast.error(action.payload);
         }
@@ -204,7 +210,6 @@ export const boardSlice = createSlice({
       })
       .addCase(thunkDeleteTasks.rejected, (state, action) => {
         state.pending = false;
-        console.log(action.payload);
         if (typeof action.payload === 'string') {
           toast.error(action.payload);
         }
@@ -215,11 +220,20 @@ export const boardSlice = createSlice({
           task._id === action.payload.task._id ? (task = updatedTask) : task
         );
         state.tasks[action.payload.column] = newTaskState;
-      });
+      })
+      .addMatcher(
+        (action) => action.type.endsWith('/rejected'),
+        (state, action: PayloadAction<string>) => {
+          if (!state.error) {
+            state.error = action.payload;
+          }
+        }
+      );
   },
 });
 
-export const { clearErrors, updateColumnsOrder, updateTasksState, clearState } = boardSlice.actions;
+export const { clearBoardErrors, updateColumnsOrder, updateTasksState, clearState } =
+  boardSlice.actions;
 
 export const singleBoardRequestStatus = (state: RootState) => state.board.pending;
 export const columnsSelector = (state: RootState) => state.board.columns;

@@ -11,6 +11,7 @@
   "AUTH": {
     "SIGN_IN": "Sign in",
     "SIGN_UP": "Sign up",
+    "USER_SETTINGS": "User settings",
     "NAME": "Name",
     "LOGIN": "Login",
     "PASSWORD": "Password",
@@ -37,6 +38,8 @@
     "403_USER_UPDATE": "Authorization is required",
     "200_USER_DELETE": "User has been deleted",
     "403_USER_DELETE": "Authorization is required",
+    "404_BOARD": "Element not found! \nPlease reload page",
+    "404_BOARD_ERROR": "Element not found!",
     "DEFAULT": "Oops! Something went wrong. Try again"
   },
   "NOTFOUND": {
@@ -107,7 +110,8 @@
     "CREATE_COLUMN_TITLE": "Create new column",
     "CREATE_TASK_TITLE": "Create new task",
     "CREATE_COLUMN_BUTTON": "New column",
-    "CREATE_TASK_BUTTON": "New task"
+    "CREATE_TASK_BUTTON": "New task",
+    "404_BOARD": "Board was not founded!"
   },
   "COLUMN": {
     "REQ_ER": "cannot be empty",

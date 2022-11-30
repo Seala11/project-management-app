@@ -1,8 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { TASK_SET } from 'api/config';
 import { fetchCreateTask, fetchDeleteTask, fetchGetTasks, fetchUpdateTask } from 'api/taskApi';
 import { DropResult } from 'react-beautiful-dnd';
+import { RootState } from 'store';
+import { getErrorMessage } from 'utils/func/handleError';
 import { getTokenFromLS } from 'utils/func/localStorage';
-import { TaskObjectType, TaskType, updateTasksState } from '../boardSlice';
+import { TaskObjectType, TaskParsedType, TaskType, updateTasksState } from '../boardSlice';
 
 export type TaskResponseType = {
   column: string;
@@ -15,23 +18,30 @@ export type TaskRequestDataType = {
 };
 
 export const thunkGetAllTasks = createAsyncThunk<
-  TaskResponseType,
+  TaskResponseType | boolean,
   TaskRequestDataType,
   { rejectValue: string }
->('task/getAllTasks', async ({ boardId, columnId }, { rejectWithValue }) => {
+>('task/getAllTasks', async ({ boardId, columnId }, { getState, rejectWithValue }) => {
   const token = getTokenFromLS();
-  const response = await fetchGetTasks(boardId, columnId, token);
-
-  if (!response.ok) {
-    const resp = await response.json();
-    return rejectWithValue(`${resp?.statusCode}/${resp.message}`);
+  const state = getState() as RootState;
+  const error = state.board.error;
+  if (error) {
+    return false;
   }
-  const data: TaskType[] = await response.json();
-  return { column: columnId, tasks: data.sort((a, b) => a.order - b.order) };
+  try {
+    const response = await fetchGetTasks(boardId, columnId, token);
+    if (!response.ok) {
+      const resp = await response.json();
+      throw new Error(`${resp?.statusCode}/${resp.message}`);
+    }
+    const data: TaskType[] = await response.json();
+    return { column: columnId, tasks: data.sort((a, b) => a.order - b.order) };
+  } catch (error) {
+    return rejectWithValue(getErrorMessage(error));
+  }
 });
 
 // create Task
-
 type CreateTaskRequestType = {
   boardId: string;
   columnId: string;
@@ -54,22 +64,26 @@ export const thunkCreateTask = createAsyncThunk<
   'task/createTask',
   async ({ boardId, columnId, title, description, order, userId }, { rejectWithValue }) => {
     const token = getTokenFromLS();
-    const response = await fetchCreateTask(
-      boardId,
-      columnId,
-      userId,
-      title,
-      description,
-      order,
-      token
-    );
+    try {
+      const response = await fetchCreateTask(
+        boardId,
+        columnId,
+        userId,
+        title,
+        description,
+        order,
+        token
+      );
 
-    if (!response.ok) {
-      const resp = await response.json();
-      return rejectWithValue(`${resp?.statusCode}/${resp.message}`);
+      if (!response.ok) {
+        const resp = await response.json();
+        throw new Error(`${resp?.statusCode}/${resp.message}`);
+      }
+      const task: TaskType = await response.json();
+      return { column: columnId, task: task };
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error));
     }
-    const task: TaskType = await response.json();
-    return { column: columnId, task: task };
   }
 );
 
@@ -92,14 +106,17 @@ export const thunkDeleteTasks = createAsyncThunk<
   { rejectValue: string }
 >('task/deleteTask', async ({ boardId, columnId, taskId }, { rejectWithValue }) => {
   const token = getTokenFromLS();
-  const response = await fetchDeleteTask(boardId, columnId, taskId, token);
-
-  if (!response.ok) {
-    const resp = await response.json();
-    return rejectWithValue(`${resp?.statusCode}/${resp.message}`);
+  try {
+    const response = await fetchDeleteTask(boardId, columnId, taskId, token);
+    if (!response.ok) {
+      const resp = await response.json();
+      throw new Error(`${resp?.statusCode}/${resp.message}`);
+    }
+    const task: TaskType = await response.json();
+    return { column: columnId, task: task };
+  } catch (error) {
+    return rejectWithValue(getErrorMessage(error));
   }
-  const task: TaskType = await response.json();
-  return { column: columnId, task: task };
 });
 
 //update task
@@ -137,19 +154,41 @@ export const thunkUpdateTaskInfo = createAsyncThunk<
   return { column: columnId, task: updatedTask };
 });
 
+type TaskSetType = {
+  _id: string;
+  order: number;
+  columnId: string;
+};
+
 export const thunkUpdateTaskOrder = createAsyncThunk<
-  undefined,
-  UpdateTaskRequestType,
+  undefined | boolean,
+  TaskSetType[],
   { rejectValue: string }
 >('board/updateTaskOnServer', async (data, { rejectWithValue }) => {
   const token = getTokenFromLS();
-  const response = await fetchUpdateTask(data, token);
-
-  if (!response.ok) {
-    const resp = await response.json();
-    return rejectWithValue(`${resp?.statusCode}/${resp.message}`);
+  try {
+    const response = await fetch(`${TASK_SET}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      const resp = await response.json();
+      throw new Error(`${resp?.statusCode}/${resp.message}`);
+    }
+  } catch (error) {
+    return rejectWithValue(getErrorMessage(error));
   }
 });
+
+const getSetOfTasks = (tasks: TaskParsedType[], columnId: string) => {
+  return tasks.map((task) => {
+    return { _id: task._id, order: task.order, columnId: columnId };
+  });
+};
 
 type DragEndTasksEntires = {
   result: DropResult;
@@ -217,30 +256,36 @@ export const thunkDragEndTasks = createAsyncThunk<void, DragEndTasksEntires>(
     }
     dispatch(updateTasksState({ tasks: newSourceTasks, destColumnId: source.droppableId }));
     dispatch(updateTasksState({ tasks: newDestTasks, destColumnId: destination.droppableId }));
-    dispatch(
-      thunkUpdateTaskOrder({
-        ...draggableTask,
-        columnId: destination.droppableId,
-        description: JSON.stringify(draggableTask.description),
-      })
-    );
-    newSourceTasks.forEach((task) => {
+
+    try {
+      await dispatch(
+        thunkUpdateTaskOrder([
+          {
+            _id: draggableTask._id,
+            order: draggableTask.order,
+            columnId: destination.droppableId,
+          },
+        ])
+      ).unwrap();
+      if (newSourceTasks.length) {
+        await dispatch(
+          thunkUpdateTaskOrder(getSetOfTasks(newSourceTasks, source.droppableId))
+        ).unwrap();
+      }
+      await dispatch(
+        thunkUpdateTaskOrder(getSetOfTasks(newDestTasks, destination.droppableId))
+      ).unwrap();
+    } catch (error) {
       dispatch(
-        thunkUpdateTaskOrder({
-          ...task,
-          columnId: source.droppableId,
-          description: JSON.stringify(task.description),
+        updateTasksState({ tasks: tasks[source.droppableId], destColumnId: source.droppableId })
+      );
+      dispatch(
+        updateTasksState({
+          tasks: tasks[destination.droppableId],
+          destColumnId: destination.droppableId,
         })
       );
-    });
-    newDestTasks.forEach((task) => {
-      dispatch(
-        thunkUpdateTaskOrder({
-          ...task,
-          columnId: destination.droppableId,
-          description: JSON.stringify(task.description),
-        })
-      );
-    });
+      console.error(`Error: ${error}, return state!`);
+    }
   }
 );

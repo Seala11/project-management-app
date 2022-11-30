@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { thunkGetUserById, thunkSignIn } from 'store/authSlice';
 import { useAppDispatch } from 'store/hooks';
 import { NavLink } from 'react-router-dom';
@@ -7,11 +7,11 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import signImage from 'assets/images/login.png';
 import { useTranslation } from 'react-i18next';
 import Icon from 'components/Icon/Icon';
-import styles from '../registration.module.scss';
 import { toast } from 'react-toastify';
 import { setIsPending } from 'store/appSlice';
 import { getErrorMessage } from 'utils/func/handleError';
 import { getMsgError } from 'utils/func/getMsgError';
+import styles from '../registration.module.scss';
 
 const SignIn = () => {
   const { t } = useTranslation();
@@ -46,7 +46,7 @@ const SignIn = () => {
     }
   };
 
-  const showPassword: MouseEventHandler<HTMLButtonElement> = (e) => {
+  function showPassword(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.preventDefault();
     if (passwordField?.current) {
       if (passwordField?.current.getAttribute('type') === 'text') {
@@ -57,7 +57,7 @@ const SignIn = () => {
         (passwordField?.current as HTMLInputElement).setAttribute('type', 'text');
       }
     }
-  };
+  }
 
   return (
     <section className={styles.wrapper}>
