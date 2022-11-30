@@ -57,9 +57,8 @@ const Board = () => {
   useEffect(() => {
     if (error) {
       const [code] = error.split('/');
-      // console.log(error);
       if (code) {
-        if (+code === 403) {
+        if (code === '403') {
           dispatch(setAuth(false));
           toast.error(t(getMsgErrorBoard(code)));
         } else if (code === '404_BOARD') {

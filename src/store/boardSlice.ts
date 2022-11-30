@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction, AnyAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import { parseTaskObj, parseBoardObj } from 'utils/func/boardHandler';
 import { getTokenFromLS } from 'utils/func/localStorage';
@@ -221,11 +221,14 @@ export const boardSlice = createSlice({
         );
         state.tasks[action.payload.column] = newTaskState;
       })
-      .addMatcher(isError, (state, action: PayloadAction<string>) => {
-        if (!state.error) {
-          state.error = action.payload;
+      .addMatcher(
+        (action) => action.type.endsWith('/rejected'),
+        (state, action: PayloadAction<string>) => {
+          if (!state.error) {
+            state.error = action.payload;
+          }
         }
-      });
+      );
   },
 });
 
@@ -237,7 +240,3 @@ export const columnsSelector = (state: RootState) => state.board.columns;
 export const boardIdSelector = (state: RootState) => state.board.id;
 
 export default boardSlice.reducer;
-
-function isError(action: AnyAction) {
-  return action.type.endsWith('rejected');
-}
