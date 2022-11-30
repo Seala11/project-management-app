@@ -19,3 +19,17 @@ export async function fetchGetColumns(boardId: string, token: string): Promise<R
   });
   return response;
 }
+
+export async function fetchGetColumn(
+  boardId: string,
+  columnId: string,
+  token: string
+): Promise<Response> {
+  const response = await fetch(`${BOARDS}/${boardId}/columns/${columnId}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+}

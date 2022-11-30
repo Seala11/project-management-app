@@ -32,7 +32,6 @@ const Task = (props: Props) => {
         >
           <div className={styles.taskTitle} {...providedTask.dragHandleProps}>
             {taskData.title}
-            {taskData.order}
           </div>
         </li>
       )}

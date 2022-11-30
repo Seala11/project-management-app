@@ -1,9 +1,8 @@
 import React, { useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { clearState, thunkGetSingleBoard } from 'store/boardSlice';
+import { clearBoardErrors, clearState, thunkGetSingleBoard } from 'store/boardSlice';
 import styles from './board.module.scss';
 import { useAppSelector, useAppDispatch } from 'store/hooks';
-import ROUTES from 'utils/constants/ROUTES';
 import {
   thunkGetAllColumns,
   thunkCreateColumn,
@@ -23,6 +22,10 @@ import { useTranslation } from 'react-i18next';
 import Column from './column/Column';
 import { thunkCreateTask, thunkDeleteTasks, thunkDragEndTasks } from 'store/middleware/tasks';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { getMsgErrorBoard } from 'utils/func/getMsgErrorBoard';
+import ROUTES from 'utils/constants/ROUTES';
 
 /* ToDo
 - оттестировать ошибки errors
@@ -41,15 +44,12 @@ const Board = () => {
   const navigate = useNavigate();
   const modalColumnId = useAppSelector(modalColumnIdSelector);
   const { t } = useTranslation();
-
   const user = useAppSelector(userSelector);
 
   useEffect(() => {
     dispatch(thunkGetSingleBoard(`${id}`));
     dispatch(thunkGetAllColumns(`${id}`));
-    console.log('useEffect');
     return () => {
-      console.log('clear');
       dispatch(clearState());
     };
   }, [id, dispatch]);
@@ -58,15 +58,22 @@ const Board = () => {
     if (error) {
       const [code] = error.split('/');
       if (code) {
-        if (+code === 401) {
+        if (code === '403') {
           dispatch(setAuth(false));
-          navigate(ROUTES.signIn, { replace: true });
+          toast.error(t(getMsgErrorBoard(code)));
+        } else if (code === '404_BOARD') {
+          navigate(ROUTES.boards, { replace: true });
+          toast.error(t(getMsgErrorBoard(code)));
         } else {
-          navigate(ROUTES.notFound, { replace: true });
+          toast.error(t(getMsgErrorBoard(code)));
         }
+        dispatch(clearBoardErrors());
       }
     }
-  }, [error, dispatch, navigate]);
+    return () => {
+      dispatch(clearBoardErrors());
+    };
+  }, [error, dispatch, navigate, t]);
 
   useEffect(() => {
     if (modalAction === ModalAction.COLUMN_DELETE) {
@@ -136,7 +143,7 @@ const Board = () => {
   };
 
   const onDragEnd = useCallback(
-    (result: DropResult) => {
+    async (result: DropResult) => {
       const { destination, source, type } = result;
       if (
         !destination ||
@@ -145,7 +152,7 @@ const Board = () => {
         return;
       }
       if (type === 'COLUMN') {
-        dispatch(thunkDragEndColumns({ result, columns, id }));
+        await dispatch(thunkDragEndColumns({ result, columns, id }));
       } else {
         dispatch(thunkDragEndTasks({ result, tasks }));
       }
