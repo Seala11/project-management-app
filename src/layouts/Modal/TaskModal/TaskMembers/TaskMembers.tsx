@@ -5,7 +5,13 @@ import { TaskParsedType } from 'store/boardSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { thunkUpdateTaskInfo } from 'store/middleware/tasks';
 import { thunkGetAllUsers } from 'store/middleware/users';
-import { selectAssignedUsers, setUsersAssigned, usersSelector } from 'store/modalSlice';
+import {
+  selectAssignedUsers,
+  setModalClose,
+  setTaskModalClose,
+  setUsersAssigned,
+  usersSelector,
+} from 'store/modalSlice';
 import useDebounce from 'utils/hooks/useDebounce';
 import MemberListItem from './MemberListItem/MemberListItem';
 import MembersAssigned from './MembersAssigned.tsx/MemberAssigned';
@@ -32,9 +38,20 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
   const taskRef = useRef(task);
   const listRef = useRef<HTMLDivElement | null>(null);
 
-  if (window !== undefined && allUsers.length === 0) {
-    dispatch(thunkGetAllUsers());
-  }
+  useEffect(() => {
+    const getUsers = async () => {
+      if (allUsers.length === 0) {
+        await dispatch(thunkGetAllUsers())
+          .unwrap()
+          .catch(() => {
+            dispatch(setTaskModalClose());
+            dispatch(setModalClose());
+          });
+      }
+    };
+
+    getUsers();
+  }, [allUsers.length, dispatch]);
 
   useEffect(() => {
     if (allUsers.length === 0) return;

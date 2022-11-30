@@ -144,14 +144,20 @@ export const thunkUpdateTaskInfo = createAsyncThunk<
 >('board/updateTask', async (data, { rejectWithValue }) => {
   const { columnId } = data;
   const token = getTokenFromLS();
-  const response = await fetchUpdateTask(data, token);
 
-  if (!response.ok) {
-    const resp = await response.json();
-    return rejectWithValue(`${resp?.statusCode}/${resp.message}`);
+  try {
+    const response = await fetchUpdateTask(data, token);
+
+    if (!response.ok) {
+      const resp = await response.json();
+      throw new Error(`${resp?.statusCode}/${resp.message}`);
+    }
+
+    const updatedTask = await response.json();
+    return { column: columnId, task: updatedTask };
+  } catch (error) {
+    return rejectWithValue(getErrorMessage(error));
   }
-  const updatedTask = await response.json();
-  return { column: columnId, task: updatedTask };
 });
 
 type TaskSetType = {
