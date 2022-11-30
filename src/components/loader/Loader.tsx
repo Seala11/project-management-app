@@ -2,7 +2,7 @@ import React from 'react';
 import style from './loader.module.scss';
 
 type Props = {
-  status: string | boolean;
+  status?: string | boolean;
 };
 
 function Loader({ status }: Props) {
