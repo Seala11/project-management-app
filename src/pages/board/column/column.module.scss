@@ -72,9 +72,11 @@
   flex-direction: column;
   overflow: hidden auto;
   padding-right: 1.2rem;
+  margin-right: -1.2rem;
+  padding-left: 1.2rem;
+  margin-left: -1.2rem;
   padding-bottom: 0.8rem;
   min-height: 1.5rem;
-  margin-right: -1.2rem;
 }
 
 .addButton {

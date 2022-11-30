@@ -31,7 +31,11 @@ const Task = (props: Props) => {
           {...providedTask.draggableProps}
         >
           <div className={styles.taskTitle} {...providedTask.dragHandleProps}>
-            {taskData.title}
+            <div
+              className={styles.colorBadge}
+              style={{ background: taskData.description.color }}
+            ></div>
+            <div className={styles.taskText}>{taskData.title}</div>
           </div>
         </li>
       )}

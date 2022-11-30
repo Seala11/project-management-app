@@ -5,6 +5,7 @@
   width: 100%;
   background: var(--white);
   margin: 0.8rem 0;
+  border: 0;
 }
 
 .taskTitle {
@@ -12,6 +13,17 @@
   font-size: 1.6rem;
   line-height: 1.9rem;
   display: flex;
-  align-items: center;
-  padding: 1.6rem;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.colorBadge {
+  width: 100%;
+  border-radius: 0.8rem 0.8rem 0 0;
+  padding-bottom: 0.8rem;
+}
+
+.taskText {
+  padding: 0.8rem 1.6rem 1.6rem;
+  width: 100%;
 }
