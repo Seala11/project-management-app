@@ -44,8 +44,8 @@ const Board = () => {
   const navigate = useNavigate();
   const modalColumnId = useAppSelector(modalColumnIdSelector);
   const { t } = useTranslation();
-
   const user = useAppSelector(userSelector);
+
   useEffect(() => {
     dispatch(thunkGetSingleBoard(`${id}`));
     dispatch(thunkGetAllColumns(`${id}`));
@@ -62,13 +62,13 @@ const Board = () => {
         if (+code === 403) {
           dispatch(setAuth(false));
           toast.error(t(getMsgErrorBoard(code)));
-        }
-        if (code === '404_BOARD') {
+        } else if (code === '404_BOARD') {
           navigate(ROUTES.boards, { replace: true });
           toast.error(t(getMsgErrorBoard(code)));
         } else {
           toast.error(t(getMsgErrorBoard(code)));
         }
+        dispatch(clearBoardErrors());
       }
     }
     return () => {
@@ -144,7 +144,7 @@ const Board = () => {
   };
 
   const onDragEnd = useCallback(
-    (result: DropResult) => {
+    async (result: DropResult) => {
       const { destination, source, type } = result;
       if (
         !destination ||
@@ -153,7 +153,7 @@ const Board = () => {
         return;
       }
       if (type === 'COLUMN') {
-        dispatch(thunkDragEndColumns({ result, columns, id }));
+        await dispatch(thunkDragEndColumns({ result, columns, id }));
       } else {
         dispatch(thunkDragEndTasks({ result, tasks }));
       }

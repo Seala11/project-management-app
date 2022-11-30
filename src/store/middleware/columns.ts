@@ -26,7 +26,6 @@ export const thunkGetAllColumns = createAsyncThunk<
       throw new Error(`${resp?.statusCode}/${resp.message}`);
     }
     const data: ColumnType[] = await response.json();
-    console.log(data);
     return data.sort((a, b) => a.order - b.order);
   } catch (error) {
     return rejectWithValue(getErrorMessage(error));
@@ -206,7 +205,6 @@ export const thunkDragEndColumns = createAsyncThunk<void, DragEndColumnsEntires>
     } catch (error) {
       dispatch(updateColumnsOrder(columns)); //return old state
       console.error(`Error: ${error}, return state!`);
-      // dispatch(clearBoardErrors());
     }
   }
 );

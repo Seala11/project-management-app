@@ -63,7 +63,7 @@ export type ColumnType = {
 export type BoardStateType = {
   id: string;
   title: BoardInfo;
-  error: string;
+  error: string | null;
   pending: boolean | string;
   columns: ColumnType[];
   tasks: TaskObjectType;
@@ -88,7 +88,7 @@ const initialBoardState: BoardStateType = {
     title: '',
     descr: '',
   },
-  error: '',
+  error: null,
   pending: false,
   columns: [],
   tasks: {},
@@ -129,7 +129,7 @@ export const boardSlice = createSlice({
       state.title = { title: '', descr: '' };
     },
     clearBoardErrors(state) {
-      state.error = '';
+      state.error = null;
     },
   },
   extraReducers: (builder) => {
@@ -194,7 +194,6 @@ export const boardSlice = createSlice({
       })
       .addCase(thunkCreateTask.rejected, (state, action) => {
         state.pending = false;
-        console.log(action.payload);
         if (typeof action.payload === 'string') {
           toast.error(action.payload);
         }
@@ -211,7 +210,6 @@ export const boardSlice = createSlice({
       })
       .addCase(thunkDeleteTasks.rejected, (state, action) => {
         state.pending = false;
-        console.log(action.payload);
         if (typeof action.payload === 'string') {
           toast.error(action.payload);
         }
@@ -224,7 +222,9 @@ export const boardSlice = createSlice({
         state.tasks[action.payload.column] = newTaskState;
       })
       .addMatcher(isError, (state, action: PayloadAction<string>) => {
-        state.error = action.payload;
+        if (!state.error) {
+          state.error = action.payload;
+        }
       });
   },
 });
