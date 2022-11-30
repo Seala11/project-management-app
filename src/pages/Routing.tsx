@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import ROUTES from 'utils/constants/ROUTES';
-import NotFound from './404/NotFound';
-import Board from './board/Board';
-import Boards from './boards/Boards';
+const NotFound = lazy(() => import('./404/NotFound'));
+const Board = lazy(() => import('./board/Board'));
+const Boards = lazy(() => import('./boards/Boards'));
 import Home from './home/Home';
-import Settings from './settings/Settings';
+const Settings = lazy(() => import('./settings/Settings'));
 import SignIn from './registration/sign-in/SignIn';
 import SignUp from './registration/sign-up/SignUp';
 import { LoginRouting, PrivateRouting } from './privateRouting';

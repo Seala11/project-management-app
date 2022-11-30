@@ -11,6 +11,7 @@
   "AUTH": {
     "SIGN_IN": "Sign in",
     "SIGN_UP": "Sign up",
+    "USER_SETTINGS": "User settings",
     "NAME": "Name",
     "LOGIN": "Login",
     "PASSWORD": "Password",

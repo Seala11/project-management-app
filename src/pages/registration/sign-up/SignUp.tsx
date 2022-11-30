@@ -7,11 +7,11 @@ import signImage from 'assets/images/login.png';
 import { Signup } from 'api/types';
 import { useTranslation } from 'react-i18next';
 import Icon from 'components/Icon/Icon';
-import styles from '../registration.module.scss';
 import { toast } from 'react-toastify';
 import { setIsPending } from 'store/appSlice';
 import { getErrorMessage } from 'utils/func/handleError';
 import { getMsgError } from 'utils/func/getMsgError';
+import styles from '../registration.module.scss';
 
 const SignUp = () => {
   const { t } = useTranslation();
@@ -36,7 +36,6 @@ const SignUp = () => {
     dispatch(setIsPending(true));
     try {
       const res = await dispatch(thunkSignUp(data)).unwrap();
-      toast.success(t('AUTH.200_SIGNUP'));
       const dataForUser = await dispatch(thunkSignIn(res)).unwrap();
       const user = await dispatch(thunkGetUserById(dataForUser)).unwrap();
       toast.success(t('AUTH.200_USER') + `${user.name}`);
