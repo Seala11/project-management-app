@@ -15,15 +15,27 @@
   display: flex;
   align-items: flex-start;
   flex-direction: column;
+
+  @include media-mobile {
+    font-size: 1.4rem;
+  }
 }
 
 .colorBadge {
   width: 100%;
   border-radius: 0.8rem 0.8rem 0 0;
   padding-bottom: 0.8rem;
+
+  @include media-mobile {
+    padding-bottom: 0.6rem;
+  }
 }
 
 .taskText {
   padding: 0.8rem 1.6rem 1.6rem;
   width: 100%;
+
+  @include media-mobile {
+    padding: 0.4rem 0.8rem 1.2rem 0.8rem;
+  }
 }
