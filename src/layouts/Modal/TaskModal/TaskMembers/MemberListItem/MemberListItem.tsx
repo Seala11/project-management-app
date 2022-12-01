@@ -7,9 +7,14 @@ import styles from './memberListItem.module.scss';
 type Props = {
   user: UserType;
   assignedMembers: (UserType | undefined)[];
-  userHandler: () => void;
+  userHandler: (id: string, state: string) => void;
   isOpen: boolean;
 };
+
+export enum UserAction {
+  ADD = 'add',
+  REMOVE = 'remove',
+}
 
 const MemberListItem = React.memo(({ user, assignedMembers, userHandler, isOpen }: Props) => {
   const [assigned, setAssigned] = useState(false);
@@ -20,37 +25,30 @@ const MemberListItem = React.memo(({ user, assignedMembers, userHandler, isOpen 
     setAssigned(!!assigned);
   }, [assignedMembers, user._id]);
 
-  const clickHandler = () => {
-    if (!isOpen) return;
+  const clickHandler = (e: React.ChangeEvent<HTMLElement> | React.MouseEvent) => {
+    if (!isOpen || e.currentTarget !== e.target) return;
 
     setAssigned(!assigned);
-    userHandler();
 
     if (assigned) {
       dispatch(removeUserAssigned(user._id));
+      userHandler(user._id, UserAction.REMOVE);
     } else {
       dispatch(addUserAssigned(user._id));
+      userHandler(user._id, UserAction.ADD);
     }
   };
 
   return (
-    <div className={styles.wrapper} data-member="true">
-      <input
-        className={`${styles.input} ${isOpen ? styles.open : styles.close}`}
-        type="checkbox"
-        id={user._id}
-        checked={assigned}
-        data-member="true"
-        onChange={clickHandler}
-      />
-      <label
-        htmlFor={user._id}
-        data-member="true"
-        className={`${styles.label} ${isOpen ? styles.open : styles.close}`}
-      >
-        {user.name} ({user.login})
-      </label>
-    </div>
+    <li
+      className={`${styles.listItem} ${assigned ? styles.assigned : ''} ${
+        !isOpen ? styles.closed : ''
+      }`}
+      data-member="true"
+      onClick={(e) => clickHandler(e)}
+    >
+      {user.name} ({user.login})
+    </li>
   );
 });
 

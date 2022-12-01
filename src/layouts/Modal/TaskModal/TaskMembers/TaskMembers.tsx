@@ -12,7 +12,7 @@ import {
   usersSelector,
 } from 'store/modalSlice';
 import useDebounce from 'utils/hooks/useDebounce';
-import MemberListItem from './MemberListItem/MemberListItem';
+import MemberListItem, { UserAction } from './MemberListItem/MemberListItem';
 import MembersAssigned from './MembersAssigned.tsx/MemberAssigned';
 import styles from './taskMembers.module.scss';
 
@@ -25,6 +25,7 @@ type Props = {
 const TaskMembers = ({ task, boardId, columnId }: Props) => {
   const allUsers = useAppSelector(usersSelector);
   const assignedMembers = useAppSelector(selectAssignedUsers);
+  const assignedMembersRef = useRef(assignedMembers);
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
@@ -35,29 +36,39 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
   const debouncedValue = useDebounce<string[]>(membersArr);
 
   const taskRef = useRef(task);
-  const listRef = useRef<HTMLDivElement | null>(null);
+  const listRef = useRef<HTMLUListElement | null>(null);
+  const usersChecked = useRef<string[] | undefined>(task?.users ? task.users : []);
 
   useEffect(() => {
     const getUsers = async () => {
-      if (allUsers.length === 0) {
-        await dispatch(thunkGetAllUsers())
-          .unwrap()
-          .catch(() => {
-            dispatch(setTaskModalClose());
-            dispatch(setModalClose());
-          });
-      }
+      await dispatch(thunkGetAllUsers())
+        .unwrap()
+        .then((allUsers) => {
+          if (allUsers.length === 0) return;
+          const getUserFullInfo = (id: string) => allUsers.find((user) => user._id === id);
+          const assignedUsers = task?.users.map((user) => getUserFullInfo(user));
+          dispatch(setUsersAssigned(assignedUsers ? assignedUsers : []));
+          assignedMembersRef.current = assignedUsers ? assignedUsers : [];
+        })
+        .catch(() => {
+          dispatch(setTaskModalClose());
+          dispatch(setModalClose());
+        });
     };
 
-    getUsers();
-  }, [allUsers.length, dispatch]);
+    if (allUsers.length !== 0) {
+      const getUserFullInfo = (id: string) => allUsers.find((user) => user._id === id);
+      const assignedUsers = task?.users.map((user) => getUserFullInfo(user));
+      dispatch(setUsersAssigned(assignedUsers ? assignedUsers : []));
+      assignedMembersRef.current = assignedUsers ? assignedUsers : [];
+    } else {
+      getUsers();
+    }
 
-  useEffect(() => {
-    if (allUsers.length === 0) return;
-    const getUserFullInfo = (id: string) => allUsers.find((user) => user._id === id);
-    const assignedUsers = task?.users.map((user) => getUserFullInfo(user));
-    dispatch(setUsersAssigned(assignedUsers ? assignedUsers : []));
-  }, [allUsers, dispatch, task?.users]);
+    return () => {
+      dispatch(setUsersAssigned([]));
+    };
+  }, [allUsers, allUsers.length, dispatch, task?.users]);
 
   useEffect(() => {
     const list = listRef.current;
@@ -104,20 +115,18 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
       });
   }, [boardId, columnId, debouncedValue, dispatch]);
 
-  const addMembers = useCallback(() => {
+  const addMembers = useCallback((id: string, userAction: string) => {
     if (!menuOpen.current) return;
-    const items = listRef.current?.children;
-    const userChecked = [];
 
-    if (items) {
-      for (let i = 0; i < items?.length; i++) {
-        if ((items[i].children[0] as HTMLInputElement).checked) {
-          userChecked.push(items[i].children[0].id);
-        }
-      }
+    let newUsersChecked;
+    if (userAction === UserAction.REMOVE) {
+      newUsersChecked = usersChecked.current?.filter((userId) => userId !== id);
+    } else {
+      newUsersChecked = usersChecked.current?.concat(id);
     }
+    usersChecked.current = newUsersChecked;
 
-    setMembersArr(userChecked);
+    setMembersArr(usersChecked.current ? usersChecked.current : []);
   }, []);
 
   const openMenutOptions = () => {
@@ -135,7 +144,7 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
           <p className={styles.err}>{t('MODAL.MEMBERS_ERR')}</p>
         )}
       </div>
-      <div
+      <ul
         className={`${styles.list} ${isOpen ? styles.open : styles.close}`}
         onClick={openMenutOptions}
         ref={listRef}
@@ -147,11 +156,11 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
               user={user}
               key={user._id}
               userHandler={addMembers}
-              assignedMembers={assignedMembers}
+              assignedMembers={assignedMembersRef.current}
               isOpen={isOpen}
             />
           ))}
-      </div>
+      </ul>
     </div>
   );
 };
