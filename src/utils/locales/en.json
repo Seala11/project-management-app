@@ -138,6 +138,7 @@
   "SEARCH": {
     "SEARCH": "Search",
     "RESET": "Reset",
-    "FIND": "Find board ..."
+    "FIND": "Find board ...",
+    "EMPTY": "Sorry, no title matched your search"
   }
 }

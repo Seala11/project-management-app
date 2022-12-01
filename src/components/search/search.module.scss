@@ -22,5 +22,6 @@
 .searchForm {
   & input {
     @extend %input;
+    height: 4rem;
   }
 }

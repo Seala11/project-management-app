@@ -5,6 +5,7 @@ import Icon from '../Icon/Icon';
 import imgSearch from 'assets/images/search.png';
 import styles from './search.module.scss';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 type Search = {
   search: string;
@@ -20,6 +21,9 @@ const Search = ({ boards, setNewBoards }: Props) => {
   const onSubmit: SubmitHandler<Search> = async (data) => {
     const reg = new RegExp(data.search);
     const res = boards.filter((board) => reg.test(board.title.title));
+    if (!res.length) {
+      toast.success(t('SEARCH.EMPTY'));
+    }
     setNewBoards(res);
   };
 
