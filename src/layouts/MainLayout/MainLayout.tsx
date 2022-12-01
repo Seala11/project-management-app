@@ -22,7 +22,6 @@ import TaskModal from 'layouts/Modal/TaskModal/TaskModal';
 import Loader from 'components/loader/Loader';
 import { appSelector, setIsPending } from 'store/appSlice';
 import { singleBoardRequestStatus } from 'store/boardSlice';
-import { boardsLoadingSelector } from 'store/boardsSlice';
 import { getErrorMessage } from 'utils/func/handleError';
 import { getMsgError } from 'utils/func/getMsgError';
 
@@ -32,9 +31,8 @@ const MainLayout = ({ children }: Props) => {
   const modalIsOpen = useAppSelector(modalStatusSelector);
   const taskIsOpen = useAppSelector(taskStatusSelector);
   const boardState = useAppSelector(singleBoardRequestStatus);
-  const boardsState = useAppSelector(boardsLoadingSelector);
   const { isPending } = useAppSelector(appSelector);
-  const pending = boardState || boardsState || isPending;
+  const pending = boardState || isPending;
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const taskDeleteConfirmMessage = useAppSelector(taskDeleteConfirmSelector);
@@ -53,7 +51,6 @@ const MainLayout = ({ children }: Props) => {
     } else {
       dispatch(setIsPending(false));
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
