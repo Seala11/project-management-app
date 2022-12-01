@@ -60,18 +60,14 @@ const Board = () => {
     if (error) {
       const [code] = error.split('/');
       if (code) {
-        console.log(code);
         if (code === '403') {
           dispatch(setAuth(false));
           dispatch(setTaskModalClose());
           dispatch(setModalClose());
-          toast.error(t(getMsgErrorBoard(code)));
         } else if (code === '404_BOARD') {
           navigate(ROUTES.boards, { replace: true });
-          toast.error(t(getMsgErrorBoard(code)));
-        } else {
-          toast.error(t(getMsgErrorBoard(code)));
         }
+        toast.error(t(getMsgErrorBoard(code)));
         dispatch(clearBoardErrors());
       }
     }
