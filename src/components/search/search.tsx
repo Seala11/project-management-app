@@ -4,6 +4,7 @@ import { BoardType } from 'store/boardsSlice';
 import Icon from '../Icon/Icon';
 import imgSearch from 'assets/images/search.png';
 import styles from './search.module.scss';
+import { useTranslation } from 'react-i18next';
 
 type Search = {
   search: string;
@@ -15,7 +16,7 @@ type Props = {
 };
 const Search = ({ boards, setNewBoards }: Props) => {
   const { register, handleSubmit, reset } = useForm<Search>();
-
+  const { t } = useTranslation();
   const onSubmit: SubmitHandler<Search> = async (data) => {
     const reg = new RegExp(data.search);
     const res = boards.filter((board) => reg.test(board.title.title));
@@ -40,7 +41,7 @@ const Search = ({ boards, setNewBoards }: Props) => {
           type={'text'}
           {...register('search')}
           autoComplete="off"
-          placeholder="Find board ..."
+          placeholder={t('SEARCH.FIND')}
         />
       </form>
     </div>
