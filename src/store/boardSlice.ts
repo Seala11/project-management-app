@@ -98,7 +98,7 @@ export const thunkGetSingleBoard = createAsyncThunk<
   BoardResponseType,
   string,
   { rejectValue: string }
->('board/getSingleBoard', async (id, { rejectWithValue }) => {
+>('board/getSingleBoard', async (id, { dispatch, rejectWithValue }) => {
   const token = getTokenFromLS();
   try {
     const response = await fetchGetBoard(id, token);
@@ -106,6 +106,7 @@ export const thunkGetSingleBoard = createAsyncThunk<
       const resp = await response.json();
       throw new Error(`${resp?.statusCode}/${resp.message}`);
     }
+    dispatch(thunkGetAllColumns(id));
     const data: BoardResponseType = await response.json();
     return data;
   } catch (error) {
@@ -227,6 +228,7 @@ export const boardSlice = createSlice({
         (state, action: PayloadAction<string>) => {
           if (!state.error) {
             state.error = action.payload;
+            state.pending = false;
           }
         }
       );
