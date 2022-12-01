@@ -38,7 +38,6 @@
   background-color: var(--white);
   box-shadow: 0 0.3rem 1, 6rem 0.1rem var(--card);
   border-radius: 0.8rem;
-  // opacity: 1;
   animation: show 0.5s forwards;
   z-index: 11;
 
@@ -56,12 +55,10 @@
   0% {
     transform-origin: center center;
     transform: translate(-50%, -50%) scale(0.8);
-    // opacity: 0;
   }
 
   100% {
     transform-origin: center center;
     transform: translate(-50%, -50%) scale(1);
-    // opacity: 1;
   }
 }

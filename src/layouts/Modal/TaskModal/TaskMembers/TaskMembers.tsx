@@ -70,6 +70,42 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
     };
   }, [allUsers, allUsers.length, dispatch, task?.users]);
 
+  const fetchUsers = useRef(false);
+  const fetchNewUsers = useCallback(
+    async (debouncedValue: string[]) => {
+      if (!taskRef.current || !menuOpen.current) return;
+      const task = taskRef.current;
+
+      dispatch(
+        thunkUpdateTaskInfo({
+          _id: task?._id,
+          boardId: boardId,
+          columnId: columnId,
+          userId: task.userId,
+          title: task.title,
+          description: JSON.stringify({
+            description: task.description.description,
+            color: task.description.color,
+          }),
+          order: task.order,
+          users: debouncedValue,
+        })
+      )
+        .unwrap()
+        .catch((err) => {
+          const [code] = err.split('/');
+          if (code === '404') {
+            dispatch(setTaskModalClose());
+            dispatch(setModalClose());
+          }
+        })
+        .finally(() => {
+          fetchUsers.current = false;
+        });
+    },
+    [boardId, columnId, dispatch]
+  );
+
   useEffect(() => {
     const list = listRef.current;
 
@@ -83,41 +119,23 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
     };
 
     document.addEventListener('click', clickHandler);
-    return () => document.removeEventListener('click', clickHandler);
-  }, []);
+    return () => {
+      document.removeEventListener('click', clickHandler);
+
+      if (fetchUsers) {
+        fetchNewUsers(usersChecked.current ? usersChecked.current : []);
+      }
+    };
+  }, [fetchNewUsers]);
 
   useEffect(() => {
-    if (!taskRef.current || !menuOpen.current) return;
-    const task = taskRef.current;
-
-    dispatch(
-      thunkUpdateTaskInfo({
-        _id: task?._id,
-        boardId: boardId,
-        columnId: columnId,
-        userId: task.userId,
-        title: task.title,
-        description: JSON.stringify({
-          description: task.description.description,
-          color: task.description.color,
-        }),
-        order: task.order,
-        users: debouncedValue,
-      })
-    )
-      .unwrap()
-      .catch((err) => {
-        const [code] = err.split('/');
-        if (code === '404') {
-          dispatch(setTaskModalClose());
-          dispatch(setModalClose());
-        }
-      });
-  }, [boardId, columnId, debouncedValue, dispatch]);
+    fetchNewUsers(debouncedValue);
+  }, [debouncedValue, fetchNewUsers]);
 
   const addMembers = useCallback((id: string, userAction: string) => {
     if (!menuOpen.current) return;
 
+    fetchUsers.current = true;
     let newUsersChecked;
     if (userAction === UserAction.REMOVE) {
       newUsersChecked = usersChecked.current?.filter((userId) => userId !== id);
