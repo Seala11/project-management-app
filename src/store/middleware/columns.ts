@@ -12,25 +12,32 @@ export const thunkGetAllColumns = createAsyncThunk<
   ColumnType[] | boolean,
   string,
   { rejectValue: string }
->('column/getAllColumns', async (boardId, { getState, rejectWithValue }) => {
-  const state = getState() as RootState;
-  const error = state.board.error;
-  if (error) {
-    return false;
-  }
-  const token = getTokenFromLS();
-  try {
-    const response = await fetchGetColumns(boardId, token);
-    if (!response.ok) {
-      const resp = await response.json();
-      throw new Error(`${resp?.statusCode}/${resp.message}`);
+>(
+  'column/getAllColumns',
+  async (boardId, { rejectWithValue }) => {
+    const token = getTokenFromLS();
+    try {
+      const response = await fetchGetColumns(boardId, token);
+      if (!response.ok) {
+        const resp = await response.json();
+        throw new Error(`${resp?.statusCode}/${resp.message}`);
+      }
+      const data: ColumnType[] = await response.json();
+      return data.sort((a, b) => a.order - b.order);
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error));
     }
-    const data: ColumnType[] = await response.json();
-    return data.sort((a, b) => a.order - b.order);
-  } catch (error) {
-    return rejectWithValue(getErrorMessage(error));
+  },
+  {
+    condition: (_, { getState }) => {
+      const state = getState() as RootState;
+      const error = state.board.error;
+      if (error) {
+        return false;
+      }
+    },
   }
-});
+);
 
 export const thunkGetColumn = createAsyncThunk<
   boolean,

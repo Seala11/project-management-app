@@ -21,7 +21,7 @@ import ConfirmationModal from 'layouts/Modal/ConfirmationModal/ConfirmationModal
 import TaskModal from 'layouts/Modal/TaskModal/TaskModal';
 import Loader from 'components/loader/Loader';
 import { appSelector, setIsPending } from 'store/appSlice';
-import { singleBoardRequestStatus } from 'store/boardSlice';
+import { clearBoardErrors, singleBoardRequestStatus } from 'store/boardSlice';
 import { getErrorMessage } from 'utils/func/handleError';
 import { getMsgError } from 'utils/func/getMsgError';
 
@@ -47,7 +47,10 @@ const MainLayout = ({ children }: Props) => {
           const error = getErrorMessage(err);
           toast.error(t(getMsgError(error)));
         })
-        .finally(() => dispatch(setIsPending(false)));
+        .finally(() => {
+          dispatch(clearBoardErrors());
+          dispatch(setIsPending(false));
+        });
     } else {
       dispatch(setIsPending(false));
     }
