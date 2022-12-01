@@ -3,6 +3,7 @@ import { thunkUpdateTaskInfo } from 'store/middleware/tasks';
 import { useAppDispatch } from 'store/hooks';
 import { TaskParsedType } from 'store/boardSlice';
 import styles from './taskTitle.module.scss';
+import { setModalClose, setTaskModalClose } from 'store/modalSlice';
 
 type Props = {
   task: TaskParsedType | null;
@@ -42,8 +43,12 @@ const TaskTitle = ({ task, boardId, columnId }: Props) => {
         .then(() => {
           setTitleCurrVal(titleUpdatedVal);
         })
-        .catch(() => {
-          setTitleUpdatedVal(titleCurrVal);
+        .catch((err) => {
+          const [code] = err.split('/');
+          if (code === '404') {
+            dispatch(setTaskModalClose());
+            dispatch(setModalClose());
+          }
         })
         .finally(() => {
           setTitleInputDisabled(true);

@@ -39,9 +39,9 @@ const MemberListItem = React.memo(({ user, assignedMembers, userHandler, isOpen 
         className={`${styles.input} ${isOpen ? styles.open : styles.close}`}
         type="checkbox"
         id={user._id}
-        defaultChecked={assigned}
+        checked={assigned}
         data-member="true"
-        onClick={clickHandler}
+        onChange={clickHandler}
       />
       <label
         htmlFor={user._id}

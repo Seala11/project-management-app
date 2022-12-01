@@ -5,6 +5,7 @@ import { useAppDispatch } from 'store/hooks';
 import { useTranslation } from 'react-i18next';
 import { TaskParsedType } from 'store/boardSlice';
 import styles from './taskDescription.module.scss';
+import { setModalClose, setTaskModalClose } from 'store/modalSlice';
 
 type Props = {
   task: TaskParsedType | null;
@@ -57,8 +58,13 @@ const TaskDescription = ({ task, boardId, columnId }: Props) => {
         .then(() => {
           setDescrCurrVal(descrUpdatedVal);
         })
-        .catch(() => {
+        .catch((err) => {
           setDescrUpdatedVal(descrCurrVal);
+          const [code] = err.split('/');
+          if (code === '404') {
+            dispatch(setTaskModalClose());
+            dispatch(setModalClose());
+          }
         })
         .finally(() => {
           setDescrInputDisabled(true);

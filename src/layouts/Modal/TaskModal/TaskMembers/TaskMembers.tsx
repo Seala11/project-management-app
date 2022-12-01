@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import { TaskParsedType } from 'store/boardSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { thunkUpdateTaskInfo } from 'store/middleware/tasks';
@@ -79,7 +78,6 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
   useEffect(() => {
     if (!taskRef.current || !menuOpen.current) return;
     const task = taskRef.current;
-    console.log(debouncedValue);
 
     dispatch(
       thunkUpdateTaskInfo({
@@ -97,13 +95,14 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
       })
     )
       .unwrap()
-      .then(() => {
-        toast.success('update members');
-      })
-      .catch(() => {
-        toast.error('update member error');
+      .catch((err) => {
+        const [code] = err.split('/');
+        if (code === '404') {
+          dispatch(setTaskModalClose());
+          dispatch(setModalClose());
+        }
       });
-  }, [boardId, columnId, dispatch, debouncedValue]);
+  }, [boardId, columnId, debouncedValue, dispatch]);
 
   const addMembers = useCallback(() => {
     if (!menuOpen.current) return;
