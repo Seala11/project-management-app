@@ -4,6 +4,12 @@
   @extend %wrapper;
   flex-grow: 1;
   width: 100%;
+
+  & .wrapperTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
 
 .titleWrapper {

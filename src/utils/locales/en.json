@@ -133,5 +133,9 @@
     "EDIT": "Edit",
     "DELETE_ACCOUNT": "Delete account",
     "SAVE_CHANGES": "Save changes"
+  },
+  "SEARCH": {
+    "SEARCH": "Search",
+    "RESET": "Reset"
   }
 }

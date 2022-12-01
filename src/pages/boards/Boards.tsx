@@ -23,6 +23,7 @@ import pencil from 'assets/images/pencil.png';
 import styles from './boards.module.scss';
 import { userSelector } from 'store/authSlice';
 import { getTokenFromLS } from 'utils/func/localStorage';
+import Search from 'components/search/search';
 
 const Boards = () => {
   const [selectedBoard, setSelectedBoard] = useState<string>();
@@ -37,6 +38,7 @@ const Boards = () => {
   const user = useAppSelector(userSelector);
   const boards = useAppSelector(boardsSelector);
   const initialRenderBoards = useRef(boards.length);
+  const [newBoards, setNewBoards] = useState<BoardType[]>(boards);
 
   useEffect(() => {
     if (initialRenderBoards.current === 0) {
@@ -44,6 +46,9 @@ const Boards = () => {
     }
   }, [dispatch]);
 
+  useEffect(() => {
+    setNewBoards(boards);
+  }, [boards]);
   const navigateToBoardPage = (id: string) => {
     navigate(`/boards/${id}`);
   };
@@ -96,13 +101,16 @@ const Boards = () => {
 
   return (
     <section className={styles.wrapper}>
-      <h2 className={styles.title}>{t('BOARDS.TITLE')}</h2>
+      <div className={styles.wrapperTop}>
+        <h2 className={styles.title}>{t('BOARDS.TITLE')}</h2>
+        <Search boards={boards} setNewBoards={setNewBoards} />
+      </div>
       <ul className={styles.list}>
         <li className={`${styles.card} ${styles.cardCreate}`} onClick={createBoardHandler}>
           <h3 className={`${styles.cardName} ${styles.cardCreateName}`}>{t('BOARDS.CREATE')}</h3>
           <img src={pencil} alt="yellow pencil" className={styles.image} />
         </li>
-        {boards.map((board) => (
+        {newBoards.map((board) => (
           <li
             key={board._id}
             className={styles.card}
