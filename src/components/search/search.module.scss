@@ -1,18 +1,26 @@
 @use 'app/styles/mixins.scss' as *;
 
+.btnReset {
+  @extend %btnGray;
+}
+
+.btnSearch {
+  @extend %btnBlue;
+}
+
 .wrapperSearch {
   display: flex;
   align-items: center;
   column-gap: 1rem;
-}
 
-.btnReset {
-  @extend %btnBlue;
+  & button {
+    padding: 1rem;
+    font-size: 0;
+  }
 }
 
 .searchForm {
   & input {
-    padding: 0.7rem;
-    font-size: 1.6rem;
+    @extend %input;
   }
 }

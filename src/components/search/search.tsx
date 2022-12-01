@@ -1,7 +1,8 @@
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import { BoardType } from 'store/boardsSlice';
+import Icon from '../Icon/Icon';
+import imgSearch from 'assets/images/search.png';
 import styles from './search.module.scss';
 
 type Search = {
@@ -13,7 +14,6 @@ type Props = {
   setNewBoards: React.Dispatch<React.SetStateAction<BoardType[]>>;
 };
 const Search = ({ boards, setNewBoards }: Props) => {
-  const { t } = useTranslation();
   const { register, handleSubmit, reset } = useForm<Search>();
 
   const onSubmit: SubmitHandler<Search> = async (data) => {
@@ -29,11 +29,19 @@ const Search = ({ boards, setNewBoards }: Props) => {
 
   return (
     <div className={styles.wrapperSearch}>
+      <button className={styles.btnSearch} onClick={handleSubmit(onSubmit)}>
+        <img className={styles.imgSearch} src={imgSearch} alt="search image" />
+      </button>
       <button className={styles.btnReset} onClick={handlerReset}>
-        {t('SEARCH.RESET')}
+        <Icon icon="close" size="16" color="#9a9a9a" />
       </button>
       <form className={styles.searchForm} onSubmit={handleSubmit(onSubmit)}>
-        <input type={'text'} {...register('search')} />
+        <input
+          type={'text'}
+          {...register('search')}
+          autoComplete="off"
+          placeholder="Find board ..."
+        />
       </form>
     </div>
   );
