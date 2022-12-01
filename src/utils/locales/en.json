@@ -136,8 +136,6 @@
     "SAVE_CHANGES": "Save changes"
   },
   "SEARCH": {
-    "SEARCH": "Search",
-    "RESET": "Reset",
     "FIND": "Find board ...",
     "EMPTY": "Sorry, no title matched your search"
   }

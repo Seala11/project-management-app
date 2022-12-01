@@ -23,5 +23,13 @@
   & input {
     @extend %input;
     height: 4rem;
+
+    @include media-middle {
+      max-width: 21rem;
+    }
+
+    @include media-mobile {
+      width: 90%;
+    }
   }
 }
