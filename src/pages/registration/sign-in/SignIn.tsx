@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { thunkGetUserById, thunkSignIn } from 'store/authSlice';
 import { useAppDispatch } from 'store/hooks';
 import { NavLink } from 'react-router-dom';
@@ -21,6 +21,7 @@ const SignIn = () => {
   const {
     register,
     handleSubmit,
+    setFocus,
     formState: { errors },
     clearErrors,
   } = useForm<Signin>({ reValidateMode: 'onSubmit' });
@@ -31,6 +32,11 @@ const SignIn = () => {
     minLength: { value: 6, message: 'PASSWORD_LENGTH' },
     onChange: (e) => clearErrors(e.target.name),
   });
+
+  useEffect(() => {
+    setFocus('login');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onSubmit: SubmitHandler<Signin> = async (data) => {
     dispatch(setIsPending(true));
