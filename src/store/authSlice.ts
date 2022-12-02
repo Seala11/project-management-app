@@ -2,13 +2,13 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchSignIn, fetchSignUp } from '../api/apiAuth';
 import { Signup, Signin, User } from '../api/types';
 import { RootState } from 'store';
-import { getTokenFromLS, removeTokenFromLS, setTokenToLS } from 'utils/func/localStorage';
+import { removeTokenFromLS, setTokenToLS } from 'utils/func/localStorage';
 import { deleteUser, getUserById, updateUser } from 'api/apiUsers';
 import { parseJwt } from 'utils/func/parsejwt';
 import { getErrorMessage } from 'utils/func/handleError';
 
 type Auth = {
-  isLogged: boolean;
+  isLogged: boolean | null;
   user: Omit<User, 'password'>;
 };
 
@@ -19,7 +19,7 @@ const userInit: Omit<User, 'password'> = {
 };
 
 const initialState: Auth = {
-  isLogged: !!getTokenFromLS(),
+  isLogged: null,
   user: userInit,
 };
 
