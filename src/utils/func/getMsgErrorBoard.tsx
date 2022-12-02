@@ -4,7 +4,6 @@ export function getMsgErrorBoard(err: string) {
     '403': '403_USER',
     '404': '404_BOARD',
     '404_BOARD': '404_BOARD_ERROR',
-    '403_BOARD': '403_USER',
     DEFAULT: 'DEFAULT',
   };
 

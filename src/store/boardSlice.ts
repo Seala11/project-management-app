@@ -142,6 +142,9 @@ export const boardSlice = createSlice({
       .addCase(thunkGetSingleBoard.pending, (state) => {
         state.pending = true;
       })
+      .addCase(thunkGetSingleBoard.rejected, (state) => {
+        state.pending = false;
+      })
       // Columns get all
       .addCase(thunkGetAllColumns.fulfilled, (state, action) => {
         if (typeof action.payload === 'boolean') return;
@@ -224,7 +227,6 @@ export const boardSlice = createSlice({
         (state, action: PayloadAction<string>) => {
           if (!state.error) {
             state.error = action.payload;
-            state.pending = false;
           }
         }
       );
