@@ -15,7 +15,9 @@ import {
   ModalAction,
   modalColumnIdSelector,
   resetModal,
+  setModalClose,
   setModalOpen,
+  setTaskModalClose,
 } from 'store/modalSlice';
 import { useTranslation } from 'react-i18next';
 import Column from './column/Column';
@@ -58,6 +60,8 @@ const Board = () => {
       if (code) {
         if (code === '403') {
           dispatch(setAuth(false));
+          dispatch(setTaskModalClose());
+          dispatch(setModalClose());
         }
         if (message === 'Board was not founded!') {
           navigate(ROUTES.boards, { replace: true });
