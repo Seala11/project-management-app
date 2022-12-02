@@ -19,7 +19,7 @@ const Search = ({ boards, setNewBoards }: Props) => {
   const { register, handleSubmit, reset } = useForm<Search>();
   const { t } = useTranslation();
   const onSubmit: SubmitHandler<Search> = async (data) => {
-    const reg = new RegExp(data.search);
+    const reg = new RegExp(data.search, 'i');
     const res = boards.filter((board) => reg.test(board.title.title));
     if (!res.length) {
       toast.success(t('SEARCH.EMPTY'));
