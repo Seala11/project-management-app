@@ -134,5 +134,9 @@
     "EDIT": "Edit",
     "DELETE_ACCOUNT": "Delete account",
     "SAVE_CHANGES": "Save changes"
+  },
+  "SEARCH": {
+    "FIND": "Find board ...",
+    "EMPTY": "Sorry, no title matched your search"
   }
 }

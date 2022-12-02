@@ -4,6 +4,20 @@
   @extend %wrapper;
   flex-grow: 1;
   width: 100%;
+
+  & .wrapperTop {
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3rem 0 0;
+
+    @include media-mobile-s {
+      flex-direction: column;
+      align-items: flex-start;
+      width: 90%;
+    }
+  }
   user-select: none;
 }
 
@@ -20,7 +34,6 @@
 
 .title {
   @extend %title;
-  padding: 3rem 0 0;
 }
 
 .button {
