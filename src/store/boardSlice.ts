@@ -144,9 +144,6 @@ export const boardSlice = createSlice({
       .addCase(thunkGetSingleBoard.pending, (state) => {
         state.pending = true;
       })
-      .addCase(thunkGetSingleBoard.rejected, (state) => {
-        state.pending = false;
-      })
       // Columns get all
       .addCase(thunkGetAllColumns.fulfilled, (state, action) => {
         if (typeof action.payload === 'boolean') return;
@@ -164,9 +161,7 @@ export const boardSlice = createSlice({
       .addCase(thunkCreateColumn.pending, (state) => {
         state.pending = true;
       })
-      .addCase(thunkCreateColumn.rejected, (state) => {
-        state.pending = false;
-      })
+
       // Column delete
       .addCase(thunkDeleteColumn.fulfilled, (state, action) => {
         state.pending = false;
@@ -176,9 +171,7 @@ export const boardSlice = createSlice({
       .addCase(thunkDeleteColumn.pending, (state) => {
         state.pending = true;
       })
-      .addCase(thunkDeleteColumn.rejected, (state) => {
-        state.pending = false;
-      })
+
       // Column update title
       .addCase(thunkUpdateTitleColumn.fulfilled, (state, action) => {
         const index = state.columns.findIndex((obj) => obj._id === action.payload._id);
@@ -199,9 +192,7 @@ export const boardSlice = createSlice({
         state.pending = false;
         state.tasks[action.payload.column].push(parseTaskObj(action.payload.task));
       })
-      .addCase(thunkCreateTask.rejected, (state) => {
-        state.pending = false;
-      })
+
       // Task Delete
       .addCase(thunkDeleteTasks.pending, (state) => {
         state.pending = true;
@@ -213,9 +204,6 @@ export const boardSlice = createSlice({
         );
         state.tasks[action.payload.column] = newTaskState;
       })
-      .addCase(thunkDeleteTasks.rejected, (state) => {
-        state.pending = false;
-      })
       // Task Module
       .addCase(thunkUpdateTaskInfo.fulfilled, (state, action) => {
         const updatedTask = parseTaskObj(action.payload.task);
@@ -225,7 +213,11 @@ export const boardSlice = createSlice({
         state.tasks[action.payload.column] = newTaskState;
       })
       .addMatcher(
-        (action) => action.type.endsWith('/rejected'),
+        (action) =>
+          action.type.endsWith('/rejected') &&
+          (action.type.startsWith('board/') ||
+            action.type.startsWith('column/') ||
+            action.type.startsWith('task/')),
         (state, action: PayloadAction<string>) => {
           if (!state.error) {
             state.error = action.payload;

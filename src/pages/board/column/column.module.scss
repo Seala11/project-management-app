@@ -7,6 +7,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  @include media-mobile {
+    font-size: 1.6rem;
+    font-weight: 600;
+  }
 }
 
 .form {
@@ -15,6 +20,10 @@
   flex-wrap: wrap;
   justify-content: space-between;
   position: relative;
+
+  @include media-mobile {
+    margin-top: -0.6rem;
+  }
 }
 
 .formError {
@@ -24,6 +33,10 @@
   position: absolute;
   bottom: -0.8rem;
   left: 0.5rem;
+
+  @include media-mobile {
+    font-size: 1rem;
+  }
 }
 
 .input {
@@ -35,6 +48,14 @@
   font-size: 2rem;
   line-height: 2.4rem;
   padding: 0.3rem 1rem;
+
+  @include media-mobile {
+    max-width: 68%;
+    font-size: 1.6rem;
+    line-height: 1rem;
+    margin: 0.3rem;
+    padding: 0.3rem 0.5rem;
+  }
 }
 
 .input:focus {
@@ -55,6 +76,12 @@
   padding: 2.5rem 2.5rem 1.6rem;
   border-radius: 0.8rem;
   margin: 0 2.5rem;
+
+  @include media-mobile {
+    width: 22rem;
+    padding: 1rem 1.2rem 0.6rem;
+    margin: 0 1rem;
+  }
 }
 
 .titleName {
@@ -72,14 +99,29 @@
   flex-direction: column;
   overflow: hidden auto;
   padding-right: 1.2rem;
+  margin-right: -1.2rem;
+  padding-left: 1.2rem;
+  margin-left: -1.2rem;
   padding-bottom: 0.8rem;
   min-height: 1.5rem;
-  margin-right: -1.2rem;
+
+  @include media-mobile {
+    padding-right: 0.8rem;
+    margin-right: -0.8rem;
+    padding-left: 0.8rem;
+    margin-left: -0.8rem;
+    padding-bottom: 0.4rem;
+  }
 }
 
 .addButton {
   @extend %addButton;
   width: 30rem;
+
+  @include media-mobile {
+    width: 22rem;
+    font-size: 1.5rem;
+  }
 }
 
 .taskButton {
@@ -91,11 +133,21 @@
   &:hover {
     background: var(--primary-s);
   }
+
+  @include media-mobile {
+    padding: 1.2rem;
+    margin-top: 0.8rem;
+  }
 }
 
 .icon {
   height: 2.4rem;
   width: 2.2rem;
+
+  @include media-mobile {
+    height: 1.8rem;
+    width: 1.8rem;
+  }
 }
 
 .columnLine {
@@ -117,6 +169,10 @@
   &:hover {
     background: var(--error-m);
   }
+
+  @include media-mobile {
+    padding: 0.5rem;
+  }
 }
 
 .buttonEdit {
@@ -128,6 +184,10 @@
 
   &:hover {
     background: var(--error-m);
+  }
+
+  @include media-mobile {
+    padding: 0.3rem 0.5rem;
   }
 }
 

@@ -4,6 +4,7 @@
   @extend %wrapper;
   flex-grow: 1;
   width: 100%;
+  user-select: none;
 }
 
 .titleWrapper {
