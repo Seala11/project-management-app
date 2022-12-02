@@ -122,7 +122,7 @@ const Column = (props: Props) => {
                     maxLength: { value: 25, message: 'MAX_ER' },
                   })}
                   className={`${styles.input} ${errors.input ? styles.error : ''}`}
-                  // onBlur={handleSubmit(onSubmitEdit)}
+                  onBlur={handleSubmit(onSubmitEdit)}
                 />
                 <button
                   className={`${styles.buttonEdit} ${styles.submit}`}
