@@ -43,7 +43,7 @@ type ModalState = {
   columnId: string;
   taskId: TaskParsedType | null;
   taskOrder: number;
-  users: UserType[];
+  users: UserType[] | null;
   usersAssigned: (UserType | undefined)[];
   pending: boolean;
 };
@@ -59,7 +59,7 @@ export const initialState: ModalState = {
   columnId: '',
   taskId: null,
   taskOrder: 0,
-  users: [],
+  users: null,
   usersAssigned: [],
   pending: false,
 };
@@ -120,8 +120,10 @@ export const modalSlice = createSlice({
       state.usersAssigned = newState;
     },
     addUserAssigned: (state, action: PayloadAction<string>) => {
-      const userToAdd = state.users.find((members) => members._id === action.payload);
-      state.usersAssigned = [...state.usersAssigned, userToAdd];
+      if (state.users) {
+        const userToAdd = state.users.find((members) => members._id === action.payload);
+        state.usersAssigned = [...state.usersAssigned, userToAdd];
+      }
     },
   },
   extraReducers: (builder) => {

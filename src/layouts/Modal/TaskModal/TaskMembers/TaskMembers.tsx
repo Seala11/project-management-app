@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { TaskParsedType } from 'store/boardSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { TaskDataKeys, thunkUpdateTaskInfo } from 'store/middleware/tasks';
-import { thunkGetAllUsers } from 'store/middleware/users';
+import { thunkGetAllUsers, UserType } from 'store/middleware/users';
 import {
   selectAssignedUsers,
   setModalClose,
@@ -38,6 +38,9 @@ const TaskMembers = ({ task, columnId }: Props) => {
 
   const listRef = useRef<HTMLUListElement | null>(null);
   const usersChecked = useRef<string[] | undefined>(task?.users ? task.users : []);
+  const usersRef = useRef<UserType[] | null>(allUsers);
+
+  const getUserFullInfo = (id: string, users: UserType[]) => users.find((user) => user._id === id);
 
   useEffect(() => {
     const getUsers = async () => {
@@ -45,6 +48,7 @@ const TaskMembers = ({ task, columnId }: Props) => {
         .unwrap()
         .then((allUsers) => {
           if (allUsers.length === 0) return;
+          usersRef.current = allUsers;
           const getUserFullInfo = (id: string) => allUsers.find((user) => user._id === id);
           const assignedUsers = task?.users.map((user) => getUserFullInfo(user));
           dispatch(setUsersAssigned(assignedUsers ? assignedUsers : []));
@@ -58,9 +62,9 @@ const TaskMembers = ({ task, columnId }: Props) => {
         });
     };
 
-    if (allUsers.length !== 0) {
-      const getUserFullInfo = (id: string) => allUsers.find((user) => user._id === id);
-      const assignedUsers = task?.users.map((user) => getUserFullInfo(user));
+    if (usersRef && usersRef.current) {
+      const users = usersRef.current;
+      const assignedUsers = task?.users.map((user) => getUserFullInfo(user, users));
       dispatch(setUsersAssigned(assignedUsers ? assignedUsers : []));
       assignedMembersRef.current = assignedUsers ? assignedUsers : [];
     } else {
@@ -70,7 +74,8 @@ const TaskMembers = ({ task, columnId }: Props) => {
     return () => {
       dispatch(setUsersAssigned([]));
     };
-  }, [allUsers, allUsers.length, dispatch, t, task?.users]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const fetchUsers = useRef(false);
   const fetchNewUsers = useCallback(
@@ -126,14 +131,18 @@ const TaskMembers = ({ task, columnId }: Props) => {
   }, [debouncedValue, fetchNewUsers]);
 
   const addMembers = useCallback((id: string, userAction: string) => {
-    if (!menuOpen.current) return;
+    const allUsers = usersRef.current;
+    const assignedMembers = assignedMembersRef.current;
+    if (!menuOpen.current || !allUsers) return;
 
     fetchUsers.current = true;
     let newUsersChecked;
     if (userAction === UserAction.REMOVE) {
+      assignedMembersRef.current = assignedMembers.filter((member) => member?._id !== id);
       newUsersChecked = usersChecked.current?.filter((userId) => userId !== id);
     } else {
       newUsersChecked = usersChecked.current?.concat(id);
+      assignedMembersRef.current = [...assignedMembers, getUserFullInfo(id, allUsers)];
     }
     usersChecked.current = newUsersChecked;
 
@@ -161,7 +170,8 @@ const TaskMembers = ({ task, columnId }: Props) => {
         ref={listRef}
         data-member="true"
       >
-        {allUsers.length > 0 &&
+        {allUsers &&
+          allUsers.length > 0 &&
           allUsers.map((user) => (
             <MemberListItem
               user={user}

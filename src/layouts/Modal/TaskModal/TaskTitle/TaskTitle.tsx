@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { TaskDataKeys, thunkUpdateTaskInfo } from 'store/middleware/tasks';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { useAppDispatch } from 'store/hooks';
 import { TaskParsedType } from 'store/boardSlice';
 import styles from './taskTitle.module.scss';
-import { setModalClose, setTaskModalClose, taskIdSelector } from 'store/modalSlice';
+import { setModalClose, setTaskModalClose } from 'store/modalSlice';
 
 type Props = {
   task: TaskParsedType | null;
@@ -21,11 +21,7 @@ const TaskTitle = ({ task, columnId }: Props) => {
     setTitleUpdatedVal(e.target.value);
   };
 
-  const selectedTask = useAppSelector(taskIdSelector);
-
   const updateTitleVal = () => {
-    const task = selectedTask;
-    console.log('s', selectedTask);
     if (titleUpdatedVal && task && titleUpdatedVal !== titleCurrVal) {
       dispatch(
         thunkUpdateTaskInfo({
