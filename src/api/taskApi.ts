@@ -1,5 +1,4 @@
 import { BOARDS } from 'api/config';
-import { UpdateTaskRequestType } from 'store/middleware/tasks';
 
 export async function fetchGetTasks(boardId: string, columnId: string, token: string) {
   const response = await fetch(`${BOARDS}/${boardId}/columns/${columnId}/tasks`, {
@@ -49,6 +48,17 @@ export async function fetchDeleteTask(
   });
   return response;
 }
+
+type UpdateTaskRequestType = {
+  _id: string;
+  boardId: string;
+  columnId: string;
+  userId: string;
+  title: string;
+  description: string;
+  order: number;
+  users: string[];
+};
 
 export async function fetchUpdateTask(data: UpdateTaskRequestType, token: string) {
   const { _id, boardId, columnId, userId, title, description, order, users } = data;

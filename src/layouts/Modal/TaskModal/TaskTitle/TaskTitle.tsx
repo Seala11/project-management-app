@@ -1,17 +1,16 @@
 import React, { useRef, useState } from 'react';
-import { thunkUpdateTaskInfo } from 'store/middleware/tasks';
+import { TaskDataKeys, thunkUpdateTaskInfo } from 'store/middleware/tasks';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { TaskParsedType } from 'store/boardSlice';
 import styles from './taskTitle.module.scss';
-import { setModalClose, setTaskId, setTaskModalClose, taskIdSelector } from 'store/modalSlice';
+import { setModalClose, setTaskModalClose, taskIdSelector } from 'store/modalSlice';
 
 type Props = {
   task: TaskParsedType | null;
-  boardId: string;
   columnId: string;
 };
 
-const TaskTitle = ({ task, boardId, columnId }: Props) => {
+const TaskTitle = ({ task, columnId }: Props) => {
   const dispatch = useAppDispatch();
   const [titleCurrVal, setTitleCurrVal] = useState(task?.title);
   const [titleUpdatedVal, setTitleUpdatedVal] = useState(task?.title);
@@ -31,35 +30,13 @@ const TaskTitle = ({ task, boardId, columnId }: Props) => {
       dispatch(
         thunkUpdateTaskInfo({
           _id: task?._id,
-          boardId: boardId,
           columnId: columnId,
-          userId: task.userId,
-          title: titleUpdatedVal,
-          description: JSON.stringify({
-            description: task.description.description,
-            color: task.description.color,
-          }),
-          order: task.order,
-          users: task.users,
+          newData: { key: TaskDataKeys.TITLE, value: titleUpdatedVal },
         })
       )
         .unwrap()
         .then(() => {
           setTitleCurrVal(titleUpdatedVal);
-          dispatch(
-            setTaskId({
-              _id: task?._id,
-              boardId: boardId,
-              userId: task.userId,
-              title: titleUpdatedVal,
-              description: {
-                description: task.description.description,
-                color: task.description.color,
-              },
-              order: task.order,
-              users: task.users,
-            })
-          );
         })
         .catch((err) => {
           const [code] = err.split('/');

@@ -11,7 +11,7 @@ import {
 import { useAppSelector } from 'store/hooks';
 import { taskIdSelector } from 'store/modalSlice';
 import { useTranslation } from 'react-i18next';
-import { boardIdSelector, columnsSelector } from 'store/boardSlice';
+import { columnsSelector } from 'store/boardSlice';
 import TaskTitle from './TaskTitle/TaskTitle';
 import TaskDescription from './TaskDescription/TaskDescription';
 import styles from './taskModal.module.scss';
@@ -29,7 +29,6 @@ const TaskModal = ({ onClose }: Props) => {
   const { t } = useTranslation();
 
   const selectedTask = useAppSelector(taskIdSelector);
-  const boardId = useAppSelector(boardIdSelector);
   const columnId = useAppSelector(modalColumnIdSelector);
   const columns = useAppSelector(columnsSelector);
   const selectedColumn = columns.find((column) => column._id === columnId);
@@ -58,22 +57,17 @@ const TaskModal = ({ onClose }: Props) => {
 
       <div className={styles.taskWrapper}>
         <div className={styles.taskTitleWrapper}>
-          <TaskTitle task={selectedTask} boardId={boardId} columnId={columnId} />
+          <TaskTitle task={selectedTask} columnId={columnId} />
           <p className={styles.subtitleColumn}>
             {t('MODAL.IN_COLUMN')} {selectedColumn?.title}
           </p>
         </div>
 
-        <TaskDescription task={selectedTask} boardId={boardId} columnId={columnId} />
+        <TaskDescription task={selectedTask} columnId={columnId} />
 
-        <TaskMembers task={selectedTask} boardId={boardId} columnId={columnId} />
+        <TaskMembers task={selectedTask} columnId={columnId} />
 
-        <TaskColor
-          task={selectedTask}
-          boardId={boardId}
-          columnId={columnId}
-          setHeaderColor={setHeaderColor}
-        />
+        <TaskColor task={selectedTask} columnId={columnId} setHeaderColor={setHeaderColor} />
 
         <button className={styles.button} type="button" onClick={deleteModalOpen}>
           {t('MODAL.DELETE_TASK')}

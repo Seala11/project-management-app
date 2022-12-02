@@ -3,12 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { TaskParsedType } from 'store/boardSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { thunkUpdateTaskInfo } from 'store/middleware/tasks';
+import { TaskDataKeys, thunkUpdateTaskInfo } from 'store/middleware/tasks';
 import { thunkGetAllUsers } from 'store/middleware/users';
 import {
   selectAssignedUsers,
   setModalClose,
-  setTaskId,
   setTaskModalClose,
   setUsersAssigned,
   usersSelector,
@@ -21,11 +20,10 @@ import styles from './taskMembers.module.scss';
 
 type Props = {
   task: TaskParsedType | null;
-  boardId: string;
   columnId: string;
 };
 
-const TaskMembers = ({ task, boardId, columnId }: Props) => {
+const TaskMembers = ({ task, columnId }: Props) => {
   const allUsers = useAppSelector(usersSelector);
   const assignedMembers = useAppSelector(selectAssignedUsers);
   const assignedMembersRef = useRef(assignedMembers);
@@ -38,7 +36,6 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
   const [membersArr, setMembersArr] = useState<string[]>([]);
   const debouncedValue = useDebounce<string[]>(membersArr);
 
-  const taskRef = useRef(task);
   const listRef = useRef<HTMLUListElement | null>(null);
   const usersChecked = useRef<string[] | undefined>(task?.users ? task.users : []);
 
@@ -78,41 +75,16 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
   const fetchUsers = useRef(false);
   const fetchNewUsers = useCallback(
     async (debouncedValue: string[]) => {
-      if (!taskRef.current || !menuOpen.current) return;
-      const task = taskRef.current;
+      if (!menuOpen.current || !task?._id) return;
 
       dispatch(
         thunkUpdateTaskInfo({
           _id: task?._id,
-          boardId: boardId,
           columnId: columnId,
-          userId: task.userId,
-          title: task.title,
-          description: JSON.stringify({
-            description: task.description.description,
-            color: task.description.color,
-          }),
-          order: task.order,
-          users: debouncedValue,
+          newData: { key: TaskDataKeys.USERS, value: debouncedValue },
         })
       )
         .unwrap()
-        .then(() => {
-          dispatch(
-            setTaskId({
-              _id: task?._id,
-              boardId: boardId,
-              userId: task.userId,
-              title: task.title,
-              description: {
-                description: task.description.description,
-                color: task.description.color,
-              },
-              order: task.order,
-              users: debouncedValue,
-            })
-          );
-        })
         .catch((err) => {
           const [code] = err.split('/');
           if (code === '404') {
@@ -124,7 +96,7 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
           fetchUsers.current = false;
         });
     },
-    [boardId, columnId, dispatch]
+    [columnId, dispatch, task?._id]
   );
 
   useEffect(() => {
@@ -177,8 +149,8 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
     <div className={styles.taskInfo}>
       <h3 className={styles.members}>{t('MODAL.MEMBERS')}</h3>
       <div className={styles.membersWrapper}>
-        {assignedMembers.length > 0 ? (
-          <MembersAssigned members={assignedMembers} />
+        {assignedMembersRef.current.length > 0 ? (
+          <MembersAssigned members={assignedMembersRef.current} />
         ) : (
           <p className={styles.err}>{t('MODAL.MEMBERS_ERR')}</p>
         )}
