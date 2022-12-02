@@ -26,7 +26,8 @@ const Task = (props: Props) => {
       {(providedTask, snapshot) => {
         // extending the DraggableStyle with our own inline styles
         const style = {
-          backgroundColor: snapshot.isDragging ? '#ffffffbf' : 'white',
+          boxShadow: snapshot.isDragging ? '0 0.3rem 1.6rem 0.1rem var(--card-hover)' : 'none',
+          background: snapshot.isDragging ? '#ffffffd1' : 'white',
           ...providedTask.draggableProps.style,
         };
         return (

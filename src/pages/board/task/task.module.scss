@@ -1,11 +1,11 @@
 @use './app/styles/mixins.scss' as *;
 
 .taskItem {
-  @extend %cardShadow;
   width: 100%;
   background: var(--white);
   margin: 0.8rem 0;
   border: 0;
+  border-radius: 0.8rem;
 }
 
 .taskTitle {
@@ -15,6 +15,11 @@
   display: flex;
   align-items: flex-start;
   flex-direction: column;
+  border-radius: 0.8rem;
+
+  &:hover {
+    box-shadow: 0 0.3rem 1.6rem 0.1rem var(--card-hover);
+  }
 
   @include media-mobile {
     font-size: 1.4rem;
