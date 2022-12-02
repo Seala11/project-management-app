@@ -113,7 +113,11 @@ export const initialState: BoardState = {
 export const boardsSlice = createSlice({
   name: 'boards',
   initialState,
-  reducers: {},
+  reducers: {
+    setBoards(state, action) {
+      state.boards = action.payload;
+    },
+  },
   extraReducers(builder) {
     builder.addCase(thunkGetUserBoards.fulfilled, (state, action) => {
       state.loading = false;
@@ -136,5 +140,5 @@ export const boardsSlice = createSlice({
 
 export const boardsSelector = (state: RootState) => state.boards.boards;
 export const boardsLoadingSelector = (state: RootState) => state.boards.loading;
-
+export const { setBoards } = boardsSlice.actions;
 export default boardsSlice.reducer;

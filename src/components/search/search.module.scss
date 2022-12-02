@@ -1,0 +1,35 @@
+@use 'app/styles/mixins.scss' as *;
+
+.btnReset {
+  @extend %btnGray;
+}
+
+.btnSearch {
+  @extend %btnBlue;
+}
+
+.wrapperSearch {
+  display: flex;
+  align-items: center;
+  column-gap: 1rem;
+
+  & button {
+    padding: 1rem;
+    font-size: 0;
+  }
+}
+
+.searchForm {
+  & input {
+    @extend %input;
+    height: 4rem;
+
+    @include media-middle {
+      max-width: 21rem;
+    }
+
+    @include media-mobile {
+      width: 90%;
+    }
+  }
+}

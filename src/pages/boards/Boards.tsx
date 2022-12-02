@@ -23,6 +23,7 @@ import pencil from 'assets/images/pencil.png';
 import styles from './boards.module.scss';
 import { userSelector } from 'store/authSlice';
 import { getTokenFromLS } from 'utils/func/localStorage';
+import Search from 'components/search/search';
 import { setIsPending } from 'store/appSlice';
 import { ErrosType, useGetBoardsErrors } from 'utils/hooks/useGetBoardsErrors';
 import { toast } from 'react-toastify';
@@ -42,6 +43,7 @@ const Boards = () => {
   const userRef = useRef(user._id);
 
   const boards = useAppSelector(boardsSelector);
+  const [newBoards, setNewBoards] = useState<BoardType[]>(boards);
   const initialRenderBoardsRef = useRef(boards.length);
 
   const messageErr = useGetBoardsErrors();
@@ -67,6 +69,9 @@ const Boards = () => {
     getBoards();
   }, [dispatch]);
 
+  useEffect(() => {
+    setNewBoards(boards);
+  }, [boards]);
   const navigateToBoardPage = (id: string) => {
     navigate(`/boards/${id}`);
   };
@@ -151,13 +156,16 @@ const Boards = () => {
 
   return (
     <section className={styles.wrapper}>
-      <h2 className={styles.title}>{t('BOARDS.TITLE')}</h2>
+      <div className={styles.wrapperTop}>
+        <h2 className={styles.title}>{t('BOARDS.TITLE')}</h2>
+        <Search boards={boards} setNewBoards={setNewBoards} />
+      </div>
       <ul className={styles.list}>
         <li className={`${styles.card} ${styles.cardCreate}`} onClick={createBoardHandler}>
           <h3 className={`${styles.cardName} ${styles.cardCreateName}`}>{t('BOARDS.CREATE')}</h3>
           <img src={pencil} alt="yellow pencil" className={styles.image} />
         </li>
-        {boards.map((board) => (
+        {newBoards.map((board) => (
           <li
             key={board._id}
             className={styles.card}
