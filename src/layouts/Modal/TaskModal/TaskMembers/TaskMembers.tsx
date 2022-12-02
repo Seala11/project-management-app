@@ -1,13 +1,18 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import { TaskParsedType } from 'store/boardSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { thunkUpdateTaskInfo } from 'store/middleware/tasks';
 import { thunkGetAllUsers } from 'store/middleware/users';
-import { selectAssignedUsers, setUsersAssigned, usersSelector } from 'store/modalSlice';
+import {
+  selectAssignedUsers,
+  setModalClose,
+  setTaskModalClose,
+  setUsersAssigned,
+  usersSelector,
+} from 'store/modalSlice';
 import useDebounce from 'utils/hooks/useDebounce';
-import MemberListItem from './MemberListItem/MemberListItem';
+import MemberListItem, { UserAction } from './MemberListItem/MemberListItem';
 import MembersAssigned from './MembersAssigned.tsx/MemberAssigned';
 import styles from './taskMembers.module.scss';
 
@@ -20,6 +25,7 @@ type Props = {
 const TaskMembers = ({ task, boardId, columnId }: Props) => {
   const allUsers = useAppSelector(usersSelector);
   const assignedMembers = useAppSelector(selectAssignedUsers);
+  const assignedMembersRef = useRef(assignedMembers);
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
@@ -30,18 +36,75 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
   const debouncedValue = useDebounce<string[]>(membersArr);
 
   const taskRef = useRef(task);
-  const listRef = useRef<HTMLDivElement | null>(null);
-
-  if (window !== undefined && allUsers.length === 0) {
-    dispatch(thunkGetAllUsers());
-  }
+  const listRef = useRef<HTMLUListElement | null>(null);
+  const usersChecked = useRef<string[] | undefined>(task?.users ? task.users : []);
 
   useEffect(() => {
-    if (allUsers.length === 0) return;
-    const getUserFullInfo = (id: string) => allUsers.find((user) => user._id === id);
-    const assignedUsers = task?.users.map((user) => getUserFullInfo(user));
-    dispatch(setUsersAssigned(assignedUsers ? assignedUsers : []));
-  }, [allUsers, dispatch, task?.users]);
+    const getUsers = async () => {
+      await dispatch(thunkGetAllUsers())
+        .unwrap()
+        .then((allUsers) => {
+          if (allUsers.length === 0) return;
+          const getUserFullInfo = (id: string) => allUsers.find((user) => user._id === id);
+          const assignedUsers = task?.users.map((user) => getUserFullInfo(user));
+          dispatch(setUsersAssigned(assignedUsers ? assignedUsers : []));
+          assignedMembersRef.current = assignedUsers ? assignedUsers : [];
+        })
+        .catch(() => {
+          dispatch(setTaskModalClose());
+          dispatch(setModalClose());
+        });
+    };
+
+    if (allUsers.length !== 0) {
+      const getUserFullInfo = (id: string) => allUsers.find((user) => user._id === id);
+      const assignedUsers = task?.users.map((user) => getUserFullInfo(user));
+      dispatch(setUsersAssigned(assignedUsers ? assignedUsers : []));
+      assignedMembersRef.current = assignedUsers ? assignedUsers : [];
+    } else {
+      getUsers();
+    }
+
+    return () => {
+      dispatch(setUsersAssigned([]));
+    };
+  }, [allUsers, allUsers.length, dispatch, task?.users]);
+
+  const fetchUsers = useRef(false);
+  const fetchNewUsers = useCallback(
+    async (debouncedValue: string[]) => {
+      if (!taskRef.current || !menuOpen.current) return;
+      const task = taskRef.current;
+
+      dispatch(
+        thunkUpdateTaskInfo({
+          _id: task?._id,
+          boardId: boardId,
+          columnId: columnId,
+          userId: task.userId,
+          title: task.title,
+          description: JSON.stringify({
+            description: task.description.description,
+            color: task.description.color,
+          }),
+          order: task.order,
+          users: debouncedValue,
+        })
+      )
+        .unwrap()
+        .catch((err) => {
+          const [code] = err.split('/');
+          if (code === '404') {
+            dispatch(setTaskModalClose());
+            dispatch(setModalClose());
+          }
+        })
+        .finally(() => {
+          fetchUsers.current = false;
+        });
+    },
+    [boardId, columnId, dispatch]
+  );
 
   useEffect(() => {
     const list = listRef.current;
@@ -56,52 +119,32 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
     };
 
     document.addEventListener('click', clickHandler);
-    return () => document.removeEventListener('click', clickHandler);
-  }, []);
+    return () => {
+      document.removeEventListener('click', clickHandler);
+
+      if (fetchUsers) {
+        fetchNewUsers(usersChecked.current ? usersChecked.current : []);
+      }
+    };
+  }, [fetchNewUsers]);
 
   useEffect(() => {
-    if (!taskRef.current || !menuOpen.current) return;
-    const task = taskRef.current;
-    console.log(debouncedValue);
+    fetchNewUsers(debouncedValue);
+  }, [debouncedValue, fetchNewUsers]);
 
-    dispatch(
-      thunkUpdateTaskInfo({
-        _id: task?._id,
-        boardId: boardId,
-        columnId: columnId,
-        userId: task.userId,
-        title: task.title,
-        description: JSON.stringify({
-          description: task.description.description,
-          color: task.description.color,
-        }),
-        order: task.order,
-        users: debouncedValue,
-      })
-    )
-      .unwrap()
-      .then(() => {
-        toast.success('update members');
-      })
-      .catch(() => {
-        toast.error('update member error');
-      });
-  }, [boardId, columnId, dispatch, debouncedValue]);
-
-  const addMembers = useCallback(() => {
+  const addMembers = useCallback((id: string, userAction: string) => {
     if (!menuOpen.current) return;
-    const items = listRef.current?.children;
-    const userChecked = [];
 
-    if (items) {
-      for (let i = 0; i < items?.length; i++) {
-        if ((items[i].children[0] as HTMLInputElement).checked) {
-          userChecked.push(items[i].children[0].id);
-        }
-      }
+    fetchUsers.current = true;
+    let newUsersChecked;
+    if (userAction === UserAction.REMOVE) {
+      newUsersChecked = usersChecked.current?.filter((userId) => userId !== id);
+    } else {
+      newUsersChecked = usersChecked.current?.concat(id);
     }
+    usersChecked.current = newUsersChecked;
 
-    setMembersArr(userChecked);
+    setMembersArr(usersChecked.current ? usersChecked.current : []);
   }, []);
 
   const openMenutOptions = () => {
@@ -119,7 +162,7 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
           <p className={styles.err}>{t('MODAL.MEMBERS_ERR')}</p>
         )}
       </div>
-      <div
+      <ul
         className={`${styles.list} ${isOpen ? styles.open : styles.close}`}
         onClick={openMenutOptions}
         ref={listRef}
@@ -131,11 +174,11 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
               user={user}
               key={user._id}
               userHandler={addMembers}
-              assignedMembers={assignedMembers}
+              assignedMembers={assignedMembersRef.current}
               isOpen={isOpen}
             />
           ))}
-      </div>
+      </ul>
     </div>
   );
 };

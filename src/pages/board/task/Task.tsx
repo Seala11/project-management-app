@@ -23,18 +23,31 @@ const Task = (props: Props) => {
 
   return (
     <Draggable draggableId={taskData._id} index={index}>
-      {(providedTask) => (
-        <li
-          className={styles.taskItem}
-          onClick={openTaskModal}
-          ref={providedTask.innerRef}
-          {...providedTask.draggableProps}
-        >
-          <div className={styles.taskTitle} {...providedTask.dragHandleProps}>
-            {taskData.title}
-          </div>
-        </li>
-      )}
+      {(providedTask, snapshot) => {
+        // extending the DraggableStyle with our own inline styles
+        const style = {
+          boxShadow: snapshot.isDragging ? '0 0.3rem 1.6rem 0.1rem var(--card-hover)' : 'none',
+          background: snapshot.isDragging ? '#ffffffd1' : 'white',
+          ...providedTask.draggableProps.style,
+        };
+        return (
+          <li
+            className={styles.taskItem}
+            onClick={openTaskModal}
+            ref={providedTask.innerRef}
+            {...providedTask.draggableProps}
+            style={style}
+          >
+            <div className={styles.taskTitle} {...providedTask.dragHandleProps}>
+              <div
+                className={styles.colorBadge}
+                style={{ background: taskData.description.color }}
+              ></div>
+              <div className={styles.taskText}>{taskData.title}</div>
+            </div>
+          </li>
+        );
+      }}
     </Draggable>
   );
 };

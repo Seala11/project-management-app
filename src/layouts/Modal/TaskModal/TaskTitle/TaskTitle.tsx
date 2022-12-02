@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { thunkUpdateTaskInfo } from 'store/middleware/tasks';
-import { toast } from 'react-toastify';
 import { useAppDispatch } from 'store/hooks';
 import { TaskParsedType } from 'store/boardSlice';
 import styles from './taskTitle.module.scss';
+import { setModalClose, setTaskModalClose } from 'store/modalSlice';
 
 type Props = {
   task: TaskParsedType | null;
@@ -40,15 +40,15 @@ const TaskTitle = ({ task, boardId, columnId }: Props) => {
         })
       )
         .unwrap()
-        .then((originalPromiseResult) => {
-          console.log(originalPromiseResult);
-          toast.success('task title updated');
+        .then(() => {
           setTitleCurrVal(titleUpdatedVal);
         })
-        .catch((rejectedValue) => {
-          console.log(rejectedValue);
-          toast.error('update title error');
-          setTitleUpdatedVal(titleCurrVal);
+        .catch((err) => {
+          const [code] = err.split('/');
+          if (code === '404') {
+            dispatch(setTaskModalClose());
+            dispatch(setModalClose());
+          }
         })
         .finally(() => {
           setTitleInputDisabled(true);

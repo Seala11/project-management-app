@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { toast } from 'react-toastify';
 import { parseTaskObj, parseBoardObj } from 'utils/func/boardHandler';
 import { getTokenFromLS } from 'utils/func/localStorage';
 import { BoardInfo } from './boardsSlice';
@@ -98,17 +97,19 @@ export const thunkGetSingleBoard = createAsyncThunk<
   BoardResponseType,
   string,
   { rejectValue: string }
->('board/getSingleBoard', async (id, { rejectWithValue }) => {
+>('board/getSingleBoard', async (id, { dispatch, rejectWithValue }) => {
   const token = getTokenFromLS();
   try {
     const response = await fetchGetBoard(id, token);
     if (!response.ok) {
       const resp = await response.json();
-      throw new Error(`${resp?.statusCode}_BOARD/${resp.message}`);
+      throw new Error(`${resp?.statusCode}/${resp.message}`);
     }
+    dispatch(thunkGetAllColumns(id));
     const data: BoardResponseType = await response.json();
     return data;
   } catch (error) {
+    console.error(`Error: ${error}`);
     return rejectWithValue(getErrorMessage(error));
   }
 });
@@ -143,7 +144,7 @@ export const boardSlice = createSlice({
       .addCase(thunkGetSingleBoard.pending, (state) => {
         state.pending = true;
       })
-      // Columns
+      // Columns get all
       .addCase(thunkGetAllColumns.fulfilled, (state, action) => {
         if (typeof action.payload === 'boolean') return;
         state.columns = action.payload;
@@ -152,6 +153,7 @@ export const boardSlice = createSlice({
       .addCase(thunkGetAllColumns.pending, (state) => {
         state.pending = true;
       })
+      // Column create
       .addCase(thunkCreateColumn.fulfilled, (state, action) => {
         state.columns.push(action.payload);
         state.pending = false;
@@ -159,12 +161,8 @@ export const boardSlice = createSlice({
       .addCase(thunkCreateColumn.pending, (state) => {
         state.pending = true;
       })
-      .addCase(thunkCreateColumn.rejected, (state, action) => {
-        state.pending = false;
-        if (typeof action.payload === 'string') {
-          toast.error(action.payload);
-        }
-      })
+
+      // Column delete
       .addCase(thunkDeleteColumn.fulfilled, (state, action) => {
         state.pending = false;
         const newColumnState = state.columns.filter((col) => col._id !== action.payload);
@@ -173,6 +171,8 @@ export const boardSlice = createSlice({
       .addCase(thunkDeleteColumn.pending, (state) => {
         state.pending = true;
       })
+
+      // Column update title
       .addCase(thunkUpdateTitleColumn.fulfilled, (state, action) => {
         const index = state.columns.findIndex((obj) => obj._id === action.payload._id);
         state.columns[index].title = action.payload.title;
@@ -184,7 +184,7 @@ export const boardSlice = createSlice({
         const taskObj = action.payload.tasks.map((task) => parseTaskObj(task));
         state.tasks[action.payload.column] = taskObj;
       })
-
+      // Task Create
       .addCase(thunkCreateTask.pending, (state) => {
         state.pending = true;
       })
@@ -192,12 +192,8 @@ export const boardSlice = createSlice({
         state.pending = false;
         state.tasks[action.payload.column].push(parseTaskObj(action.payload.task));
       })
-      .addCase(thunkCreateTask.rejected, (state, action) => {
-        state.pending = false;
-        if (typeof action.payload === 'string') {
-          toast.error(action.payload);
-        }
-      })
+
+      // Task Delete
       .addCase(thunkDeleteTasks.pending, (state) => {
         state.pending = true;
       })
@@ -208,12 +204,7 @@ export const boardSlice = createSlice({
         );
         state.tasks[action.payload.column] = newTaskState;
       })
-      .addCase(thunkDeleteTasks.rejected, (state, action) => {
-        state.pending = false;
-        if (typeof action.payload === 'string') {
-          toast.error(action.payload);
-        }
-      })
+      // Task Module
       .addCase(thunkUpdateTaskInfo.fulfilled, (state, action) => {
         const updatedTask = parseTaskObj(action.payload.task);
         const newTaskState = state.tasks[action.payload.column].map((task) =>
@@ -222,10 +213,15 @@ export const boardSlice = createSlice({
         state.tasks[action.payload.column] = newTaskState;
       })
       .addMatcher(
-        (action) => action.type.endsWith('/rejected'),
+        (action) =>
+          action.type.endsWith('/rejected') &&
+          (action.type.startsWith('board/') ||
+            action.type.startsWith('column/') ||
+            action.type.startsWith('task/')),
         (state, action: PayloadAction<string>) => {
           if (!state.error) {
             state.error = action.payload;
+            state.pending = false;
           }
         }
       );
