@@ -36,6 +36,23 @@ export async function fetchCreateBoard(options: newBoard, token: string): Promis
   return response;
 }
 
+export async function fetchUpdateBoard(
+  options: newBoard,
+  token: string,
+  boardId: string
+): Promise<Response> {
+  const response = await fetch(`${BOARDS}/${boardId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      accept: 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(options),
+  });
+  return response;
+}
+
 export async function fetchDeleteBoard(boardId: string, token: string): Promise<Response> {
   const response = await fetch(`${BOARDS}/${boardId}`, {
     method: 'DELETE',

@@ -83,6 +83,7 @@
   "BOARDS": {
     "TITLE": "My Boards",
     "CREATE": "Create new board",
+    "CHANGE": "Change board",
     "404_BOARDS": "Element not found. Reload the page"
   },
   "MODAL": {
