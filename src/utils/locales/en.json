@@ -62,23 +62,23 @@
   "VALA": {
     "NAME": "Valentin",
     "ROLE": "Developer",
-    "FEAT1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
-    "FEAT2": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
-    "FEAT3": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+    "FEAT1": "Developed home page, 404 and a single board page",
+    "FEAT2": "Developed the whole drag and drop functionality on the board page",
+    "FEAT3": "Improved the Back-End functionality and error handling"
   },
   "ANNA": {
     "NAME": "Hanna",
     "ROLE": "Team Lead",
-    "FEAT1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
-    "FEAT2": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
-    "FEAT3": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+    "FEAT1": "Coordinated team work and implemented the basic structure of the application",
+    "FEAT2": "Developed my board page, confirmation modal, task modal and error handling",
+    "FEAT3": "Designed website in Figma"
   },
   "KOSTIA": {
     "NAME": "Konstantin",
     "ROLE": "Developer",
-    "FEAT1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
-    "FEAT2": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
-    "FEAT3": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+    "FEAT1": "Developed registration pages and user settings page",
+    "FEAT2": "Developed private and public routes functionality, search on my boards page",
+    "FEAT3": "Working with Back-End and error handling"
   },
   "BOARDS": {
     "TITLE": "My Boards",

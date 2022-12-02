@@ -1,32 +1,22 @@
-.input {
+.listItem {
+  padding: 1rem 0.4rem;
   color: var(--gray);
   font-weight: 400;
   font-size: 1.6rem;
   line-height: 1.9rem;
-  padding: 1rem;
-  padding-left: 3rem;
-  cursor: pointer;
-}
 
-.wrapper {
-  display: flex;
-  padding: 1rem 0.4rem;
-  gap: 1rem;
-}
-
-.label {
   &:hover {
     cursor: pointer;
-    color: var(--primary);
+    background-color: var(--gray-s);
   }
 }
 
-.close {
-  &[type='checkbox'] {
-    display: none;
-  }
+.assigned {
+  background-color: var(--primary-s);
+  color: var(--primary);
+}
 
-  &:hover {
-    color: var(--gray);
-  }
+.closed {
+  background-color: transparent;
+  color: var(--gray);
 }
