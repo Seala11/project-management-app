@@ -4,7 +4,6 @@ import { clearBoardErrors, clearState, thunkGetSingleBoard } from 'store/boardSl
 import styles from './board.module.scss';
 import { useAppSelector, useAppDispatch } from 'store/hooks';
 import {
-  thunkGetAllColumns,
   thunkCreateColumn,
   thunkDeleteColumn,
   thunkDragEndColumns,
@@ -50,7 +49,6 @@ const Board = () => {
 
   useEffect(() => {
     dispatch(thunkGetSingleBoard(`${id}`));
-    dispatch(thunkGetAllColumns(`${id}`));
     return () => {
       dispatch(clearState());
     };
