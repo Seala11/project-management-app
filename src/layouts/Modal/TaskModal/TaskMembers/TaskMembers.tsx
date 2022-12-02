@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { TaskParsedType } from 'store/boardSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { thunkUpdateTaskInfo } from 'store/middleware/tasks';
@@ -11,6 +12,7 @@ import {
   setUsersAssigned,
   usersSelector,
 } from 'store/modalSlice';
+import { getMsgErrorBoard } from 'utils/func/getMsgErrorBoard';
 import useDebounce from 'utils/hooks/useDebounce';
 import MemberListItem, { UserAction } from './MemberListItem/MemberListItem';
 import MembersAssigned from './MembersAssigned.tsx/MemberAssigned';
@@ -50,9 +52,11 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
           dispatch(setUsersAssigned(assignedUsers ? assignedUsers : []));
           assignedMembersRef.current = assignedUsers ? assignedUsers : [];
         })
-        .catch(() => {
+        .catch((err) => {
+          const [code] = err.split('/');
           dispatch(setTaskModalClose());
           dispatch(setModalClose());
+          toast.error(t(getMsgErrorBoard(code)));
         });
     };
 
@@ -68,7 +72,7 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
     return () => {
       dispatch(setUsersAssigned([]));
     };
-  }, [allUsers, allUsers.length, dispatch, task?.users]);
+  }, [allUsers, allUsers.length, dispatch, t, task?.users]);
 
   const fetchUsers = useRef(false);
   const fetchNewUsers = useCallback(

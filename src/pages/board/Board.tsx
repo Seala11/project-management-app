@@ -28,13 +28,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { getMsgErrorBoard } from 'utils/func/getMsgErrorBoard';
 import ROUTES from 'utils/constants/ROUTES';
 
-/* ToDo
-- оттестировать ошибки errors
-- logOut() ??
-- colors for task
-- check mediaQuares for DnD
-*/
-
 const Board = () => {
   const { title, error, columns, tasks } = useAppSelector((state) => state.board);
   const { modalAction, userInputTitle, userInputDescr, taskId, taskOrder } = useAppSelector(
