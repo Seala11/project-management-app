@@ -8,6 +8,7 @@ import { thunkGetAllUsers } from 'store/middleware/users';
 import {
   selectAssignedUsers,
   setModalClose,
+  setTaskId,
   setTaskModalClose,
   setUsersAssigned,
   usersSelector,
@@ -96,6 +97,22 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
         })
       )
         .unwrap()
+        .then(() => {
+          dispatch(
+            setTaskId({
+              _id: task?._id,
+              boardId: boardId,
+              userId: task.userId,
+              title: task.title,
+              description: {
+                description: task.description.description,
+                color: task.description.color,
+              },
+              order: task.order,
+              users: debouncedValue,
+            })
+          );
+        })
         .catch((err) => {
           const [code] = err.split('/');
           if (code === '404') {

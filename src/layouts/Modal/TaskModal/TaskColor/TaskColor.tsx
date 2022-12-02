@@ -6,7 +6,7 @@ import { thunkUpdateTaskInfo } from 'store/middleware/tasks';
 import { TaskParsedType } from 'store/boardSlice';
 import styles from './taskColor.module.scss';
 import Icon from 'components/Icon/Icon';
-import { setModalClose, setTaskModalClose } from 'store/modalSlice';
+import { setModalClose, setTaskId, setTaskModalClose } from 'store/modalSlice';
 
 type Props = {
   task: TaskParsedType | null;
@@ -43,6 +43,20 @@ const TaskColor = ({ task, boardId, columnId, setHeaderColor }: Props) => {
         .then(() => {
           setHeaderColor(newColor);
           !newColor ? setDisplayRemoveBtn(false) : setDisplayRemoveBtn(true);
+          dispatch(
+            setTaskId({
+              _id: task?._id,
+              boardId: boardId,
+              userId: task.userId,
+              title: task.title,
+              description: {
+                description: task.description.description,
+                color: newColor,
+              },
+              order: task.order,
+              users: task.users,
+            })
+          );
         })
         .catch((err) => {
           if (prevColor) {

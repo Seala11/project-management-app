@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { thunkUpdateTaskInfo } from 'store/middleware/tasks';
-import { useAppDispatch } from 'store/hooks';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { TaskParsedType } from 'store/boardSlice';
 import styles from './taskTitle.module.scss';
-import { setModalClose, setTaskModalClose } from 'store/modalSlice';
+import { setModalClose, setTaskId, setTaskModalClose, taskIdSelector } from 'store/modalSlice';
 
 type Props = {
   task: TaskParsedType | null;
@@ -22,7 +22,11 @@ const TaskTitle = ({ task, boardId, columnId }: Props) => {
     setTitleUpdatedVal(e.target.value);
   };
 
+  const selectedTask = useAppSelector(taskIdSelector);
+
   const updateTitleVal = () => {
+    const task = selectedTask;
+    console.log('s', selectedTask);
     if (titleUpdatedVal && task && titleUpdatedVal !== titleCurrVal) {
       dispatch(
         thunkUpdateTaskInfo({
@@ -42,6 +46,20 @@ const TaskTitle = ({ task, boardId, columnId }: Props) => {
         .unwrap()
         .then(() => {
           setTitleCurrVal(titleUpdatedVal);
+          dispatch(
+            setTaskId({
+              _id: task?._id,
+              boardId: boardId,
+              userId: task.userId,
+              title: titleUpdatedVal,
+              description: {
+                description: task.description.description,
+                color: task.description.color,
+              },
+              order: task.order,
+              users: task.users,
+            })
+          );
         })
         .catch((err) => {
           const [code] = err.split('/');

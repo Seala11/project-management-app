@@ -5,7 +5,7 @@ import { useAppDispatch } from 'store/hooks';
 import { useTranslation } from 'react-i18next';
 import { TaskParsedType } from 'store/boardSlice';
 import styles from './taskDescription.module.scss';
-import { setModalClose, setTaskModalClose } from 'store/modalSlice';
+import { setModalClose, setTaskId, setTaskModalClose } from 'store/modalSlice';
 
 type Props = {
   task: TaskParsedType | null;
@@ -57,6 +57,20 @@ const TaskDescription = ({ task, boardId, columnId }: Props) => {
         .unwrap()
         .then(() => {
           setDescrCurrVal(descrUpdatedVal);
+          dispatch(
+            setTaskId({
+              _id: task?._id,
+              boardId: boardId,
+              userId: task.userId,
+              title: task.title,
+              description: {
+                description: descrUpdatedVal,
+                color: task.description.color,
+              },
+              order: task.order,
+              users: task.users,
+            })
+          );
         })
         .catch((err) => {
           setDescrUpdatedVal(descrCurrVal);
