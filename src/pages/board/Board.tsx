@@ -58,13 +58,14 @@ const Board = () => {
 
   useEffect(() => {
     if (error) {
-      const [code] = error.split('/');
+      const [code, message] = error.split('/');
       if (code) {
         if (code === '403') {
           dispatch(setAuth(false));
           dispatch(setTaskModalClose());
           dispatch(setModalClose());
-        } else if (code === '404_BOARD') {
+        }
+        if (message === 'Board was not founded!') {
           navigate(ROUTES.boards, { replace: true });
         }
         toast.error(t(getMsgErrorBoard(code)));
