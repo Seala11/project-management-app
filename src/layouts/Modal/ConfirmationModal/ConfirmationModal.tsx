@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   BtnColor,
   modalSelector,
@@ -44,6 +44,7 @@ const ConfirmationModal = ({ onClose }: Props) => {
     handleSubmit,
     getFieldState,
     setError,
+    setFocus,
     clearErrors,
     formState: { errors },
   } = useForm<ModalForm>();
@@ -107,6 +108,10 @@ const ConfirmationModal = ({ onClose }: Props) => {
   const backToTaskModal = () => {
     dispatch(setTaskModalOpen());
   };
+
+  useEffect(() => {
+    setTimeout(() => setFocus(UserInput.TITLE), 0);
+  }, [setFocus]);
 
   return (
     <form className={styles.modal} onSubmit={handleSubmit(onSubmit)}>
