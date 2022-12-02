@@ -40,6 +40,7 @@
   border-radius: 0.8rem;
   animation: show 0.5s forwards;
   z-index: 11;
+  overflow-x: hidden;
 
   &:hover {
     cursor: auto;
@@ -48,6 +49,21 @@
   @include media-mobile {
     width: 90%;
     min-width: 30rem;
+  }
+
+  &::-webkit-scrollbar {
+    width: 0.6rem;
+    height: 1rem;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: var(--primary-s);
+    border-radius: 0.6rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--primary-l);
+    border-radius: 0.6rem;
   }
 }
 
