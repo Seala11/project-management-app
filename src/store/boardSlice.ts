@@ -224,7 +224,11 @@ export const boardSlice = createSlice({
         state.tasks[action.payload.column] = newTaskState;
       })
       .addMatcher(
-        (action) => action.type.endsWith('/rejected'),
+        (action) =>
+          action.type.endsWith('/rejected') &&
+          (action.type.startsWith('board/') ||
+            action.type.startsWith('column/') ||
+            action.type.startsWith('task/')),
         (state, action: PayloadAction<string>) => {
           if (!state.error) {
             state.error = action.payload;
