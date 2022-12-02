@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { thunkUpdateTaskInfo } from 'store/middleware/tasks';
-import { toast } from 'react-toastify';
 import Icon from 'components/Icon/Icon';
 import { useAppDispatch } from 'store/hooks';
 import { useTranslation } from 'react-i18next';
 import { TaskParsedType } from 'store/boardSlice';
 import styles from './taskDescription.module.scss';
+import { setModalClose, setTaskModalClose } from 'store/modalSlice';
 
 type Props = {
   task: TaskParsedType | null;
@@ -56,12 +56,15 @@ const TaskDescription = ({ task, boardId, columnId }: Props) => {
       )
         .unwrap()
         .then(() => {
-          toast.success('task descr updated');
           setDescrCurrVal(descrUpdatedVal);
         })
-        .catch(() => {
-          toast.error('update descr error');
+        .catch((err) => {
           setDescrUpdatedVal(descrCurrVal);
+          const [code] = err.split('/');
+          if (code === '404') {
+            dispatch(setTaskModalClose());
+            dispatch(setModalClose());
+          }
         })
         .finally(() => {
           setDescrInputDisabled(true);

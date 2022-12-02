@@ -4,7 +4,6 @@ import { clearBoardErrors, clearState, thunkGetSingleBoard } from 'store/boardSl
 import styles from './board.module.scss';
 import { useAppSelector, useAppDispatch } from 'store/hooks';
 import {
-  thunkGetAllColumns,
   thunkCreateColumn,
   thunkDeleteColumn,
   thunkDragEndColumns,
@@ -16,7 +15,9 @@ import {
   ModalAction,
   modalColumnIdSelector,
   resetModal,
+  setModalClose,
   setModalOpen,
+  setTaskModalClose,
 } from 'store/modalSlice';
 import { useTranslation } from 'react-i18next';
 import Column from './column/Column';
@@ -48,7 +49,6 @@ const Board = () => {
 
   useEffect(() => {
     dispatch(thunkGetSingleBoard(`${id}`));
-    dispatch(thunkGetAllColumns(`${id}`));
     return () => {
       dispatch(clearState());
     };
@@ -56,17 +56,17 @@ const Board = () => {
 
   useEffect(() => {
     if (error) {
-      const [code] = error.split('/');
+      const [code, message] = error.split('/');
       if (code) {
         if (code === '403') {
           dispatch(setAuth(false));
-          toast.error(t(getMsgErrorBoard(code)));
-        } else if (code === '404_BOARD') {
-          navigate(ROUTES.boards, { replace: true });
-          toast.error(t(getMsgErrorBoard(code)));
-        } else {
-          toast.error(t(getMsgErrorBoard(code)));
+          dispatch(setTaskModalClose());
+          dispatch(setModalClose());
         }
+        if (message === 'Board was not founded!') {
+          navigate(ROUTES.boards, { replace: true });
+        }
+        toast.error(t(getMsgErrorBoard(code)));
         dispatch(clearBoardErrors());
       }
     }
