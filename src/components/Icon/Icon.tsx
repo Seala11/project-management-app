@@ -2,11 +2,6 @@ import React from 'react';
 import IcomoonReact from 'icomoon-react';
 import iconSet from 'utils/data/iconSet.json';
 
-/*
-import Icon from 'components/Icon/Icon';
-<Icon color="#000" size={100} icon="user" />
-*/
-
 type Props = {
   color?: string;
   size: string | number;
