@@ -28,13 +28,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { getMsgErrorBoard } from 'utils/func/getMsgErrorBoard';
 import ROUTES from 'utils/constants/ROUTES';
 
-/* ToDo
-- оттестировать ошибки errors
-- logOut() ??
-- colors for task
-- check mediaQuares for DnD
-*/
-
 const Board = () => {
   const { title, error, columns, tasks } = useAppSelector((state) => state.board);
   const { modalAction, userInputTitle, userInputDescr, taskId, taskOrder } = useAppSelector(
@@ -57,6 +50,7 @@ const Board = () => {
   useEffect(() => {
     if (error) {
       const [code, message] = error.split('/');
+      let errorMessageCode = code;
       if (code) {
         if (code === '403') {
           dispatch(setAuth(false));
@@ -65,8 +59,9 @@ const Board = () => {
         }
         if (message === 'Board was not founded!') {
           navigate(ROUTES.boards, { replace: true });
+          errorMessageCode = code + '_BOARD';
         }
-        toast.error(t(getMsgErrorBoard(code)));
+        toast.error(t(getMsgErrorBoard(errorMessageCode)));
         dispatch(clearBoardErrors());
       }
     }

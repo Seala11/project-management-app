@@ -7,12 +7,14 @@ import {
   thunkCreateBoard,
   BoardType,
   thunkDeleteBoard,
+  thunkUpdateBoard,
 } from 'store/boardsSlice';
 import {
   BtnColor,
   ModalAction,
   modalActionSelector,
   resetModal,
+  setChangeBoard,
   setModalOpen,
   userDescriptionSelector,
   userTitleSelector,
@@ -102,6 +104,26 @@ const Boards = () => {
     setSelectedBoard(board._id);
   };
 
+  const changeBoardHandler = (event: React.MouseEvent, board: BoardType) => {
+    event.stopPropagation();
+    dispatch(setChangeBoard(true));
+    dispatch(
+      setModalOpen({
+        title: `${t('BOARDS.CHANGE')}`,
+        inputTitle: `${t('MODAL.TITLE')}`,
+        inputDescr: `${t('MODAL.DESCRIPTION')}`,
+        color: BtnColor.BLUE,
+        btnText: `${t('MODAL.CHANGE')}`,
+        action: ModalAction.BOARD_CHANGE,
+        defaultVals: {
+          title: board.title.title,
+          description: board.title.descr,
+        },
+      })
+    );
+    setSelectedBoard(board._id);
+  };
+
   const deleteBoard = useCallback(async () => {
     if (typeof selectedBoard !== 'string') return;
     dispatch(setIsPending(true));
@@ -116,6 +138,33 @@ const Boards = () => {
         dispatch(setIsPending(false));
       });
   }, [dispatch, messageErr, selectedBoard]);
+
+  const changeBoard = useCallback(async () => {
+    if (typeof selectedBoard !== 'string') return;
+    const info = JSON.stringify({
+      title: userInputTitle,
+      descr: userInputDescr,
+    });
+    dispatch(setIsPending(true));
+    dispatch(
+      thunkUpdateBoard({
+        owner: userRef.current,
+        title: info,
+        users: [],
+        token: getTokenFromLS(),
+        boardId: selectedBoard,
+      })
+    )
+      .unwrap()
+      .catch((err) => {
+        const error = err as keyof ErrosType;
+        const message = messageErr[error] ? messageErr[error] : messageErr.DEFAULT;
+        toast.error(message);
+      })
+      .finally(() => {
+        dispatch(setIsPending(false));
+      });
+  }, [dispatch, messageErr, selectedBoard, userInputDescr, userInputTitle]);
 
   const createBoard = useCallback(async () => {
     dispatch(setIsPending(true));
@@ -152,7 +201,12 @@ const Boards = () => {
       dispatch(resetModal());
       deleteBoard();
     }
-  }, [createBoard, deleteBoard, dispatch, modalAction]);
+
+    if (modalAction === ModalAction.BOARD_CHANGE) {
+      dispatch(resetModal());
+      changeBoard();
+    }
+  }, [changeBoard, createBoard, deleteBoard, dispatch, modalAction]);
 
   return (
     <section className={styles.wrapper}>
@@ -173,9 +227,22 @@ const Boards = () => {
           >
             <div className={styles.titleWrapper}>
               <h3 className={styles.cardName}>{board.title.title}</h3>
-              <button className={styles.button} onClick={(e) => deleteBoardHandler(e, board)}>
-                <Icon color="#CC0707" size={100} icon="trash" className={styles.icon} />
-              </button>
+              <div className={styles.buttonWrapper}>
+                <button
+                  className={styles.buttonChange}
+                  onClick={(e) => changeBoardHandler(e, board)}
+                >
+                  <Icon
+                    color="#0047ff"
+                    size={100}
+                    icon="pen-change"
+                    className={styles.iconChange}
+                  />
+                </button>
+                <button className={styles.button} onClick={(e) => deleteBoardHandler(e, board)}>
+                  <Icon color="#CC0707" size={100} icon="trash" className={styles.icon} />
+                </button>
+              </div>
             </div>
             <p className={styles.description}>{board.title.descr}</p>
           </li>

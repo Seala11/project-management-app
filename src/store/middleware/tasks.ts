@@ -3,6 +3,7 @@ import { TASK_SET } from 'api/config';
 import { fetchCreateTask, fetchDeleteTask, fetchGetTasks, fetchUpdateTask } from 'api/taskApi';
 import { DropResult } from 'react-beautiful-dnd';
 import { RootState } from 'store';
+import { setTaskId } from 'store/modalSlice';
 import { getErrorMessage } from 'utils/func/handleError';
 import { getTokenFromLS } from 'utils/func/localStorage';
 import { TaskObjectType, TaskParsedType, TaskType, updateTasksState } from '../boardSlice';
@@ -121,15 +122,10 @@ export const thunkDeleteTasks = createAsyncThunk<
 
 //update task
 
-export type UpdateTaskRequestType = {
+type UpdateTaskRequestType = {
   _id: string;
-  boardId: string;
   columnId: string;
-  userId: string;
-  title: string;
-  description: string;
-  order: number;
-  users: string[];
+  newData: { key: string; value: string | string[] };
 };
 
 export type UpdateTaskResponseType = {
@@ -137,23 +133,87 @@ export type UpdateTaskResponseType = {
   task: TaskType;
 };
 
+export enum TaskDataKeys {
+  TITLE = 'title',
+  DESCR = 'description',
+  COLOR = 'color',
+  USERS = 'users',
+}
+
 export const thunkUpdateTaskInfo = createAsyncThunk<
   UpdateTaskResponseType,
   UpdateTaskRequestType,
   { rejectValue: string }
 >(
   'board/updateTask',
-  async (data, { rejectWithValue }) => {
-    const { columnId } = data;
+  async (data, { rejectWithValue, getState, dispatch }) => {
+    const { columnId, _id, newData } = data;
     const token = getTokenFromLS();
 
+    const state = getState() as RootState;
+    const tasks = state.board.tasks[columnId];
+    const task = tasks.find((task) => task._id === _id);
+
+    if (!task) {
+      throw new Error(`${404}/${'No such element exist'}`);
+    }
+
+    const newTile =
+      newData.key === TaskDataKeys.TITLE && typeof newData.value === 'string'
+        ? newData.value
+        : task?.title;
+
+    const newDescr =
+      newData.key === TaskDataKeys.DESCR && typeof newData.value === 'string'
+        ? newData.value
+        : task?.description.description;
+
+    const newColor =
+      newData.key === TaskDataKeys.COLOR && typeof newData.value === 'string'
+        ? newData.value
+        : task?.description.color;
+
+    const newUsers =
+      newData.key === TaskDataKeys.USERS && typeof newData.value !== 'string'
+        ? newData.value
+        : task?.users;
+
+    const newTaskData = {
+      _id: task?._id,
+      boardId: task?.boardId,
+      columnId: columnId,
+      userId: task?.userId,
+      title: newTile,
+      description: JSON.stringify({
+        description: newDescr,
+        color: newColor,
+      }),
+      order: task?.order,
+      users: newUsers,
+    };
+
     try {
-      const response = await fetchUpdateTask(data, token);
+      const response = await fetchUpdateTask(newTaskData, token);
 
       if (!response.ok) {
         const resp = await response.json();
         throw new Error(`${resp?.statusCode}/${resp.message}`);
       }
+
+      const newTaskIdData = {
+        _id: task?._id,
+        boardId: task?.boardId,
+        columnId: columnId,
+        userId: task?.userId,
+        title: newTile,
+        description: {
+          description: newDescr,
+          color: newColor,
+        },
+        order: task?.order,
+        users: newUsers,
+      };
+      dispatch(setTaskId(newTaskIdData));
 
       const updatedTask = await response.json();
       return { column: columnId, task: updatedTask };

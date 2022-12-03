@@ -30,6 +30,11 @@
 .icon {
   height: 2.4rem;
   width: 2.2rem;
+
+  @include media-mobile-s {
+    height: 1.8rem;
+    width: 1.8rem;
+  }
 }
 
 .title {
@@ -46,6 +51,32 @@
   &:hover {
     background: var(--error-m);
   }
+}
+
+.buttonChange {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 1rem;
+  border-radius: 100%;
+
+  &:hover {
+    background: var(--primary-s);
+  }
+}
+
+.iconChange {
+  height: 2.4rem;
+  width: 2.2rem;
+
+  @include media-mobile-s {
+    height: 1.8rem;
+    width: 1.8rem;
+  }
+}
+
+.buttonWrapper {
+  display: flex;
 }
 
 .list {
@@ -100,7 +131,7 @@
   word-break: break-word;
 
   @include media-mobile {
-    font-size: 2rem;
+    font-size: 1.8rem;
   }
 }
 

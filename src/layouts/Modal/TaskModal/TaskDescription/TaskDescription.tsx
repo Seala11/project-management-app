@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { thunkUpdateTaskInfo } from 'store/middleware/tasks';
+import { TaskDataKeys, thunkUpdateTaskInfo } from 'store/middleware/tasks';
 import Icon from 'components/Icon/Icon';
 import { useAppDispatch } from 'store/hooks';
 import { useTranslation } from 'react-i18next';
@@ -9,11 +9,10 @@ import { setModalClose, setTaskModalClose } from 'store/modalSlice';
 
 type Props = {
   task: TaskParsedType | null;
-  boardId: string;
   columnId: string;
 };
 
-const TaskDescription = ({ task, boardId, columnId }: Props) => {
+const TaskDescription = ({ task, columnId }: Props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
@@ -42,16 +41,8 @@ const TaskDescription = ({ task, boardId, columnId }: Props) => {
       dispatch(
         thunkUpdateTaskInfo({
           _id: task?._id,
-          boardId: boardId,
           columnId: columnId,
-          userId: task.userId,
-          title: task.title,
-          description: JSON.stringify({
-            description: descrUpdatedVal,
-            color: task.description.color,
-          }),
-          order: task.order,
-          users: task.users,
+          newData: { key: TaskDataKeys.DESCR, value: descrUpdatedVal },
         })
       )
         .unwrap()

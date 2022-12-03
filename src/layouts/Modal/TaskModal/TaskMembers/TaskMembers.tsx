@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { TaskParsedType } from 'store/boardSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { thunkUpdateTaskInfo } from 'store/middleware/tasks';
-import { thunkGetAllUsers } from 'store/middleware/users';
+import { TaskDataKeys, thunkUpdateTaskInfo } from 'store/middleware/tasks';
+import { thunkGetAllUsers, UserType } from 'store/middleware/users';
 import {
   selectAssignedUsers,
   setModalClose,
@@ -11,6 +12,7 @@ import {
   setUsersAssigned,
   usersSelector,
 } from 'store/modalSlice';
+import { getMsgErrorBoard } from 'utils/func/getMsgErrorBoard';
 import useDebounce from 'utils/hooks/useDebounce';
 import MemberListItem, { UserAction } from './MemberListItem/MemberListItem';
 import MembersAssigned from './MembersAssigned.tsx/MemberAssigned';
@@ -18,11 +20,10 @@ import styles from './taskMembers.module.scss';
 
 type Props = {
   task: TaskParsedType | null;
-  boardId: string;
   columnId: string;
 };
 
-const TaskMembers = ({ task, boardId, columnId }: Props) => {
+const TaskMembers = ({ task, columnId }: Props) => {
   const allUsers = useAppSelector(usersSelector);
   const assignedMembers = useAppSelector(selectAssignedUsers);
   const assignedMembersRef = useRef(assignedMembers);
@@ -35,9 +36,11 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
   const [membersArr, setMembersArr] = useState<string[]>([]);
   const debouncedValue = useDebounce<string[]>(membersArr);
 
-  const taskRef = useRef(task);
   const listRef = useRef<HTMLUListElement | null>(null);
   const usersChecked = useRef<string[] | undefined>(task?.users ? task.users : []);
+  const usersRef = useRef<UserType[] | null>(allUsers);
+
+  const getUserFullInfo = (id: string, users: UserType[]) => users.find((user) => user._id === id);
 
   useEffect(() => {
     const getUsers = async () => {
@@ -45,20 +48,23 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
         .unwrap()
         .then((allUsers) => {
           if (allUsers.length === 0) return;
+          usersRef.current = allUsers;
           const getUserFullInfo = (id: string) => allUsers.find((user) => user._id === id);
           const assignedUsers = task?.users.map((user) => getUserFullInfo(user));
           dispatch(setUsersAssigned(assignedUsers ? assignedUsers : []));
           assignedMembersRef.current = assignedUsers ? assignedUsers : [];
         })
-        .catch(() => {
+        .catch((err) => {
+          const [code] = err.split('/');
           dispatch(setTaskModalClose());
           dispatch(setModalClose());
+          toast.error(t(getMsgErrorBoard(code)));
         });
     };
 
-    if (allUsers.length !== 0) {
-      const getUserFullInfo = (id: string) => allUsers.find((user) => user._id === id);
-      const assignedUsers = task?.users.map((user) => getUserFullInfo(user));
+    if (usersRef && usersRef.current) {
+      const users = usersRef.current;
+      const assignedUsers = task?.users.map((user) => getUserFullInfo(user, users));
       dispatch(setUsersAssigned(assignedUsers ? assignedUsers : []));
       assignedMembersRef.current = assignedUsers ? assignedUsers : [];
     } else {
@@ -68,27 +74,19 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
     return () => {
       dispatch(setUsersAssigned([]));
     };
-  }, [allUsers, allUsers.length, dispatch, task?.users]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const fetchUsers = useRef(false);
   const fetchNewUsers = useCallback(
     async (debouncedValue: string[]) => {
-      if (!taskRef.current || !menuOpen.current) return;
-      const task = taskRef.current;
+      if (!menuOpen.current || !task?._id) return;
 
       dispatch(
         thunkUpdateTaskInfo({
           _id: task?._id,
-          boardId: boardId,
           columnId: columnId,
-          userId: task.userId,
-          title: task.title,
-          description: JSON.stringify({
-            description: task.description.description,
-            color: task.description.color,
-          }),
-          order: task.order,
-          users: debouncedValue,
+          newData: { key: TaskDataKeys.USERS, value: debouncedValue },
         })
       )
         .unwrap()
@@ -103,7 +101,7 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
           fetchUsers.current = false;
         });
     },
-    [boardId, columnId, dispatch]
+    [columnId, dispatch, task?._id]
   );
 
   useEffect(() => {
@@ -133,14 +131,18 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
   }, [debouncedValue, fetchNewUsers]);
 
   const addMembers = useCallback((id: string, userAction: string) => {
-    if (!menuOpen.current) return;
+    const allUsers = usersRef.current;
+    const assignedMembers = assignedMembersRef.current;
+    if (!menuOpen.current || !allUsers) return;
 
     fetchUsers.current = true;
     let newUsersChecked;
     if (userAction === UserAction.REMOVE) {
+      assignedMembersRef.current = assignedMembers.filter((member) => member?._id !== id);
       newUsersChecked = usersChecked.current?.filter((userId) => userId !== id);
     } else {
       newUsersChecked = usersChecked.current?.concat(id);
+      assignedMembersRef.current = [...assignedMembers, getUserFullInfo(id, allUsers)];
     }
     usersChecked.current = newUsersChecked;
 
@@ -156,8 +158,8 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
     <div className={styles.taskInfo}>
       <h3 className={styles.members}>{t('MODAL.MEMBERS')}</h3>
       <div className={styles.membersWrapper}>
-        {assignedMembers.length > 0 ? (
-          <MembersAssigned members={assignedMembers} />
+        {assignedMembersRef.current.length > 0 ? (
+          <MembersAssigned members={assignedMembersRef.current} />
         ) : (
           <p className={styles.err}>{t('MODAL.MEMBERS_ERR')}</p>
         )}
@@ -168,7 +170,8 @@ const TaskMembers = ({ task, boardId, columnId }: Props) => {
         ref={listRef}
         data-member="true"
       >
-        {allUsers.length > 0 &&
+        {allUsers &&
+          allUsers.length > 0 &&
           allUsers.map((user) => (
             <MemberListItem
               user={user}
