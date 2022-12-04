@@ -25,7 +25,7 @@
 }
 
 @mixin media-mobile {
-  @media (max-width: 600px) {
+  @media (max-width: 600px), (max-height: 650px) {
     @content;
   }
 }
@@ -141,6 +141,7 @@
 %title {
   font-size: 2.4rem;
   font-weight: 600;
+
   @include media-mobile {
     font-size: 2.1rem;
   }

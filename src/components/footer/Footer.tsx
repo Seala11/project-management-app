@@ -36,8 +36,8 @@ const Footer = () => {
         >
           <svg
             className={styles.rssLogo}
-            width="127"
-            height="46"
+            width="84"
+            height="30"
             viewBox="0 0 248 90"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
