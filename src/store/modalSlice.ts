@@ -12,6 +12,7 @@ export enum BtnColor {
 export enum ModalAction {
   BOARD_CREATE = 'create new board',
   BOARD_DELETE = 'delete board',
+  BOARD_CHANGE = 'change board',
   COLUMN_CREATE = 'create new column',
   COLUMN_DELETE = 'delete column',
   TASK_CREATE = 'create new task',
@@ -30,6 +31,10 @@ type ModalType = {
   color: BtnColor;
   btnText: string;
   action: ModalAction;
+  defaultVals?: {
+    title: string;
+    description: string;
+  };
 };
 
 type ModalState = {
@@ -43,9 +48,10 @@ type ModalState = {
   columnId: string;
   taskId: TaskParsedType | null;
   taskOrder: number;
-  users: UserType[];
+  users: UserType[] | null;
   usersAssigned: (UserType | undefined)[];
   pending: boolean;
+  change: boolean;
 };
 
 export const initialState: ModalState = {
@@ -59,9 +65,10 @@ export const initialState: ModalState = {
   columnId: '',
   taskId: null,
   taskOrder: 0,
-  users: [],
+  users: null,
   usersAssigned: [],
   pending: false,
+  change: false,
 };
 
 export const modalSlice = createSlice({
@@ -77,6 +84,7 @@ export const modalSlice = createSlice({
       state.modal = null;
       state.taskOpen = false;
       state.taskDeleteConfirm = false;
+      state.change = false;
     },
     setModalAction: (state, action: PayloadAction<ModalAction | undefined>) => {
       state.modalAction = action.payload;
@@ -89,6 +97,9 @@ export const modalSlice = createSlice({
     },
     setInputDescr: (state, action: PayloadAction<string>) => {
       state.userInputDescr = action.payload;
+    },
+    setChangeBoard: (state, action: PayloadAction<boolean>) => {
+      state.change = action.payload;
     },
 
     //task
@@ -120,8 +131,10 @@ export const modalSlice = createSlice({
       state.usersAssigned = newState;
     },
     addUserAssigned: (state, action: PayloadAction<string>) => {
-      const userToAdd = state.users.find((members) => members._id === action.payload);
-      state.usersAssigned = [...state.usersAssigned, userToAdd];
+      if (state.users) {
+        const userToAdd = state.users.find((members) => members._id === action.payload);
+        state.usersAssigned = [...state.usersAssigned, userToAdd];
+      }
     },
   },
   extraReducers: (builder) => {
@@ -147,6 +160,7 @@ export const {
   setUsersAssigned,
   removeUserAssigned,
   addUserAssigned,
+  setChangeBoard,
 } = modalSlice.actions;
 
 export const modalStatusSelector = (state: RootState) => state.modal.modalOpen;
@@ -162,5 +176,6 @@ export const usersSelector = (state: RootState) => state.modal.users;
 export const taskDeleteConfirmSelector = (state: RootState) => state.modal.taskDeleteConfirm;
 export const selectAssignedUsers = (state: RootState) => state.modal.usersAssigned;
 export const selectModalPending = (state: RootState) => state.modal.pending;
+export const selectChangeBoard = (state: RootState) => state.modal.change;
 
 export default modalSlice.reducer;

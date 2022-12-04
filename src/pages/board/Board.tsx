@@ -51,7 +51,6 @@ const Board = () => {
     if (error) {
       const [code, message] = error.split('/');
       let errorMessageCode = code;
-      console.log(error);
       if (code) {
         if (code === '403') {
           dispatch(setAuth(false));

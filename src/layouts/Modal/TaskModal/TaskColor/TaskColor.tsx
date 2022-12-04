@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import COLORS from 'utils/constants/COLORS';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from 'store/hooks';
-import { thunkUpdateTaskInfo } from 'store/middleware/tasks';
+import { TaskDataKeys, thunkUpdateTaskInfo } from 'store/middleware/tasks';
 import { TaskParsedType } from 'store/boardSlice';
 import styles from './taskColor.module.scss';
 import Icon from 'components/Icon/Icon';
@@ -10,12 +10,11 @@ import { setModalClose, setTaskModalClose } from 'store/modalSlice';
 
 type Props = {
   task: TaskParsedType | null;
-  boardId: string;
   columnId: string;
   setHeaderColor: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const TaskColor = ({ task, boardId, columnId, setHeaderColor }: Props) => {
+const TaskColor = ({ task, columnId, setHeaderColor }: Props) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -27,16 +26,8 @@ const TaskColor = ({ task, boardId, columnId, setHeaderColor }: Props) => {
       dispatch(
         thunkUpdateTaskInfo({
           _id: task?._id,
-          boardId: boardId,
           columnId: columnId,
-          userId: task.userId,
-          title: task.title,
-          description: JSON.stringify({
-            description: task.description.description,
-            color: newColor,
-          }),
-          order: task.order,
-          users: task.users,
+          newData: { key: TaskDataKeys.COLOR, value: newColor },
         })
       )
         .unwrap()

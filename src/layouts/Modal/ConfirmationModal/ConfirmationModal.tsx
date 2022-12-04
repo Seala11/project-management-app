@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   BtnColor,
   modalSelector,
+  selectChangeBoard,
   setInputDescr,
   setInputTitle,
   setModalAction,
@@ -38,15 +39,31 @@ const ConfirmationModal = ({ onClose }: Props) => {
   const taskDeleteConfirmMessage = useAppSelector(taskDeleteConfirmSelector);
   const { t } = useTranslation();
   const errMessage = useGetModalErrors();
+  const isChangeBoard = useAppSelector(selectChangeBoard);
 
   const {
     register,
     handleSubmit,
     getFieldState,
     setError,
+    setValue,
+    setFocus,
     clearErrors,
     formState: { errors },
   } = useForm<ModalForm>();
+
+  useEffect(() => {
+    if (isChangeBoard) {
+      setValue('title', `${modal?.defaultVals?.title ? modal?.defaultVals?.title : ''}`);
+      setValue(
+        'description',
+        `${modal?.defaultVals?.description ? modal?.defaultVals?.description : ''}`
+      );
+      setDescrValue(
+        modal?.defaultVals?.description.length ? modal?.defaultVals?.description.length : 0
+      );
+    }
+  }, [isChangeBoard, modal?.defaultVals?.description, modal?.defaultVals?.title, setValue]);
 
   const onSubmit: SubmitHandler<ModalForm> = (data) => {
     const dataIsValid: boolean = validateData(data);
@@ -107,6 +124,10 @@ const ConfirmationModal = ({ onClose }: Props) => {
   const backToTaskModal = () => {
     dispatch(setTaskModalOpen());
   };
+
+  useEffect(() => {
+    setTimeout(() => setFocus(UserInput.TITLE), 0);
+  }, [setFocus]);
 
   return (
     <form className={styles.modal} onSubmit={handleSubmit(onSubmit)}>

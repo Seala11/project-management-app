@@ -2,7 +2,6 @@
 
 .dropdownWrapper {
   display: flex;
-  // min-width: 12.2rem;
   z-index: 1;
   position: relative;
   margin: 0.2rem; //не менять! иначе шапака прыгает
@@ -74,6 +73,7 @@
     right: auto;
     left: 17%;
     gap: 2.5rem;
+    align-items: flex-start;
   }
 }
 
