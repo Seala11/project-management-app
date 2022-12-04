@@ -1,0 +1,83 @@
+@use './app/styles/mixins.scss' as *;
+
+.taskTitleWrapper {
+  width: 100%;
+  width: -moz-available;
+  width: -webkit-fill-available;
+  width: stretch;
+  padding: 1.5rem 0;
+}
+
+.subtitle {
+  color: var(--gray);
+  cursor: default;
+}
+
+.subtitleColumn {
+  color: var(--gray);
+  margin: 0;
+  font-size: 1.4rem;
+  padding: 0.2rem 0 0 1rem;
+  cursor: default;
+}
+
+.heading {
+  display: flex;
+  background-color: var(--primary-s);
+  width: 100%;
+  width: -moz-available;
+  width: -webkit-fill-available;
+  width: stretch;
+  padding: 1rem 2rem;
+  justify-content: flex-end;
+
+  @include media-mobile-width {
+    padding: 1rem;
+  }
+}
+
+.taskWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 50rem;
+  padding: 0 2.5rem 2rem 1.5rem;
+  overflow-y: auto;
+
+  @include media-mobile-width {
+    width: 90vw;
+  }
+}
+
+.closeBtn {
+  position: relative;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  padding: 1.8rem;
+  border-radius: 50%;
+  transition: all 0.15s ease-in-out;
+
+  &::after {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    content: '';
+    width: 1.6rem;
+    height: 1.6rem;
+    background-image: url('../../../assets/images/close.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  &:hover {
+    background-color: var(--primary-m);
+  }
+}
+
+.button {
+  @extend %btnRed;
+  align-self: flex-end;
+}

@@ -1,0 +1,16 @@
+.member {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3rem;
+  height: 3rem;
+  background-color: var(--primary-s);
+  border-radius: 50%;
+  color: var(--gray);
+  cursor: default;
+}
+
+.total {
+  width: fit-content;
+  padding: 1rem 0.5rem;
+}

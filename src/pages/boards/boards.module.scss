@@ -1,0 +1,155 @@
+@use './app/styles/mixins.scss' as *;
+
+.wrapper {
+  @extend %wrapper;
+  flex-grow: 1;
+  width: 100%;
+
+  & .wrapperTop {
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3rem 0 0;
+
+    @include media-mobile-s {
+      flex-direction: column;
+      align-items: flex-start;
+      width: 90%;
+    }
+  }
+  user-select: none;
+}
+
+.titleWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.icon {
+  height: 2.4rem;
+  width: 2.2rem;
+
+  @include media-mobile-s {
+    height: 1.8rem;
+    width: 1.8rem;
+  }
+}
+
+.title {
+  @extend %title;
+}
+
+.button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 1rem;
+  border-radius: 100%;
+
+  &:hover {
+    background: var(--error-m);
+  }
+}
+
+.buttonChange {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 1rem;
+  border-radius: 100%;
+
+  &:hover {
+    background: var(--primary-s);
+  }
+}
+
+.iconChange {
+  height: 2.4rem;
+  width: 2.2rem;
+
+  @include media-mobile-s {
+    height: 1.8rem;
+    width: 1.8rem;
+  }
+}
+
+.buttonWrapper {
+  display: flex;
+}
+
+.list {
+  list-style-type: none;
+  margin: 0;
+  padding: 3rem 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-items: center;
+  grid-row-gap: 3rem;
+
+  @include media-big-tablet {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include media-mobile-width {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.card {
+  @extend %cardShadow;
+  display: flex;
+  flex-direction: column;
+  height: 20rem;
+  width: 36rem;
+  padding: 1.6rem;
+
+  @include media-laptop {
+    width: 93%;
+  }
+
+  @include media-mobile-width {
+    width: 90%;
+    height: 16rem;
+  }
+
+  @include media-mobile-s {
+    height: 20rem;
+  }
+}
+
+.cardCreate {
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.cardName {
+  font-size: 2.4rem;
+  font-weight: 600;
+  margin: 0.6rem 0;
+  word-break: break-word;
+
+  @include media-mobile-width {
+    font-size: 1.8rem;
+  }
+}
+
+.cardCreateName {
+  margin-top: 1rem;
+}
+
+.image {
+  width: 11.4rem;
+  height: 7.5rem;
+  margin-top: 3rem;
+
+  @include media-mobile-width {
+    margin-top: 2rem;
+  }
+}
+
+.description {
+  color: var(--gray);
+  word-break: break-all;
+}

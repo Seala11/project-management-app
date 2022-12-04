@@ -1,0 +1,141 @@
+@use './app/styles/mixins.scss' as *;
+
+.wrapper {
+  @extend %wrapper;
+  width: 100%;
+  flex: 1 1 auto;
+  margin: 7rem auto;
+
+  @include media-tablet {
+    margin: 3rem auto;
+  }
+}
+
+.settings {
+  display: flex;
+  justify-content: space-around;
+  column-gap: 5rem;
+  .leftBlock {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  @include media-tablet {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.formSettings {
+  display: flex;
+  flex-direction: column;
+
+  & .formItem {
+    @extend %formItem;
+
+    & input {
+      @extend %input;
+
+      @include media-mobile-s {
+        width: 29rem;
+      }
+    }
+
+    & .fieldError {
+      @extend %fieldError;
+      top: 5.8rem;
+    }
+
+    @include media-mobile-s {
+      padding-bottom: 3.7rem;
+    }
+  }
+}
+
+h1 {
+  @extend %title;
+}
+
+.wrapperEye {
+  position: relative;
+
+  .button {
+    position: absolute;
+    right: 0.5rem;
+    top: calc(50% - 1.2rem);
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    border-radius: 100%;
+    &:hover {
+      background-color: transparent;
+    }
+  }
+}
+
+.rightBlock {
+  align-self: flex-end;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  row-gap: 8rem;
+
+  & .buttonBlockRight {
+    .btnDelete {
+      @extend %btnRed;
+
+      @include media-tablet {
+        width: 30rem;
+      }
+
+      @include media-mobile-s {
+        width: 29rem;
+      }
+    }
+  }
+
+  & .imageBlock {
+    @include media-big-tablet {
+      max-width: 100%;
+    }
+
+    & img {
+      height: auto;
+      width: max-content;
+
+      @include media-big-tablet {
+        max-width: 100%;
+      }
+    }
+  }
+
+  @include media-tablet {
+    margin-top: 3rem;
+    align-items: center;
+    row-gap: 3rem;
+    align-self: center;
+  }
+}
+
+.btnCancelSave {
+  @extend %btnGray;
+}
+
+.btnSave {
+  @extend %btnBlue;
+  flex: 1 0 auto;
+}
+
+.buttonBlock {
+  display: flex;
+  column-gap: 2rem;
+  width: 100%;
+}
+
+.testWrapper {
+  flex: 1 1 auto;
+}

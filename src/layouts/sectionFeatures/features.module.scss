@@ -1,0 +1,84 @@
+@use './app/styles/mixins.scss' as *;
+
+.section {
+  background-color: var(--primary-m);
+}
+
+.wrapper {
+  @extend %wrapper;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 4.8rem;
+
+  @include media-tablet {
+    text-align: center;
+    font-size: 3.8rem;
+  }
+
+  @include media-mobile {
+    font-size: 3rem;
+    line-height: 3.3rem;
+    max-width: 45rem;
+    margin: 2.2rem auto;
+  }
+
+  @include media-mobile-s {
+    max-width: 35rem;
+    font-size: 2.7rem;
+  }
+}
+
+.titleWrapper {
+  max-width: 49.3rem;
+
+  @include media-big-tablet {
+    order: 1;
+  }
+  @include media-tablet {
+    max-width: 53.3rem;
+  }
+}
+
+.subtitle {
+  @extend %subtitle;
+
+  @include media-tablet {
+    max-width: fit-content;
+  }
+
+  @include media-mobile-width {
+    padding: 0 2rem;
+  }
+
+  @include media-mobile-s {
+    text-align: justify;
+  }
+}
+
+.mainContent {
+  @extend %mainContent;
+  padding: 15.85rem 0;
+  gap: 10.3rem;
+
+  @include media-big-tablet {
+    gap: 6rem;
+    padding: 10rem 0;
+  }
+
+  @include media-mobile {
+    gap: 4.5rem;
+    padding: 5rem 0;
+  }
+}
+
+.img {
+  height: auto;
+  width: max-content;
+  min-width: 0;
+
+  @include media-big-tablet {
+    order: 2;
+  }
+}

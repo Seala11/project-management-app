@@ -1,0 +1,88 @@
+@use './app/styles/mixins.scss' as *;
+
+.wrapper {
+  display: flex;
+  gap: 3rem;
+  padding: 2rem 0;
+  justify-content: center;
+
+  @include media-mobile-width {
+    padding: 0 0 1rem;
+  }
+}
+
+.modal {
+  padding: 2rem;
+  overflow: auto;
+  width: 90%;
+  margin: 0 auto;
+
+  @include media-mobile-width {
+    padding: 0.8rem;
+  }
+}
+
+.title {
+  @extend %title;
+  align-self: flex-start;
+
+  @include media-mobile-width {
+    font-size: 2rem;
+  }
+}
+
+.message {
+  text-align: center;
+  line-height: 1.5;
+}
+
+.blue {
+  @extend %btnBlue;
+}
+
+.red {
+  @extend %btnRed;
+}
+
+.gray {
+  @extend %btnGray;
+}
+
+.inputWrraper {
+  @extend %formItem;
+
+  & input {
+    @extend %input;
+    width: 100%;
+  }
+
+  & textarea {
+    @extend %textarea;
+    height: 13rem;
+  }
+
+  & .fieldError {
+    @extend %fieldError;
+  }
+}
+
+.counter {
+  position: absolute;
+  position: absolute;
+  bottom: 4rem;
+  right: 1.4rem;
+  font-size: 1.4rem;
+  transition: color 0.3s ease-in;
+}
+
+.counterLim {
+  color: var(--error);
+}
+
+.inputError {
+  @extend %inputError;
+}
+
+.inputError:focus-visible {
+  @extend %inputErrorFocus;
+}

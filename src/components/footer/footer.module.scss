@@ -1,0 +1,96 @@
+@use './app/styles/mixins.scss' as *;
+
+.wrapper {
+  @extend %wrapper;
+}
+
+.footer {
+  background-color: var(--primary-s);
+}
+
+.footerWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.8rem;
+  flex-wrap: wrap;
+  padding: 2rem 1rem 2rem;
+  line-height: 4.6rem;
+
+  @include media-tablet {
+    flex-wrap: wrap;
+    grid-gap: 2rem;
+  }
+
+  @include media-mobile-width {
+    justify-content: center;
+    font-size: 1.6rem;
+    grid-gap: 2rem;
+  }
+
+  @include media-mobile-s {
+    line-height: 3.5rem;
+  }
+}
+
+.footerInfo {
+  display: flex;
+  gap: 2rem;
+}
+
+.footerCopyright {
+  display: flex;
+  align-items: center;
+
+  @include media-mobile-width {
+    justify-content: center;
+  }
+
+  @include media-mobile-s {
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+}
+
+.copyrightWrapper {
+  @include media-mobile-s {
+    display: none;
+  }
+}
+
+.footerYear {
+  padding: 0 7rem 0 2rem;
+
+  @include media-mobile {
+    padding: 0 3rem 0 2rem;
+  }
+}
+
+.footerGithubUsername,
+.footerRss {
+  text-decoration: none;
+  transition: 0.3s;
+  max-height: 4.6rem;
+
+  @include media-mobile-s {
+    max-height: 3.5rem;
+  }
+}
+
+.rssLogo {
+  max-height: 3rem;
+  display: flex;
+
+  @include media-mobile-s {
+    max-height: 3.5rem;
+  }
+}
+
+.rssLogoPath {
+  fill: var(--black);
+  transition: 0.3s;
+}
+
+.footerRss:hover .rssLogoPath {
+  fill: var(--primary);
+}

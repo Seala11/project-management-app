@@ -1,0 +1,143 @@
+{
+  "WELCOME": {
+    "TITLE": "More accomplish together",
+    "SUBTITLE": "Collaborate, manage projects and reach new Productivity peak.",
+    "BOARDLINK": "Go to Boards"
+  },
+  "FEATURES": {
+    "TITLE": "Features to help your team succeed",
+    "SUBTITLE": "RS Trello is the visual tool that empowers your team to manage any type of project, workflow, or task tracking. Create your user, add co-workers and you are in!"
+  },
+  "AUTH": {
+    "SIGN_IN": "Sign in",
+    "SIGN_UP": "Sign up",
+    "USER_SETTINGS": "User settings",
+    "NAME": "Name",
+    "LOGIN": "Login",
+    "PASSWORD": "Password",
+    "SUBMIT": "Submit",
+    "HAVE_ACCOUNT": "I already have an account",
+    "HAVENT_ACCOUNT": "I dont`t have an account",
+    "REQUIRED": "This field is required",
+    "LENGTH": "Minimal length 4 characters",
+    "MAXLENGTH": "Maximal length 15 characters",
+    "PATTERN": "Only letters, numbers or underscore",
+    "PASSWORD_LENGTH": "Password must be at least 6 characters",
+    "401_SIGNIN": "Invalid password or login",
+    "400_SIGNIN": "Invalid password or login",
+    "403_SIGNIN": "Authorization is required",
+    "200_SIGNUP": "New user is created",
+    "400_SIGNUP": "Your request resulted in an error",
+    "409_SIGNUP": "Login already exist",
+    "404_USER": "User not found!",
+    "200_USER": "Welcome to app, ",
+    "403_USER": "Authorization is required",
+    "200_USER_UPDATE": "Your data has been updated",
+    "400_USER_UPDATE": "Your request resulted in an error",
+    "409_USER_UPDATE": "Login already exist",
+    "403_USER_UPDATE": "Authorization is required",
+    "200_USER_DELETE": "User has been deleted",
+    "403_USER_DELETE": "Authorization is required",
+    "404_BOARD": "Element not found! \nPlease reload page",
+    "404_BOARD_ERROR": "Element not found!",
+    "DEFAULT": "Oops! Something went wrong. Try again"
+  },
+  "NOTFOUND": {
+    "TITLE": "Oops! The page you are looking for cannot be found.",
+    "HOMELINK": "Back Home"
+  },
+  "LANGUAGES": {
+    "EN": "En",
+    "RU": "Ru"
+  },
+  "TEAM": {
+    "TITLE": "About Our Team"
+  },
+  "MENU": {
+    "NEW_BOARD": "New Board",
+    "MY_BOARDS": "My Boards",
+    "EDIT": "Edit Profile",
+    "SIGN_OUT": "Sign Out"
+  },
+  "VALA": {
+    "NAME": "Valentin",
+    "ROLE": "Developer",
+    "FEAT1": "Developed home page, 404 and a single board page",
+    "FEAT2": "Developed the whole drag and drop functionality on the board page",
+    "FEAT3": "Improved the Back-End functionality and error handling"
+  },
+  "ANNA": {
+    "NAME": "Hanna",
+    "ROLE": "Team Lead",
+    "FEAT1": "Coordinated team work and implemented the basic structure of the application",
+    "FEAT2": "Developed my board page, confirmation modal, task modal and error handling",
+    "FEAT3": "Designed website in Figma"
+  },
+  "KOSTIA": {
+    "NAME": "Konstantin",
+    "ROLE": "Developer",
+    "FEAT1": "Developed registration pages and user settings page",
+    "FEAT2": "Developed private and public routes functionality, search on my boards page",
+    "FEAT3": "Working with Back-End and error handling"
+  },
+  "BOARDS": {
+    "TITLE": "My Boards",
+    "CREATE": "Create new board",
+    "CHANGE": "Change board",
+    "404_BOARDS": "Element not found. Reload the page"
+  },
+  "MODAL": {
+    "DELETE_MSG": "Are you sure you want to delete",
+    "CHANGE_MSG": "Are you sure you want to change",
+    "DELETE": "Delete",
+    "CANCEL": "Cancel",
+    "CREATE": "Create",
+    "CHANGE": "Change",
+    "SAVE": "Save",
+    "OK": "Ok",
+    "TITLE": "Title",
+    "DESCRIPTION": "Description",
+    "REQUIRED": "This field is required",
+    "TITLE_LIM": "No more than 20 characters",
+    "DESCRIPTION_LIM": "No more than 150 characters",
+    "IN_COLUMN": "In column",
+    "MEMBERS": "Members",
+    "MEMBERS_ERR": "No users assigned",
+    "LABEL": "Cover",
+    "DELETE_TASK": "Delete task",
+    "PROFILE": "your profile?"
+  },
+  "BOARD": {
+    "CREATE_COLUMN_TITLE": "Create new column",
+    "CREATE_TASK_TITLE": "Create new task",
+    "CREATE_COLUMN_BUTTON": "New column",
+    "CREATE_TASK_BUTTON": "New task",
+    "404_BOARD": "Board was not founded!"
+  },
+  "COLUMN": {
+    "REQ_ER": "cannot be empty",
+    "MAX_ER": "max length 25"
+  },
+  "TOAST": {
+    "Authorization error": "Authorization error",
+    "Invalid token": "Authorization is required",
+    "Successeful login": "Welcome to app",
+    "WELCOME": "Welcome to app",
+    "Bad Request": "Bad Request",
+    "User was not founded!": "User was not founded!",
+    "Login already exist": "Login already exist",
+    "NEW_USER": "New user is created",
+    "401SIGNIN": "Error of Authorization"
+  },
+  "SETTINGS": {
+    "EDIT_MODAL_TEXT": "Would you like to edit your profile? You need to enter your password or create a new one",
+    "SAVE_MODAL_TEXT": "Would you like to save changes to your profile?",
+    "EDIT": "Edit",
+    "DELETE_ACCOUNT": "Delete account",
+    "SAVE_CHANGES": "Save changes"
+  },
+  "SEARCH": {
+    "FIND": "Find board ...",
+    "EMPTY": "Sorry, no title matched your search"
+  }
+}

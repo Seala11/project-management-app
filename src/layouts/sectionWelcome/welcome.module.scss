@@ -1,0 +1,89 @@
+@use './app/styles/mixins.scss' as *;
+
+.sectionOne {
+  background-color: var(--white);
+}
+
+.wrapper {
+  @extend %wrapper;
+}
+
+.btn {
+  @extend %btnBlue;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 6.4rem;
+
+  @include media-tablet {
+    text-align: center;
+    font-size: 5rem;
+  }
+
+  @include media-mobile {
+    font-size: 4rem;
+    margin: 3rem auto;
+    line-height: 4.3rem;
+  }
+
+  @include media-mobile-s {
+    font-size: 3.3rem;
+    line-height: 3.5rem;
+  }
+}
+
+.titleWrapper {
+  max-width: 57rem;
+
+  @include media-mobile {
+    max-width: 45rem;
+  }
+  @include media-mobile-s {
+    max-width: 35rem;
+  }
+}
+
+.subtitle {
+  @extend %subtitle;
+
+  @include media-mobile-s {
+    padding: 0 2rem;
+    text-align: justify;
+  }
+}
+
+.mainContent {
+  @extend %mainContent;
+  padding: 16.7rem 0;
+
+  @include media-big-tablet {
+    gap: 6rem;
+    padding: 0 0 10rem 0;
+  }
+
+  @include media-mobile {
+    gap: 4.5rem;
+    padding: 1rem 0 5rem 0;
+  }
+}
+
+.img {
+  height: auto;
+  width: max-content;
+  min-width: 0;
+}
+
+.buttonsWrapper {
+  display: flex;
+  gap: 1rem;
+  padding-top: 4.5rem;
+  justify-content: flex-end;
+
+  @include media-big-tablet {
+    padding-top: 2.5rem;
+  }
+}
+
+@include media-big-tablet {
+}

@@ -1,0 +1,22 @@
+.listItem {
+  padding: 1rem 0.4rem;
+  color: var(--gray);
+  font-weight: 400;
+  font-size: 1.6rem;
+  line-height: 1.9rem;
+
+  &:hover {
+    cursor: pointer;
+    background-color: var(--gray-s);
+  }
+}
+
+.assigned {
+  background-color: var(--primary-s);
+  color: var(--primary);
+}
+
+.closed {
+  background-color: transparent;
+  color: var(--gray);
+}

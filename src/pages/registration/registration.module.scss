@@ -1,0 +1,142 @@
+@use 'app/styles/mixins.scss' as *;
+
+.wrapper {
+  @extend %wrapper;
+  width: 100%;
+  margin: 7rem auto;
+
+  @include media-mobile-s {
+    margin: 3rem auto;
+  }
+}
+
+.sign {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  @include media-big-tablet {
+    justify-content: space-between;
+  }
+
+  @include media-tablet {
+    flex-direction: column;
+    padding-top: 1rem;
+  }
+}
+
+.formSign {
+  display: flex;
+  flex-direction: column;
+}
+
+.formBlock {
+  @extend %boxShadow;
+  max-width: 44rem;
+  border: none;
+  padding: 3.5rem 7rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  & h1 {
+    @extend %title;
+    margin: 0;
+    line-height: 2.4rem;
+    padding-bottom: 3rem;
+
+    @include media-mobile-s {
+      padding-bottom: 2rem;
+    }
+  }
+
+  & .formItem {
+    @extend %formItem;
+
+    & input {
+      @extend %input;
+
+      @include media-mobile-s {
+        width: 25rem;
+      }
+    }
+
+    & .fieldError {
+      @extend %fieldError;
+      top: 6rem;
+    }
+
+    @include media-mobile-s {
+      padding-bottom: 3.7rem;
+    }
+  }
+
+  & a:hover {
+    text-decoration: underline;
+  }
+
+  & button {
+    @extend %btnBlue;
+
+    margin: 2rem 0 4.3rem 0;
+
+    @include media-mobile-s {
+      margin: 1.5rem 0 3.5rem 0;
+    }
+  }
+
+  @include media-big-tablet {
+    padding: 3.5rem 2rem;
+  }
+
+  @include media-mobile-s {
+    padding: 2.5rem 1rem;
+  }
+}
+
+.imageBlock {
+  @include media-big-tablet {
+    max-width: 100%;
+  }
+
+  & img {
+    height: auto;
+    width: max-content;
+
+    @include media-big-tablet {
+      max-width: 100%;
+    }
+  }
+}
+
+.inputError {
+  @extend %inputError;
+}
+
+.inputError:focus-visible {
+  @extend %inputErrorFocus;
+}
+
+.wrapperEye {
+  position: relative;
+
+  .button {
+    position: absolute;
+    right: 0.5rem;
+    top: calc(50% - 1.2rem);
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    border-radius: 100%;
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
+}
+
+#password {
+  padding-right: 3rem;
+}

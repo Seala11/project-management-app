@@ -1,0 +1,140 @@
+@use './app/styles/mixins.scss' as *;
+
+.dropdownWrapper {
+  display: flex;
+  z-index: 1;
+  position: relative;
+  margin: 0.2rem; //не менять! иначе шапака прыгает
+
+  @include media-mobile-width {
+    position: unset;
+  }
+}
+
+.dropdownHeader {
+  font-size: 1.6rem;
+  font-weight: 500;
+  padding: 0 1rem 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 18rem;
+  gap: 1rem;
+  cursor: pointer;
+
+  @include media-mobile-width {
+    justify-content: flex-end;
+    min-width: 0rem;
+  }
+
+  @include media-mobile-s {
+    justify-content: flex-end;
+    padding: 0;
+  }
+}
+
+.name {
+  padding-right: 3rem;
+
+  @include media-mobile-width {
+    padding-right: 1rem;
+  }
+
+  @include media-mobile-s {
+    display: none;
+  }
+}
+
+.dropdownHeader.disable {
+  filter: brightness(0.5);
+}
+
+.dropdownList {
+  position: absolute;
+  background-color: var(--white);
+  width: 100%;
+  top: 4.5rem;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 0.8rem;
+  padding: 2rem 0rem 2rem 2rem;
+  border: 0.1rem solid var(--border);
+  box-shadow: 0 0.3rem 1.6rem 0.1rem rgb(0 0 0 / 4%);
+  display: flex;
+  gap: 2rem;
+  flex-direction: column;
+  animation: show 0.3s forwards;
+
+  @include media-mobile-width {
+    width: 66%;
+    padding: 3rem 2rem 3rem 2rem;
+    right: auto;
+    left: 17%;
+    gap: 2.5rem;
+    align-items: flex-start;
+  }
+}
+
+@keyframes show {
+  0% {
+    transform-origin: center center;
+    transform: scale(0.9);
+    opacity: 0;
+  }
+
+  100% {
+    transform-origin: center center;
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.dropdownListItem {
+  color: var(--gray);
+  text-decoration: none;
+  display: flex;
+  line-height: normal;
+  font-weight: 400;
+  font-size: 1.6rem;
+  line-height: 1.9rem;
+  gap: 1.5rem;
+
+  @include media-mobile-width {
+    font-size: 1.8rem;
+    justify-content: center;
+  }
+}
+
+.dropdownListItem.active {
+  color: var(--gray-l);
+  cursor: default;
+}
+
+.dropdownListItem.active:hover {
+  color: var(--gray);
+}
+
+.dropdownListItem:hover {
+  color: var(--primary);
+  transition: 0.3s;
+}
+
+.dropdownListItem:hover svg {
+  filter: invert(17%) sepia(60%) saturate(6134%) hue-rotate(225deg) brightness(99%) contrast(112%);
+}
+
+.wrapperIconWithName {
+  display: flex;
+  column-gap: 1rem;
+  align-items: center;
+}
+
+.iconDown {
+  transition: 0.3s;
+}
+
+.iconDown.up {
+  transform: rotate(180deg);
+}

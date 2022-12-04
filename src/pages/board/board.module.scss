@@ -1,0 +1,79 @@
+@use './app/styles/mixins.scss' as *;
+
+.wrapper {
+  @extend %wrapper;
+  flex-grow: 1;
+  width: 100%;
+  overflow: auto;
+  margin-bottom: 1rem;
+}
+
+.title {
+  @extend %title;
+  padding: 3rem 0 0;
+  min-height: 5.4rem;
+
+  @include media-mobile {
+    padding: 0;
+    min-height: 1.4rem;
+  }
+}
+
+.description {
+  color: var(--gray);
+  font-size: 1.8rem;
+}
+
+.mainContent {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  width: fit-content;
+}
+
+.columnsWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin: 1rem 0;
+
+  @include media-mobile {
+    margin: 0.5rem 0 1.5rem 0;
+  }
+}
+
+.columnsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: flex-start;
+  margin-right: 2.5rem;
+  margin-left: -2.5rem;
+
+  @include media-mobile {
+    margin-right: 1rem;
+    margin-left: -1rem;
+  }
+}
+
+.addButton {
+  @extend %addButton;
+  width: 30rem;
+
+  @include media-mobile {
+    width: 22rem;
+    padding: 1.2rem 0 1.5rem 0;
+    font-size: 1.5rem;
+  }
+}
+
+.icon {
+  height: 2.4rem;
+  width: 2.2rem;
+
+  @include media-mobile {
+    height: 1.8rem;
+    width: 1.8rem;
+  }
+}

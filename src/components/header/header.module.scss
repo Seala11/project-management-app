@@ -1,0 +1,136 @@
+@use './app/styles/mixins.scss' as *;
+
+.header {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  background: var(--white);
+  box-shadow: 0 0.4rem 0.4rem rgb(0 0 0 / 4%);
+  padding-top: 1.2rem;
+  padding-bottom: 1.2rem;
+  transition: 0.3s;
+  z-index: 1;
+}
+
+.headerWrapper {
+  @extend %wrapper;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @include media-mobile {
+    position: relative;
+  }
+}
+
+.header.sticky {
+  background: var(--background);
+  padding-top: 0.8rem;
+  padding-bottom: 0.8rem;
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 2.2rem;
+  line-height: 140%;
+  display: flex;
+  gap: 0.8rem;
+
+  @include media-mobile-s {
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 150%;
+  }
+
+  @include media-mobile-xs {
+    font-size: 1.8rem;
+    font-weight: 600;
+    line-height: 170%;
+    gap: 0.5rem;
+  }
+}
+
+.logo img {
+  max-height: 2.9rem;
+}
+
+.menuWrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 0.3rem 0;
+
+  @include media-mobile {
+    position: unset;
+  }
+}
+
+.menuList {
+  font-size: 1.6rem;
+  font-weight: 500;
+  padding: 0 5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  @include media-mobile {
+    padding: 0 1rem;
+  }
+}
+
+.menuLanguage {
+  display: flex;
+  align-items: center;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+a.home:hover {
+  color: var(--black);
+}
+
+.hamburger {
+  display: none;
+  z-index: 1;
+  margin: 0 3rem 0 1rem;
+  transition: 0.3s;
+}
+
+.hamburger .line {
+  width: 3rem;
+  height: 0.2rem;
+  background-color: var(--maintheme);
+  display: block;
+  margin: 0.6rem auto;
+  -webkit-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+.hamburger:hover {
+  cursor: pointer;
+}
+
+.hamburger.is-active {
+  -webkit-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+@include media-tablet {
+  .hamburger {
+    margin: 0 1rem 0 0;
+  }
+
+  .header__wrapper {
+    margin: 1.5rem auto 1rem auto;
+  }
+}
+
+@include media-mobile {
+  .hamburger {
+    margin: 0 0rem 0 0;
+  }
+}

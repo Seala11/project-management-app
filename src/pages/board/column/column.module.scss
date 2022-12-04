@@ -1,0 +1,198 @@
+@use './app/styles/mixins.scss' as *;
+
+.columnTitle {
+  font-weight: 500;
+  font-size: 2rem;
+  line-height: 2.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  @include media-mobile {
+    font-size: 1.6rem;
+    font-weight: 600;
+  }
+}
+
+.form {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  position: relative;
+
+  @include media-mobile {
+    margin-top: -0.6rem;
+  }
+}
+
+.formError {
+  width: 100%;
+  color: var(--error);
+  font-size: 1.2rem;
+  position: absolute;
+  bottom: -0.8rem;
+  left: 0.5rem;
+
+  @include media-mobile {
+    font-size: 1rem;
+  }
+}
+
+.input {
+  max-width: 70%;
+  margin: 0.6rem 0.5rem 0.6rem 0rem;
+  border: 0.1rem solid var(--border);
+  box-shadow: 0 0.3rem 1.6rem 0.1rem var(--card);
+  border-radius: 0.8rem;
+  font-size: 2rem;
+  line-height: 2.4rem;
+  padding: 0.3rem 1rem;
+
+  @include media-mobile {
+    max-width: 68%;
+    font-size: 1.6rem;
+    line-height: 1rem;
+    margin: 0.3rem;
+    padding: 0.3rem 0.5rem;
+  }
+}
+
+.input:focus {
+  outline-width: 0;
+  border: 0.1rem solid var(--black);
+}
+
+.input.error {
+  border: 0.1rem solid var(--error);
+}
+
+.columnItem {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 30rem);
+  background-color: var(--primary-s);
+  width: 30rem;
+  padding: 2.5rem 2.5rem 1.6rem;
+  border-radius: 0.8rem;
+  margin: 0 2.5rem;
+
+  @include media-mobile {
+    width: 22rem;
+    padding: 1rem 1.2rem 0.6rem;
+    margin: 0 1rem;
+  }
+}
+
+.titleName {
+  width: 100%;
+  line-height: 2.5rem;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  cursor: pointer;
+}
+
+.tasksList {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden auto;
+  padding-right: 1.2rem;
+  margin-right: -1.2rem;
+  padding-left: 1.2rem;
+  margin-left: -1.2rem;
+  padding-bottom: 0.8rem;
+  min-height: 1.5rem;
+
+  @include media-mobile {
+    padding-right: 0.8rem;
+    margin-right: -0.8rem;
+    padding-left: 0.8rem;
+    margin-left: -0.8rem;
+    padding-bottom: 0.4rem;
+  }
+}
+
+.addButton {
+  @extend %addButton;
+  width: 30rem;
+
+  @include media-mobile {
+    width: 22rem;
+    font-size: 1.5rem;
+  }
+}
+
+.taskButton {
+  padding: 1.6rem;
+  width: 100%;
+  margin-top: 1.6rem;
+  background: transparent;
+
+  &:hover {
+    background: var(--primary-s);
+  }
+
+  @include media-mobile {
+    padding: 1.2rem;
+    margin-top: 0.8rem;
+  }
+}
+
+.icon {
+  height: 2.4rem;
+  width: 2.2rem;
+
+  @include media-mobile {
+    height: 1.8rem;
+    width: 1.8rem;
+  }
+}
+
+.columnLine {
+  height: 0.6rem;
+  border-radius: 7.5rem;
+  background-color: var(--primary-m);
+  outline: none;
+  border: 0;
+  margin: 1.1rem 0 0.8rem 0;
+}
+
+.button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 1rem;
+  border-radius: 100%;
+
+  &:hover {
+    background: var(--error-m);
+  }
+
+  @include media-mobile {
+    padding: 0.5rem;
+  }
+}
+
+.buttonEdit {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 100%;
+
+  &:hover {
+    background: var(--error-m);
+  }
+
+  @include media-mobile {
+    padding: 0.3rem 0.5rem;
+  }
+}
+
+.buttonEdit.submit {
+  &:hover {
+    background: var(--primary-m);
+  }
+}

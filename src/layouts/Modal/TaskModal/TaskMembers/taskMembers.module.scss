@@ -1,0 +1,90 @@
+@use './app/styles/mixins.scss' as *;
+
+.taskInfo {
+  width: 100%;
+  width: -moz-available;
+  width: -webkit-fill-available;
+  width: stretch;
+  padding-bottom: 5rem;
+  padding-left: 1rem;
+  position: relative;
+}
+
+.members {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--black);
+  cursor: default;
+  margin-bottom: 0;
+}
+
+.membersWrapper {
+  display: flex;
+  margin: 0;
+  gap: 1rem;
+}
+
+.list {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 98%;
+  top: 10rem;
+  left: 1rem;
+  margin: 0;
+  padding: 1rem;
+  animation: show 0.3s forwards;
+  overflow-y: hidden;
+  list-style: none;
+
+  @extend %boxShadow;
+
+  &::-webkit-scrollbar {
+    width: 0.4rem;
+    height: 1rem;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: var(--primary-s);
+    border-radius: 0.6rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--primary-l);
+    border-radius: 0.6rem;
+  }
+}
+
+.open {
+  height: 25rem;
+  overflow-y: scroll;
+  border: 0.2rem solid var(--primary);
+}
+
+.close {
+  height: 6rem;
+
+  &:after {
+    position: absolute;
+    width: 1.4rem;
+    height: 2rem;
+    content: '';
+    bottom: 2rem;
+    right: 2.4rem;
+    background-image: url('../../../../assets/images/arrow-down.svg');
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  &:hover {
+    cursor: pointer;
+    background-color: var(--gray-s);
+  }
+}
+
+.err {
+  font-size: 1.6rem;
+  color: var(--gray);
+  margin: 2rem 0 2.6rem;
+}

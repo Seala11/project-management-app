@@ -1,0 +1,213 @@
+@use './app/styles/mixins.scss' as *;
+
+.wrapper {
+  @extend %wrapper;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 4.8rem;
+
+  @include media-tablet {
+    text-align: center;
+    font-size: 3.8rem;
+  }
+
+  @include media-mobile {
+    font-size: 3rem;
+  }
+
+  @include media-mobile-s {
+    font-size: 2.7rem;
+  }
+}
+
+.titleWrapper {
+  max-width: 49.3rem;
+}
+
+.subtitle {
+  font-weight: 400;
+  font-size: 1.8rem;
+  line-height: 3rem;
+  max-width: 42.2rem;
+}
+
+.mainContent {
+  @extend %mainContent;
+  padding: 15.85rem 0;
+  gap: 3rem;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 20.7rem;
+
+  @include media-big-tablet {
+    padding: 10rem 0;
+  }
+
+  @include media-mobile {
+    padding: 5rem 0;
+    gap: 1rem;
+  }
+}
+
+.img {
+  height: auto;
+  width: max-content;
+  min-width: 0;
+
+  @include media-mobile-width {
+    display: none;
+  }
+}
+
+.imgSmall {
+  display: none;
+
+  @include media-mobile-width {
+    display: block;
+    width: 100%;
+    max-width: max-content;
+    max-width: 18rem;
+  }
+}
+
+.teamWrapper {
+  gap: 9rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: flex-start;
+
+  @include media-big-tablet {
+    gap: 5rem;
+  }
+
+  @include media-mobile {
+    gap: 3rem;
+  }
+}
+
+.teamMember {
+  @extend %boxShadow;
+  display: flex;
+  align-items: center;
+  gap: 5rem;
+  padding: 4rem 3.7rem 4rem 5rem;
+
+  @include media-mobile-width {
+    width: 100%;
+    flex-direction: column;
+    padding: 2.5rem;
+  }
+
+  @include media-mobile-s {
+    flex-direction: column;
+  }
+}
+
+.memberData {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  max-width: 44.4rem;
+  gap: 1.5rem;
+
+  @include media-mobile {
+    gap: 2.5rem;
+  }
+}
+
+.memberHeaderName {
+  @include media-mobile-width {
+    min-width: 13.59rem;
+  }
+
+  @include media-mobile-width {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.featureList {
+  padding-top: 1rem;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+}
+
+.memberHeader {
+  @include media-mobile-width {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  @include media-mobile-xs {
+    gap: 1rem;
+  }
+}
+
+.teamMember:nth-child(2) {
+  align-self: flex-end;
+
+  @include media-mobile-width {
+    align-self: auto;
+  }
+}
+
+.teamMember:nth-child(2) .img {
+  order: 2;
+}
+
+.teamMember:nth-child(2) .memberData {
+  order: 1;
+}
+
+.memberName {
+  @extend %title;
+  line-height: 2.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 1.5rem;
+
+  @include media-mobile {
+    line-height: 2.3rem;
+    padding-bottom: 0.5rem;
+  }
+}
+
+.memberRole {
+  font-weight: 400;
+  font-size: 1.6rem;
+  line-height: 1.9rem;
+}
+
+.featureItem {
+  font-weight: 400;
+  font-size: 1.6rem;
+  line-height: 1.7rem;
+  color: var(--gray);
+  display: flex;
+  flex-direction: row;
+  gap: 0.6rem;
+  padding-bottom: 1rem;
+}
+
+.dot {
+  min-width: 1.6rem;
+  height: 1.6rem;
+  background: #e1e4e8;
+  border-radius: 0.4rem;
+  display: flex;
+  justify-content: center;
+  line-height: 1.4rem;
+}

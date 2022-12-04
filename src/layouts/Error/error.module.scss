@@ -1,0 +1,49 @@
+@use './app/styles/mixins.scss' as *;
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  padding: 10rem 2rem;
+
+  @include media-tablet {
+    width: 100vw;
+  }
+}
+
+.title {
+  font-weight: 700;
+  font-size: 3.2rem;
+  padding-top: 3rem;
+  text-align: center;
+
+  @include media-tablet {
+    padding-top: 1rem;
+    font-size: 2.8rem;
+  }
+
+  @include media-mobile {
+    font-size: 2rem;
+  }
+}
+
+.img {
+  max-height: 50vh;
+  height: 100%;
+  max-width: 60rem;
+  width: 100%;
+  object-fit: contain;
+  display: flex;
+  margin: 0 auto;
+}
+
+.text {
+  text-align: center;
+
+  @include media-mobile {
+    margin: 0.5rem;
+  }
+}
