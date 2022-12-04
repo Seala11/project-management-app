@@ -57,12 +57,15 @@
 
   &::-webkit-scrollbar-track {
     background-color: var(--primary-s);
-    border-radius: 0.6rem;
+    border-radius: 0.8rem;
   }
 
   &::-webkit-scrollbar-thumb {
     background-color: var(--primary-l);
-    border-radius: 0.6rem;
+    border-top-left-radius: 10rem;
+    border-top-right-radius: 100rem;
+    border-bottom-right-radius: 100rem;
+    border-bottom-left-radius: 10rem;
   }
 }
 
