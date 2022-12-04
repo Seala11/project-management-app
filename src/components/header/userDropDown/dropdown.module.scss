@@ -6,7 +6,7 @@
   position: relative;
   margin: 0.2rem; //не менять! иначе шапака прыгает
 
-  @include media-mobile {
+  @include media-mobile-width {
     position: unset;
   }
 }
@@ -22,7 +22,7 @@
   gap: 1rem;
   cursor: pointer;
 
-  @include media-mobile {
+  @include media-mobile-width {
     justify-content: flex-end;
     min-width: 0rem;
   }
@@ -36,7 +36,7 @@
 .name {
   padding-right: 3rem;
 
-  @include media-mobile {
+  @include media-mobile-width {
     padding-right: 1rem;
   }
 
@@ -67,7 +67,7 @@
   flex-direction: column;
   animation: show 0.3s forwards;
 
-  @include media-mobile {
+  @include media-mobile-width {
     width: 66%;
     padding: 3rem 2rem 3rem 2rem;
     right: auto;
@@ -101,7 +101,7 @@
   line-height: 1.9rem;
   gap: 1.5rem;
 
-  @include media-mobile {
+  @include media-mobile-width {
     font-size: 1.8rem;
     justify-content: center;
   }

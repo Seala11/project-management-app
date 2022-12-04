@@ -92,7 +92,7 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  @include media-mobile {
+  @include media-mobile-width {
     grid-template-columns: repeat(1, 1fr);
   }
 }
@@ -109,7 +109,7 @@
     width: 93%;
   }
 
-  @include media-mobile {
+  @include media-mobile-width {
     width: 90%;
     height: 16rem;
   }
@@ -130,7 +130,7 @@
   margin: 0.6rem 0;
   word-break: break-word;
 
-  @include media-mobile {
+  @include media-mobile-width {
     font-size: 1.8rem;
   }
 }
@@ -144,7 +144,7 @@
   height: 7.5rem;
   margin-top: 3rem;
 
-  @include media-mobile {
+  @include media-mobile-width {
     margin-top: 2rem;
   }
 }

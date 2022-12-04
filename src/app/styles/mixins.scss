@@ -30,6 +30,12 @@
   }
 }
 
+@mixin media-mobile-width {
+  @media (max-width: 600px) {
+    @content;
+  }
+}
+
 @mixin media-middle {
   @media (max-width: 490px) {
     @content;
