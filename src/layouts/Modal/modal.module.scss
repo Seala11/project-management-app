@@ -39,15 +39,20 @@
   animation: show 0.5s forwards;
   z-index: 11;
   overflow-x: hidden;
+  border-radius: 0.8rem;
 
   &:hover {
     cursor: auto;
   }
 
-  @include media-mobile {
+  @include media-mobile-width {
     width: 90%;
     min-width: 30rem;
   }
+
+  // @include media-mobile {
+  // border-radius: 0;
+  // }
 
   &::-webkit-scrollbar {
     width: 0.6rem;

@@ -48,9 +48,10 @@
     max-width: fit-content;
   }
 
-  @include media-mobile {
+  @include media-mobile-width {
     padding: 0 2rem;
   }
+
   @include media-mobile-s {
     text-align: justify;
   }
