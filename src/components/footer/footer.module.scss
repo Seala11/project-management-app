@@ -25,6 +25,7 @@
   @include media-mobile {
     justify-content: center;
     font-size: 1.6rem;
+    grid-gap: 2rem;
   }
 
   @include media-mobile-s {
